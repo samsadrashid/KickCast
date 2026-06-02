@@ -1,0 +1,994 @@
+{
+  "nodes": [
+    {
+      "id": "data_DARK_T",
+      "label": "DARK_T",
+      "community": 0,
+      "community_label": "Theme System",
+      "color": "#e23636",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "5",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "data_LIGHT_T",
+      "label": "LIGHT_T",
+      "community": 0,
+      "community_label": "Theme System",
+      "color": "#e23636",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "18",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "data_GROUPS",
+      "label": "GROUPS",
+      "community": 1,
+      "community_label": "Team & Group Data",
+      "color": "#3668e2",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "75",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "data_TEAM_DATA",
+      "label": "TEAM_DATA",
+      "community": 1,
+      "community_label": "Team & Group Data",
+      "color": "#3668e2",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "90",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "data_FIXTURES",
+      "label": "FIXTURES",
+      "community": 2,
+      "community_label": "Match & Bracket Engine",
+      "color": "#9ae236",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1076",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "comp_StatusBadge",
+      "label": "StatusBadge",
+      "community": 3,
+      "community_label": "Match Card UI",
+      "color": "#e236cc",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1105",
+      "degree": 2,
+      "size": 11.0
+    },
+    {
+      "id": "comp_MatchCard",
+      "label": "MatchCard",
+      "community": 3,
+      "community_label": "Match Card UI",
+      "color": "#e236cc",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1123",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "comp_MatchCardSlide",
+      "label": "MatchCardSlide",
+      "community": 3,
+      "community_label": "Match Card UI",
+      "color": "#e236cc",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1188",
+      "degree": 2,
+      "size": 11.0
+    },
+    {
+      "id": "comp_MatchSliderSection",
+      "label": "MatchSliderSection",
+      "community": 3,
+      "community_label": "Match Card UI",
+      "color": "#e236cc",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1254",
+      "degree": 2,
+      "size": 11.0
+    },
+    {
+      "id": "comp_FixturesTab",
+      "label": "FixturesTab",
+      "community": 3,
+      "community_label": "Match Card UI",
+      "color": "#e236cc",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1288",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "comp_TeamsTab",
+      "label": "TeamsTab",
+      "community": 1,
+      "community_label": "Team & Group Data",
+      "color": "#3668e2",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1320",
+      "degree": 4,
+      "size": 14.0
+    },
+    {
+      "id": "comp_TeamDetail",
+      "label": "TeamDetail",
+      "community": 1,
+      "community_label": "Team & Group Data",
+      "color": "#3668e2",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1467",
+      "degree": 2,
+      "size": 11.0
+    },
+    {
+      "id": "data_ROUND_IDS",
+      "label": "ROUND_IDS",
+      "community": 4,
+      "community_label": "Round Data",
+      "color": "#36e2c5",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1629",
+      "degree": 0,
+      "size": 8
+    },
+    {
+      "id": "data_BRACKET_ROUNDS",
+      "label": "BRACKET_ROUNDS",
+      "community": 2,
+      "community_label": "Match & Bracket Engine",
+      "color": "#9ae236",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1631",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "data_MATCH_MAP",
+      "label": "MATCH_MAP",
+      "community": 5,
+      "community_label": "Match Map",
+      "color": "#e29336",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1698",
+      "degree": 0,
+      "size": 8
+    },
+    {
+      "id": "comp_TeamPickerModal",
+      "label": "TeamPickerModal",
+      "community": 2,
+      "community_label": "Match & Bracket Engine",
+      "color": "#9ae236",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1745",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "comp_WinnerPickerModal",
+      "label": "WinnerPickerModal",
+      "community": 2,
+      "community_label": "Match & Bracket Engine",
+      "color": "#9ae236",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1827",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "comp_BracketMatchCard",
+      "label": "BracketMatchCard",
+      "community": 2,
+      "community_label": "Match & Bracket Engine",
+      "color": "#9ae236",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1878",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "comp_BracketListView",
+      "label": "BracketListView",
+      "community": 2,
+      "community_label": "Match & Bracket Engine",
+      "color": "#9ae236",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1957",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "comp_BracketTreeView",
+      "label": "BracketTreeView",
+      "community": 2,
+      "community_label": "Match & Bracket Engine",
+      "color": "#9ae236",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "1978",
+      "degree": 2,
+      "size": 11.0
+    },
+    {
+      "id": "comp_BracketTab",
+      "label": "BracketTab",
+      "community": 2,
+      "community_label": "Match & Bracket Engine",
+      "color": "#9ae236",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "2078",
+      "degree": 10,
+      "size": 23.0
+    },
+    {
+      "id": "comp_VoteTab",
+      "label": "VoteTab",
+      "community": 6,
+      "community_label": "Voting & Local State",
+      "color": "#6136e2",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "2275",
+      "degree": 4,
+      "size": 14.0
+    },
+    {
+      "id": "data_MOCK_USERS",
+      "label": "MOCK_USERS",
+      "community": 7,
+      "community_label": "Leaderboard",
+      "color": "#3de236",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "2575",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "comp_LeaderboardTab",
+      "label": "LeaderboardTab",
+      "community": 7,
+      "community_label": "Leaderboard",
+      "color": "#3de236",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "2588",
+      "degree": 2,
+      "size": 11.0
+    },
+    {
+      "id": "data_MOCK_STATS",
+      "label": "MOCK_STATS",
+      "community": 8,
+      "community_label": "App Shell & Navigation",
+      "color": "#e2366f",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "2666",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "comp_MoreTab",
+      "label": "MoreTab",
+      "community": 8,
+      "community_label": "App Shell & Navigation",
+      "color": "#e2366f",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "2691",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "data_TABS",
+      "label": "TABS",
+      "community": 8,
+      "community_label": "App Shell & Navigation",
+      "color": "#e2366f",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "2915",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "comp_SideDrawer",
+      "label": "SideDrawer",
+      "community": 8,
+      "community_label": "App Shell & Navigation",
+      "color": "#e2366f",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "2926",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "comp_AuthModal",
+      "label": "AuthModal",
+      "community": 8,
+      "community_label": "App Shell & Navigation",
+      "color": "#e2366f",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "3060",
+      "degree": 2,
+      "size": 11.0
+    },
+    {
+      "id": "comp_App",
+      "label": "App",
+      "community": 8,
+      "community_label": "App Shell & Navigation",
+      "color": "#e2366f",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "3184",
+      "degree": 16,
+      "size": 24
+    },
+    {
+      "id": "ext_supabase",
+      "label": "Supabase",
+      "community": 9,
+      "community_label": "Supabase Backend",
+      "color": "#36a1e2",
+      "file_type": "code",
+      "source_file": "src/supabase.js",
+      "source_location": "",
+      "degree": 4,
+      "size": 14.0
+    },
+    {
+      "id": "ext_localStorage",
+      "label": "localStorage",
+      "community": 6,
+      "community_label": "Voting & Local State",
+      "color": "#6136e2",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "ext_supabase_auth",
+      "label": "Supabase Auth",
+      "community": 8,
+      "community_label": "App Shell & Navigation",
+      "color": "#e2366f",
+      "file_type": "code",
+      "source_file": "src/supabase.js",
+      "source_location": "",
+      "degree": 4,
+      "size": 14.0
+    },
+    {
+      "id": "ext_supabase_db",
+      "label": "Supabase DB",
+      "community": 9,
+      "community_label": "Supabase Backend",
+      "color": "#36a1e2",
+      "file_type": "code",
+      "source_file": "src/supabase.js",
+      "source_location": "",
+      "degree": 4,
+      "size": 14.0
+    },
+    {
+      "id": "data_theme_system",
+      "label": "Theme System",
+      "community": 0,
+      "community_label": "Theme System",
+      "color": "#e23636",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "file_main",
+      "label": "main.jsx",
+      "community": 10,
+      "community_label": "React Entry & Deps",
+      "color": "#d4e236",
+      "file_type": "code",
+      "source_file": "src/main.jsx",
+      "source_location": "",
+      "degree": 2,
+      "size": 11.0
+    },
+    {
+      "id": "file_supabase",
+      "label": "supabase.js",
+      "community": 9,
+      "community_label": "Supabase Backend",
+      "color": "#36a1e2",
+      "file_type": "code",
+      "source_file": "src/supabase.js",
+      "source_location": "",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "file_vite",
+      "label": "vite.config.js",
+      "community": 11,
+      "community_label": "Build & Deploy Config",
+      "color": "#be36e2",
+      "file_type": "code",
+      "source_file": "vite.config.js",
+      "source_location": "",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "file_pkg",
+      "label": "package.json",
+      "community": 10,
+      "community_label": "React Entry & Deps",
+      "color": "#d4e236",
+      "file_type": "document",
+      "source_file": "package.json",
+      "source_location": "",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "file_index",
+      "label": "index.html",
+      "community": 12,
+      "community_label": "HTML Shell",
+      "color": "#36e28b",
+      "file_type": "document",
+      "source_file": "index.html",
+      "source_location": "",
+      "degree": 0,
+      "size": 8
+    },
+    {
+      "id": "file_readme",
+      "label": "README.md",
+      "community": 13,
+      "community_label": "Documentation",
+      "color": "#e25936",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "",
+      "degree": 0,
+      "size": 8
+    },
+    {
+      "id": "file_netlify",
+      "label": "netlify.toml",
+      "community": 11,
+      "community_label": "Build & Deploy Config",
+      "color": "#be36e2",
+      "file_type": "document",
+      "source_file": "netlify.toml",
+      "source_location": "",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "file_vercel",
+      "label": "vercel.json",
+      "community": 11,
+      "community_label": "Build & Deploy Config",
+      "color": "#be36e2",
+      "file_type": "document",
+      "source_file": "vercel.json",
+      "source_location": "",
+      "degree": 1,
+      "size": 9.5
+    },
+    {
+      "id": "dep_react",
+      "label": "React 19",
+      "community": 10,
+      "community_label": "React Entry & Deps",
+      "color": "#d4e236",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "dep_supabase_js",
+      "label": "@supabase/supabase-js",
+      "community": 9,
+      "community_label": "Supabase Backend",
+      "color": "#36a1e2",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "",
+      "degree": 3,
+      "size": 12.5
+    },
+    {
+      "id": "dep_vite",
+      "label": "Vite 8",
+      "community": 11,
+      "community_label": "Build & Deploy Config",
+      "color": "#be36e2",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "",
+      "degree": 4,
+      "size": 14.0
+    }
+  ],
+  "links": [
+    {
+      "source": "comp_App",
+      "target": "comp_SideDrawer",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "comp_AuthModal",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "comp_FixturesTab",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "comp_TeamsTab",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "comp_BracketTab",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "comp_VoteTab",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "comp_LeaderboardTab",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "comp_MoreTab",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_FixturesTab",
+      "target": "comp_MatchSliderSection",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_MatchSliderSection",
+      "target": "comp_MatchCardSlide",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_MatchCardSlide",
+      "target": "comp_StatusBadge",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_MatchCard",
+      "target": "comp_StatusBadge",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_TeamsTab",
+      "target": "comp_TeamDetail",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_BracketTab",
+      "target": "comp_BracketTreeView",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_BracketTab",
+      "target": "comp_BracketListView",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_BracketTab",
+      "target": "comp_TeamPickerModal",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_BracketTab",
+      "target": "comp_WinnerPickerModal",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_BracketListView",
+      "target": "comp_BracketMatchCard",
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_FixturesTab",
+      "target": "data_FIXTURES",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_VoteTab",
+      "target": "data_FIXTURES",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_BracketTab",
+      "target": "data_FIXTURES",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_TeamsTab",
+      "target": "data_TEAM_DATA",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_TeamDetail",
+      "target": "data_TEAM_DATA",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_BracketTab",
+      "target": "data_TEAM_DATA",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_TeamsTab",
+      "target": "data_GROUPS",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "data_theme_system",
+      "target": "data_DARK_T",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "data_theme_system",
+      "target": "data_LIGHT_T",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_App",
+      "target": "data_TABS",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_LeaderboardTab",
+      "target": "data_MOCK_USERS",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_MoreTab",
+      "target": "data_MOCK_STATS",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_BracketTab",
+      "target": "data_BRACKET_ROUNDS",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_BracketListView",
+      "target": "data_BRACKET_ROUNDS",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_BracketTreeView",
+      "target": "data_BRACKET_ROUNDS",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8
+    },
+    {
+      "source": "comp_App",
+      "target": "ext_supabase_auth",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_AuthModal",
+      "target": "ext_supabase_auth",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_MoreTab",
+      "target": "ext_supabase_auth",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_VoteTab",
+      "target": "ext_supabase_db",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_BracketTab",
+      "target": "ext_supabase_db",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "ext_supabase_db",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "ext_supabase_auth",
+      "target": "ext_supabase",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "ext_supabase_db",
+      "target": "ext_supabase",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "file_supabase",
+      "target": "ext_supabase",
+      "relation": "initialises",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "dep_supabase_js",
+      "target": "ext_supabase",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "ext_localStorage",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.6
+    },
+    {
+      "source": "comp_BracketTab",
+      "target": "ext_localStorage",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.6
+    },
+    {
+      "source": "comp_VoteTab",
+      "target": "ext_localStorage",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.6
+    },
+    {
+      "source": "file_main",
+      "target": "comp_App",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "file_supabase",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "file_supabase",
+      "target": "dep_supabase_js",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "file_vite",
+      "target": "dep_vite",
+      "relation": "configures",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "file_pkg",
+      "target": "dep_react",
+      "relation": "declares",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "file_pkg",
+      "target": "dep_supabase_js",
+      "relation": "declares",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "file_pkg",
+      "target": "dep_vite",
+      "relation": "declares",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "file_netlify",
+      "target": "dep_vite",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "weight": 0.5
+    },
+    {
+      "source": "file_vercel",
+      "target": "dep_vite",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "weight": 0.5
+    },
+    {
+      "source": "comp_App",
+      "target": "data_theme_system",
+      "relation": "controls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "data_theme_system",
+      "target": "data_DARK_T",
+      "relation": "reads",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "data_theme_system",
+      "target": "data_LIGHT_T",
+      "relation": "reads",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "comp_App",
+      "target": "dep_react",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    },
+    {
+      "source": "file_main",
+      "target": "dep_react",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "weight": 1.0
+    }
+  ],
+  "communities": {
+    "0": "Theme System",
+    "1": "Team & Group Data",
+    "2": "Match & Bracket Engine",
+    "3": "Match Card UI",
+    "4": "Round Data",
+    "5": "Match Map",
+    "6": "Voting & Local State",
+    "7": "Leaderboard",
+    "8": "App Shell & Navigation",
+    "9": "Supabase Backend",
+    "10": "React Entry & Deps",
+    "11": "Build & Deploy Config",
+    "12": "HTML Shell",
+    "13": "Documentation"
+  }
+}

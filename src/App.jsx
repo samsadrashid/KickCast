@@ -51,14 +51,17 @@ const makeGlobalStyle = (t) => `
     overflow: hidden; height: 100vh; height: 100dvh; }
   @media (min-width: 768px) {
     .wc-root { max-width: 100% !important; display: grid !important;
-      grid-template-columns: 260px 1fr; grid-template-rows: 56px 1fr auto;
-      grid-template-areas: "topbar topbar" "sidebar content" "bottomnav bottomnav";
+      grid-template-columns: 260px 1fr; grid-template-rows: 56px 1fr;
+      grid-template-areas: "topbar topbar" "sidebar content";
       height: 100vh; height: 100dvh; }
     .wc-topbar   { grid-area: topbar; z-index: 50; }
     .wc-sidebar  { grid-area: sidebar; overflow-y: auto; border-right: 1px solid ${t.navyLight};
       display: flex; flex-direction: column; gap: 4px; padding: 16px 12px; background: ${t.navyMid}; min-height: 0; }
     .wc-content  { grid-area: content; overflow-y: auto; min-height: 0; }
-    .wc-bottomnav { grid-area: bottomnav; display: flex !important; }
+    .wc-inner { max-width: 900px; margin: 0 auto; width: 100%; }
+    .wc-bottomnav { display: flex !important; }
+    .wc-drawer { width: 520px !important; }
+    .drawer-info-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px; }
     .wc-sidebar-btn { display: flex; align-items: center; gap: 12px; padding: 12px 14px;
       border-radius: 10px; border: none; cursor: pointer; width: 100%; text-align: left;
       font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px;
@@ -68,6 +71,24 @@ const makeGlobalStyle = (t) => `
   }
   @media (min-width: 1200px) {
     .wc-root { grid-template-columns: 280px 1fr; }
+  }
+
+  /* Floating bottom nav */
+  .wc-bottomnav { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 50; border-radius: 14px; max-width: calc(100vw - 32px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.25); }
+
+  /* Score predictions responsive */
+  .pred-grid { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch; padding-bottom: 6px; }
+  .pred-grid::-webkit-scrollbar { display: none; }
+  .pred-card { min-width: 220px; flex-shrink: 0; }
+  @media (min-width: 600px) {
+    .pred-grid { display: grid; grid-template-columns: 1fr 1fr; overflow-x: visible; }
+    .pred-card { min-width: 0; flex-shrink: unset; }
+  }
+  @media (min-width: 1024px) {
+    .pred-grid { grid-template-columns: 1fr 1fr 1fr; }
   }
 `;
 
@@ -2282,6 +2303,7 @@ function VoteTab({ predictions, setPredictions, user }) {
     return live ? live.id : (FIXTURES.find(f => f.status === "FT")?.id ?? null);
   });
   const [motmVote, setMotmVote] = useState(() => ls.get("motm_vote", null));
+  const [motmSubmitted, setMotmSubmitted] = useState(() => ls.get("motm_submitted", null));
 
   const homeTeam = getTeam(POLL_MATCH.home);
   const awayTeam = getTeam(POLL_MATCH.away);
@@ -2391,14 +2413,15 @@ function VoteTab({ predictions, setPredictions, user }) {
         🔮 SCORE PREDICTIONS
       </div>
 
-      {FIXTURES.filter(f => f.status === "Upcoming").slice(0, 6).map(fixture => {
-        const pred = predictions[fixture.id];
-        const h = getTeam(fixture.home);
-        const a = getTeam(fixture.away);
-        return (
-          <div key={fixture.id} style={{
+      <div className="pred-grid">
+        {FIXTURES.filter(f => f.status === "Upcoming").slice(0, 6).map(fixture => {
+          const pred = predictions[fixture.id];
+          const h = getTeam(fixture.home);
+          const a = getTeam(fixture.away);
+          return (
+          <div key={fixture.id} className="pred-card" style={{
             background: T.navyMid, borderRadius: 12, padding: 14,
-            marginBottom: 10, border: `1px solid ${pred ? T.gold + "44" : T.navyLight}`,
+            border: `1px solid ${pred ? T.gold + "44" : T.navyLight}`,
           }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
@@ -2430,8 +2453,9 @@ function VoteTab({ predictions, setPredictions, user }) {
               {pred ? "✓ EDIT PREDICTION" : "PREDICT SCORE"}
             </button>
           </div>
-        );
-      })}
+          );
+        })}
+      </div>
 
       {/* Man of the Match */}
       <div style={{ marginTop: 8, marginBottom: 8 }}>
@@ -2499,9 +2523,23 @@ function VoteTab({ predictions, setPredictions, user }) {
                 );
               })}
               {motmVote?.startsWith(String(motmMatch) + "_") && (
-                <div style={{ textAlign: "center", padding: "10px 0 4px", fontSize: 12, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif" }}>
-                  ✓ Your vote: {motmVote.replace(String(motmMatch) + "_", "")}
-                </div>
+                motmSubmitted === motmVote ? (
+                  <div style={{ marginTop: 12, padding: "12px 14px", background: T.gold + "18", borderRadius: 10, border: `1px solid ${T.gold}44`, textAlign: "center" }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 15, color: T.gold }}>⭐ SUBMITTED</div>
+                    <div style={{ fontSize: 11, color: T.gray, marginTop: 3 }}>{motmVote.replace(String(motmMatch) + "_", "")}</div>
+                  </div>
+                ) : (
+                  <div style={{ marginTop: 14 }}>
+                    <div style={{ fontSize: 11, color: T.gray, textAlign: "center", marginBottom: 8, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                      Selected: <span style={{ color: T.gold, fontWeight: 700 }}>{motmVote.replace(String(motmMatch) + "_", "")}</span>
+                    </div>
+                    <button onClick={() => { setMotmSubmitted(motmVote); ls.set("motm_submitted", motmVote); }} style={{
+                      width: "100%", padding: "11px", background: T.gold, border: "none",
+                      borderRadius: 10, color: T.navy, cursor: "pointer",
+                      fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 14, letterSpacing: 0.5,
+                    }}>⭐  SUBMIT VOTE</button>
+                  </div>
+                )
               )}
             </div>
           );
@@ -2690,6 +2728,7 @@ const MOCK_STATS = {
 // ─── TAB: MORE ───────────────────────────────────────────────────────────────
 function MoreTab({ user, onSignIn }) {
   const [section, setSection] = useState("profile");
+  const [statTab, setStatTab] = useState("goals");
   const [showChangePwd, setShowChangePwd] = useState(false);
   const [pwdData, setPwdData] = useState({ next: "", confirm: "" });
   const [pwdMsg, setPwdMsg] = useState("");
@@ -2836,75 +2875,84 @@ function MoreTab({ user, onSignIn }) {
       {/* Stats section */}
       {section === "stats" && (
         <div>
-          {/* Top Scorers */}
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-              <span style={{ fontSize: 22 }}>⚽</span>
-              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: 1, color: T.white }}>TOP SCORERS</span>
-            </div>
-            {MOCK_STATS.goals.map((p, i) => (
-              <div key={p.name} style={{
-                background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
-                border: `1px solid ${i === 0 ? T.gold + "55" : T.navyLight}`,
-                display: "flex", alignItems: "center", gap: 12,
-              }}>
-                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 16, color: i === 0 ? T.gold : T.gray, width: 22, textAlign: "center" }}>{i + 1}</div>
-                <span style={{ fontSize: 24 }}>{p.flag}</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
-                  <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: T.gold }}>{p.goals}</span>
-                  <span style={{ fontSize: 16 }}>⚽</span>
-                </div>
-              </div>
+          {/* Stat sub-tabs */}
+          <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
+            {[["goals","⚽ SCORERS"], ["yellow","🟨 YELLOW"], ["red","🟥 RED"]].map(([id, label]) => (
+              <button key={id} onClick={() => setStatTab(id)} style={{
+                flex: 1, padding: "9px 4px",
+                background: statTab === id ? T.gold : T.navyMid,
+                border: `1px solid ${statTab === id ? T.gold : T.navyLight}`,
+                borderRadius: 10, cursor: "pointer",
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 11,
+                color: statTab === id ? T.navy : T.gray,
+                transition: "all 0.2s",
+              }}>{label}</button>
             ))}
           </div>
+
+          {/* Top Scorers */}
+          {statTab === "goals" && (
+            <div>
+              {MOCK_STATS.goals.map((p, i) => (
+                <div key={p.name} style={{
+                  background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
+                  border: `1px solid ${i === 0 ? T.gold + "55" : T.navyLight}`,
+                  display: "flex", alignItems: "center", gap: 12,
+                }}>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 16, color: i === 0 ? T.gold : T.gray, width: 22, textAlign: "center" }}>{i + 1}</div>
+                  <span style={{ fontSize: 24 }}>{p.flag}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
+                    <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: T.gold }}>{p.goals}</span>
+                    <span style={{ fontSize: 16 }}>⚽</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Yellow Cards */}
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-              <span style={{ fontSize: 22 }}>🟨</span>
-              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: 1, color: T.white }}>YELLOW CARDS</span>
-            </div>
-            {MOCK_STATS.yellowCards.map((p) => (
-              <div key={p.name} style={{
-                background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
-                border: `1px solid ${T.navyLight}`, display: "flex", alignItems: "center", gap: 12,
-              }}>
-                <span style={{ fontSize: 24 }}>{p.flag}</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
-                  <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
+          {statTab === "yellow" && (
+            <div>
+              {MOCK_STATS.yellowCards.map((p) => (
+                <div key={p.name} style={{
+                  background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
+                  border: `1px solid ${T.navyLight}`, display: "flex", alignItems: "center", gap: 12,
+                }}>
+                  <span style={{ fontSize: 24 }}>{p.flag}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
+                    <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
+                  </div>
+                  <span style={{ fontSize: 20 }}>🟨</span>
                 </div>
-                <span style={{ fontSize: 20 }}>🟨</span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Red Cards */}
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-              <span style={{ fontSize: 22 }}>🟥</span>
-              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: 1, color: T.white }}>RED CARDS</span>
-            </div>
-            {MOCK_STATS.redCards.length === 0 ? (
-              <div style={{ color: T.gray, fontSize: 13, padding: "14px 0" }}>No red cards yet</div>
-            ) : MOCK_STATS.redCards.map((p) => (
-              <div key={p.name} style={{
-                background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
-                border: `1px solid ${T.red}44`, display: "flex", alignItems: "center", gap: 12,
-              }}>
-                <span style={{ fontSize: 24 }}>{p.flag}</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
-                  <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
+          {statTab === "red" && (
+            <div>
+              {MOCK_STATS.redCards.length === 0 ? (
+                <div style={{ color: T.gray, fontSize: 13, padding: "14px 0" }}>No red cards yet</div>
+              ) : MOCK_STATS.redCards.map((p) => (
+                <div key={p.name} style={{
+                  background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
+                  border: `1px solid ${T.red}44`, display: "flex", alignItems: "center", gap: 12,
+                }}>
+                  <span style={{ fontSize: 24 }}>{p.flag}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
+                    <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
+                  </div>
+                  <span style={{ fontSize: 20 }}>🟥</span>
                 </div>
-                <span style={{ fontSize: 20 }}>🟥</span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -2935,7 +2983,7 @@ function SideDrawer({ open, onClose, theme }) {
       )}
 
       {/* Drawer panel */}
-      <div style={{
+      <div className="wc-drawer" style={{
         position: "absolute", top: 0, right: 0,
         width: 280, height: "100%",
         background: T.navyMid, zIndex: 310,
@@ -2956,16 +3004,9 @@ function SideDrawer({ open, onClose, theme }) {
           }}>✕</button>
         </div>
 
-        {/* Trophy image + Kickcast logo */}
+        {/* Trophy image */}
         <div style={{ textAlign: "center", padding: "0 20px 16px", flexShrink: 0 }}>
-          <img src="/trophy.png" alt="FIFA World Cup" style={{ height: 120, objectFit: "contain", marginBottom: 12 }} />
-          <div>
-            <img
-              src={theme === "dark" ? "/logo-dark.png" : "/logo-light.png"}
-              alt="KickCast"
-              style={{ height: 28, objectFit: "contain" }}
-            />
-          </div>
+          <img src="/trophy.png" alt="FIFA World Cup" style={{ height: 110, objectFit: "contain" }} />
         </div>
 
         {/* Divider */}
@@ -2975,25 +3016,27 @@ function SideDrawer({ open, onClose, theme }) {
         <div style={{ padding: "0 20px", flex: 1, overflowY: "auto", scrollbarWidth: "thin" }}>
 
           {/* Info rows */}
-          {[
-            { label: "EDITION", value: "23rd FIFA World Cup" },
-            { label: "START DATE", value: "June 11, 2026" },
-            { label: "FINAL", value: "July 19, 2026" },
-            { label: "HOST NATIONS", value: "USA · Canada · Mexico" },
-            { label: "VENUES", value: "16 Stadiums" },
-            { label: "TEAMS", value: "48 Nations" },
-            { label: "GROUPS", value: "12 Groups of 4" },
-            { label: "FORMAT", value: "Group Stage + Knockouts" },
-          ].map(({ label, value }) => (
-            <div key={label} style={{
-              display: "flex", flexDirection: "column", gap: 2,
-              padding: "10px 0",
-              borderBottom: `1px solid ${T.navyLight}`,
-            }}>
-              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, letterSpacing: 1.5, color: T.gray, fontWeight: 700 }}>{label}</div>
-              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 15, fontWeight: 700, color: T.white }}>{value}</div>
-            </div>
-          ))}
+          <div className="drawer-info-grid">
+            {[
+              { label: "EDITION", value: "23rd FIFA World Cup" },
+              { label: "START DATE", value: "June 11, 2026" },
+              { label: "FINAL", value: "July 19, 2026" },
+              { label: "HOST NATIONS", value: "USA · Canada · Mexico" },
+              { label: "VENUES", value: "16 Stadiums" },
+              { label: "TEAMS", value: "48 Nations" },
+              { label: "GROUPS", value: "12 Groups of 4" },
+              { label: "FORMAT", value: "Group Stage + Knockouts" },
+            ].map(({ label, value }) => (
+              <div key={label} style={{
+                display: "flex", flexDirection: "column", gap: 2,
+                padding: "10px 0",
+                borderBottom: `1px solid ${T.navyLight}`,
+              }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, letterSpacing: 1.5, color: T.gray, fontWeight: 700 }}>{label}</div>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 15, fontWeight: 700, color: T.white }}>{value}</div>
+              </div>
+            ))}
+          </div>
 
           {/* Theme */}
           <div style={{ marginTop: 16, padding: "12px 14px", background: T.gold+"18", borderRadius: 10, border: `1px solid ${T.gold}44` }}>
@@ -3353,12 +3396,14 @@ export default function App() {
 
       {/* Content */}
       <div className="wc-content" style={{ overflowY: "auto", flex: 1, minHeight: 0 }}>
-        {tab === "fixtures" && <FixturesTab predictions={predictions} onPredictOpen={openPredict} />}
-        {tab === "teams" && <TeamsTab selectedTeam={selectedTeam} onTeamOpen={(name) => { setSelectedTeam(name); if (name) setTab("teams"); }} />}
-        {tab === "bracket" && <BracketTab key={`bracket-${dataVersion}`} user={user} />}
-        {tab === "vote" && <VoteTab key={`vote-${dataVersion}`} predictions={predictions} setPredictions={setPredictions} user={user} />}
-        {tab === "board" && <LeaderboardTab />}
-        {tab === "more" && <MoreTab user={user} onSignIn={() => setShowAuth(true)} />}
+        <div className="wc-inner">
+          {tab === "fixtures" && <FixturesTab predictions={predictions} onPredictOpen={openPredict} />}
+          {tab === "teams" && <TeamsTab selectedTeam={selectedTeam} onTeamOpen={(name) => { setSelectedTeam(name); if (name) setTab("teams"); }} />}
+          {tab === "bracket" && <BracketTab key={`bracket-${dataVersion}`} user={user} />}
+          {tab === "vote" && <VoteTab key={`vote-${dataVersion}`} predictions={predictions} setPredictions={setPredictions} user={user} />}
+          {tab === "board" && <LeaderboardTab />}
+          {tab === "more" && <MoreTab user={user} onSignIn={() => setShowAuth(true)} />}
+        </div>
       </div>
 
       {/* Desktop Sidebar Nav — hidden on mobile via CSS */}
@@ -3379,21 +3424,22 @@ export default function App() {
         </div>
       </div>
 
-      {/* Bottom Nav (mobile) */}
+      {/* Bottom Nav — floating pill */}
       <div className="wc-bottomnav" style={{
-        width: "100%",
-        background: T.navyMid, borderTop: `1px solid ${T.navyLight}`,
-        display: "flex", zIndex: 50, flexShrink: 0,
+        background: T.navyMid,
+        border: `1px solid ${T.navyLight}`,
+        display: "flex", zIndex: 50, padding: "6px 12px", gap: 4,
       }}>
         {TABS.map(t => (
           <button key={t.id} onClick={() => { setTab(t.id); if (t.id !== "teams") setSelectedTeam(null); }}
             style={{
-              flex: 1, padding: "10px 4px 8px", background: "transparent", border: "none",
-              cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
-              borderTop: `2px solid ${tab === t.id ? T.gold : "transparent"}`,
+              flex: 1, minWidth: 54, padding: "8px 10px 6px",
+              background: tab === t.id ? T.gold + "22" : "transparent",
+              border: "none", borderRadius: 10,
+              cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
               transition: "all 0.2s",
             }}>
-            <span style={{ fontSize: 20 }}>{t.icon}</span>
+            <span style={{ fontSize: 18 }}>{t.icon}</span>
             <span style={{
               fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
               fontSize: 9, letterSpacing: 0.5,

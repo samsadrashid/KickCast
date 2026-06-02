@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>worldcup2026 — Knowledge Graph</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0A1931; color: #F5F0E8; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+#canvas { width: 100vw; height: 100vh; }
+#sidebar { position: fixed; top: 0; right: 0; width: 280px; height: 100vh; background: #0F2847cc;
+  backdrop-filter: blur(8px); border-left: 1px solid #162F55; padding: 16px; overflow-y: auto;
+  transform: translateX(100%); transition: transform 0.3s; z-index: 10; }
+#sidebar.open { transform: translateX(0); }
+#sidebar h2 { font-size: 14px; color: #B4FF02; letter-spacing: 2px; margin-bottom: 12px; text-transform: uppercase; }
+#sidebar .node-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+#sidebar .meta { font-size: 11px; color: #8A9BB5; margin-bottom: 4px; }
+#sidebar .edges-list { margin-top: 12px; }
+#sidebar .edge-item { font-size: 12px; padding: 4px 0; border-bottom: 1px solid #162F55; color: #8A9BB5; }
+#sidebar .edge-item span { color: #F5F0E8; }
+#legend { position: fixed; bottom: 20px; left: 20px; background: #0F2847cc; backdrop-filter: blur(8px);
+  border: 1px solid #162F55; border-radius: 10px; padding: 12px 16px; max-width: 220px; z-index: 10; }
+#legend h3 { font-size: 10px; letter-spacing: 1.5px; color: #B4FF02; margin-bottom: 8px; text-transform: uppercase; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; margin-bottom: 4px; color: #8A9BB5; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+#stats { position: fixed; top: 20px; left: 20px; background: #0F2847cc; backdrop-filter: blur(8px);
+  border: 1px solid #162F55; border-radius: 10px; padding: 10px 14px; font-size: 11px; color: #8A9BB5; z-index: 10; }
+#stats strong { color: #B4FF02; font-size: 13px; }
+#close-btn { position: absolute; top: 12px; right: 12px; background: #162F55; border: none; color: #F5F0E8;
+  width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 14px; }
+tooltip { position: fixed; background: #0F2847; border: 1px solid #B4FF02; border-radius: 6px;
+  padding: 6px 10px; font-size: 12px; pointer-events: none; z-index: 20; display: none; }
+</style>
+</head>
+<body>
+<svg id="canvas"></svg>
+<div id="sidebar">
+  <button id="close-btn" onclick="document.getElementById('sidebar').classList.remove('open')">✕</button>
+  <h2>Node Detail</h2>
+  <div id="sidebar-content"></div>
+</div>
+<div id="legend"><h3>Communities</h3><div id="legend-items"></div></div>
+<div id="stats"><strong>worldcup2026</strong><br>Knowledge Graph<br><span id="stat-text"></span></div>
+<tooltip id="tooltip"></tooltip>
+
+<script>
+const GRAPH = {"nodes": [{"id": "data_DARK_T", "label": "DARK_T", "community": 0, "community_label": "Theme System", "color": "#e23636", "file_type": "code", "source_file": "src/App.jsx", "source_location": "5", "degree": 1, "size": 9.5}, {"id": "data_LIGHT_T", "label": "LIGHT_T", "community": 0, "community_label": "Theme System", "color": "#e23636", "file_type": "code", "source_file": "src/App.jsx", "source_location": "18", "degree": 1, "size": 9.5}, {"id": "data_GROUPS", "label": "GROUPS", "community": 1, "community_label": "Team & Group Data", "color": "#3668e2", "file_type": "code", "source_file": "src/App.jsx", "source_location": "75", "degree": 1, "size": 9.5}, {"id": "data_TEAM_DATA", "label": "TEAM_DATA", "community": 1, "community_label": "Team & Group Data", "color": "#3668e2", "file_type": "code", "source_file": "src/App.jsx", "source_location": "90", "degree": 3, "size": 12.5}, {"id": "data_FIXTURES", "label": "FIXTURES", "community": 2, "community_label": "Match & Bracket Engine", "color": "#9ae236", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1076", "degree": 3, "size": 12.5}, {"id": "comp_StatusBadge", "label": "StatusBadge", "community": 3, "community_label": "Match Card UI", "color": "#e236cc", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1105", "degree": 2, "size": 11.0}, {"id": "comp_MatchCard", "label": "MatchCard", "community": 3, "community_label": "Match Card UI", "color": "#e236cc", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1123", "degree": 1, "size": 9.5}, {"id": "comp_MatchCardSlide", "label": "MatchCardSlide", "community": 3, "community_label": "Match Card UI", "color": "#e236cc", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1188", "degree": 2, "size": 11.0}, {"id": "comp_MatchSliderSection", "label": "MatchSliderSection", "community": 3, "community_label": "Match Card UI", "color": "#e236cc", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1254", "degree": 2, "size": 11.0}, {"id": "comp_FixturesTab", "label": "FixturesTab", "community": 3, "community_label": "Match Card UI", "color": "#e236cc", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1288", "degree": 3, "size": 12.5}, {"id": "comp_TeamsTab", "label": "TeamsTab", "community": 1, "community_label": "Team & Group Data", "color": "#3668e2", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1320", "degree": 4, "size": 14.0}, {"id": "comp_TeamDetail", "label": "TeamDetail", "community": 1, "community_label": "Team & Group Data", "color": "#3668e2", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1467", "degree": 2, "size": 11.0}, {"id": "data_ROUND_IDS", "label": "ROUND_IDS", "community": 4, "community_label": "Round Data", "color": "#36e2c5", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1629", "degree": 0, "size": 8}, {"id": "data_BRACKET_ROUNDS", "label": "BRACKET_ROUNDS", "community": 2, "community_label": "Match & Bracket Engine", "color": "#9ae236", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1631", "degree": 3, "size": 12.5}, {"id": "data_MATCH_MAP", "label": "MATCH_MAP", "community": 5, "community_label": "Match Map", "color": "#e29336", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1698", "degree": 0, "size": 8}, {"id": "comp_TeamPickerModal", "label": "TeamPickerModal", "community": 2, "community_label": "Match & Bracket Engine", "color": "#9ae236", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1745", "degree": 1, "size": 9.5}, {"id": "comp_WinnerPickerModal", "label": "WinnerPickerModal", "community": 2, "community_label": "Match & Bracket Engine", "color": "#9ae236", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1827", "degree": 1, "size": 9.5}, {"id": "comp_BracketMatchCard", "label": "BracketMatchCard", "community": 2, "community_label": "Match & Bracket Engine", "color": "#9ae236", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1878", "degree": 1, "size": 9.5}, {"id": "comp_BracketListView", "label": "BracketListView", "community": 2, "community_label": "Match & Bracket Engine", "color": "#9ae236", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1957", "degree": 3, "size": 12.5}, {"id": "comp_BracketTreeView", "label": "BracketTreeView", "community": 2, "community_label": "Match & Bracket Engine", "color": "#9ae236", "file_type": "code", "source_file": "src/App.jsx", "source_location": "1978", "degree": 2, "size": 11.0}, {"id": "comp_BracketTab", "label": "BracketTab", "community": 2, "community_label": "Match & Bracket Engine", "color": "#9ae236", "file_type": "code", "source_file": "src/App.jsx", "source_location": "2078", "degree": 10, "size": 23.0}, {"id": "comp_VoteTab", "label": "VoteTab", "community": 6, "community_label": "Voting & Local State", "color": "#6136e2", "file_type": "code", "source_file": "src/App.jsx", "source_location": "2275", "degree": 4, "size": 14.0}, {"id": "data_MOCK_USERS", "label": "MOCK_USERS", "community": 7, "community_label": "Leaderboard", "color": "#3de236", "file_type": "code", "source_file": "src/App.jsx", "source_location": "2575", "degree": 1, "size": 9.5}, {"id": "comp_LeaderboardTab", "label": "LeaderboardTab", "community": 7, "community_label": "Leaderboard", "color": "#3de236", "file_type": "code", "source_file": "src/App.jsx", "source_location": "2588", "degree": 2, "size": 11.0}, {"id": "data_MOCK_STATS", "label": "MOCK_STATS", "community": 8, "community_label": "App Shell & Navigation", "color": "#e2366f", "file_type": "code", "source_file": "src/App.jsx", "source_location": "2666", "degree": 1, "size": 9.5}, {"id": "comp_MoreTab", "label": "MoreTab", "community": 8, "community_label": "App Shell & Navigation", "color": "#e2366f", "file_type": "code", "source_file": "src/App.jsx", "source_location": "2691", "degree": 3, "size": 12.5}, {"id": "data_TABS", "label": "TABS", "community": 8, "community_label": "App Shell & Navigation", "color": "#e2366f", "file_type": "code", "source_file": "src/App.jsx", "source_location": "2915", "degree": 1, "size": 9.5}, {"id": "comp_SideDrawer", "label": "SideDrawer", "community": 8, "community_label": "App Shell & Navigation", "color": "#e2366f", "file_type": "code", "source_file": "src/App.jsx", "source_location": "2926", "degree": 1, "size": 9.5}, {"id": "comp_AuthModal", "label": "AuthModal", "community": 8, "community_label": "App Shell & Navigation", "color": "#e2366f", "file_type": "code", "source_file": "src/App.jsx", "source_location": "3060", "degree": 2, "size": 11.0}, {"id": "comp_App", "label": "App", "community": 8, "community_label": "App Shell & Navigation", "color": "#e2366f", "file_type": "code", "source_file": "src/App.jsx", "source_location": "3184", "degree": 16, "size": 24}, {"id": "ext_supabase", "label": "Supabase", "community": 9, "community_label": "Supabase Backend", "color": "#36a1e2", "file_type": "code", "source_file": "src/supabase.js", "source_location": "", "degree": 4, "size": 14.0}, {"id": "ext_localStorage", "label": "localStorage", "community": 6, "community_label": "Voting & Local State", "color": "#6136e2", "file_type": "code", "source_file": "src/App.jsx", "source_location": "", "degree": 3, "size": 12.5}, {"id": "ext_supabase_auth", "label": "Supabase Auth", "community": 8, "community_label": "App Shell & Navigation", "color": "#e2366f", "file_type": "code", "source_file": "src/supabase.js", "source_location": "", "degree": 4, "size": 14.0}, {"id": "ext_supabase_db", "label": "Supabase DB", "community": 9, "community_label": "Supabase Backend", "color": "#36a1e2", "file_type": "code", "source_file": "src/supabase.js", "source_location": "", "degree": 4, "size": 14.0}, {"id": "data_theme_system", "label": "Theme System", "community": 0, "community_label": "Theme System", "color": "#e23636", "file_type": "code", "source_file": "src/App.jsx", "source_location": "", "degree": 3, "size": 12.5}, {"id": "file_main", "label": "main.jsx", "community": 10, "community_label": "React Entry & Deps", "color": "#d4e236", "file_type": "code", "source_file": "src/main.jsx", "source_location": "", "degree": 2, "size": 11.0}, {"id": "file_supabase", "label": "supabase.js", "community": 9, "community_label": "Supabase Backend", "color": "#36a1e2", "file_type": "code", "source_file": "src/supabase.js", "source_location": "", "degree": 3, "size": 12.5}, {"id": "file_vite", "label": "vite.config.js", "community": 11, "community_label": "Build & Deploy Config", "color": "#be36e2", "file_type": "code", "source_file": "vite.config.js", "source_location": "", "degree": 1, "size": 9.5}, {"id": "file_pkg", "label": "package.json", "community": 10, "community_label": "React Entry & Deps", "color": "#d4e236", "file_type": "document", "source_file": "package.json", "source_location": "", "degree": 3, "size": 12.5}, {"id": "file_index", "label": "index.html", "community": 12, "community_label": "HTML Shell", "color": "#36e28b", "file_type": "document", "source_file": "index.html", "source_location": "", "degree": 0, "size": 8}, {"id": "file_readme", "label": "README.md", "community": 13, "community_label": "Documentation", "color": "#e25936", "file_type": "document", "source_file": "README.md", "source_location": "", "degree": 0, "size": 8}, {"id": "file_netlify", "label": "netlify.toml", "community": 11, "community_label": "Build & Deploy Config", "color": "#be36e2", "file_type": "document", "source_file": "netlify.toml", "source_location": "", "degree": 1, "size": 9.5}, {"id": "file_vercel", "label": "vercel.json", "community": 11, "community_label": "Build & Deploy Config", "color": "#be36e2", "file_type": "document", "source_file": "vercel.json", "source_location": "", "degree": 1, "size": 9.5}, {"id": "dep_react", "label": "React 19", "community": 10, "community_label": "React Entry & Deps", "color": "#d4e236", "file_type": "code", "source_file": "package.json", "source_location": "", "degree": 3, "size": 12.5}, {"id": "dep_supabase_js", "label": "@supabase/supabase-js", "community": 9, "community_label": "Supabase Backend", "color": "#36a1e2", "file_type": "code", "source_file": "package.json", "source_location": "", "degree": 3, "size": 12.5}, {"id": "dep_vite", "label": "Vite 8", "community": 11, "community_label": "Build & Deploy Config", "color": "#be36e2", "file_type": "code", "source_file": "package.json", "source_location": "", "degree": 4, "size": 14.0}], "links": [{"source": "comp_App", "target": "comp_SideDrawer", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "comp_AuthModal", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "comp_FixturesTab", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "comp_TeamsTab", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "comp_BracketTab", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "comp_VoteTab", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "comp_LeaderboardTab", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "comp_MoreTab", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_FixturesTab", "target": "comp_MatchSliderSection", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_MatchSliderSection", "target": "comp_MatchCardSlide", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_MatchCardSlide", "target": "comp_StatusBadge", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_MatchCard", "target": "comp_StatusBadge", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_TeamsTab", "target": "comp_TeamDetail", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_BracketTab", "target": "comp_BracketTreeView", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_BracketTab", "target": "comp_BracketListView", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_BracketTab", "target": "comp_TeamPickerModal", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_BracketTab", "target": "comp_WinnerPickerModal", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_BracketListView", "target": "comp_BracketMatchCard", "relation": "renders", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_FixturesTab", "target": "data_FIXTURES", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_VoteTab", "target": "data_FIXTURES", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_BracketTab", "target": "data_FIXTURES", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_TeamsTab", "target": "data_TEAM_DATA", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_TeamDetail", "target": "data_TEAM_DATA", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_BracketTab", "target": "data_TEAM_DATA", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_TeamsTab", "target": "data_GROUPS", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "data_theme_system", "target": "data_DARK_T", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "data_theme_system", "target": "data_LIGHT_T", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_App", "target": "data_TABS", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_LeaderboardTab", "target": "data_MOCK_USERS", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_MoreTab", "target": "data_MOCK_STATS", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_BracketTab", "target": "data_BRACKET_ROUNDS", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_BracketListView", "target": "data_BRACKET_ROUNDS", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_BracketTreeView", "target": "data_BRACKET_ROUNDS", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.8}, {"source": "comp_App", "target": "ext_supabase_auth", "relation": "calls", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_AuthModal", "target": "ext_supabase_auth", "relation": "calls", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_MoreTab", "target": "ext_supabase_auth", "relation": "calls", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_VoteTab", "target": "ext_supabase_db", "relation": "calls", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_BracketTab", "target": "ext_supabase_db", "relation": "calls", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "ext_supabase_db", "relation": "calls", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "ext_supabase_auth", "target": "ext_supabase", "relation": "implements", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "ext_supabase_db", "target": "ext_supabase", "relation": "implements", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "file_supabase", "target": "ext_supabase", "relation": "initialises", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "dep_supabase_js", "target": "ext_supabase", "relation": "implements", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "ext_localStorage", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.6}, {"source": "comp_BracketTab", "target": "ext_localStorage", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.6}, {"source": "comp_VoteTab", "target": "ext_localStorage", "relation": "uses", "confidence": "EXTRACTED", "weight": 0.6}, {"source": "file_main", "target": "comp_App", "relation": "imports", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "file_supabase", "relation": "imports", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "file_supabase", "target": "dep_supabase_js", "relation": "imports", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "file_vite", "target": "dep_vite", "relation": "configures", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "file_pkg", "target": "dep_react", "relation": "declares", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "file_pkg", "target": "dep_supabase_js", "relation": "declares", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "file_pkg", "target": "dep_vite", "relation": "declares", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "file_netlify", "target": "dep_vite", "relation": "uses", "confidence": "INFERRED", "weight": 0.5}, {"source": "file_vercel", "target": "dep_vite", "relation": "uses", "confidence": "INFERRED", "weight": 0.5}, {"source": "comp_App", "target": "data_theme_system", "relation": "controls", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "data_theme_system", "target": "data_DARK_T", "relation": "reads", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "data_theme_system", "target": "data_LIGHT_T", "relation": "reads", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "comp_App", "target": "dep_react", "relation": "uses", "confidence": "EXTRACTED", "weight": 1.0}, {"source": "file_main", "target": "dep_react", "relation": "imports", "confidence": "EXTRACTED", "weight": 1.0}], "communities": {"0": "Theme System", "1": "Team & Group Data", "2": "Match & Bracket Engine", "3": "Match Card UI", "4": "Round Data", "5": "Match Map", "6": "Voting & Local State", "7": "Leaderboard", "8": "App Shell & Navigation", "9": "Supabase Backend", "10": "React Entry & Deps", "11": "Build & Deploy Config", "12": "HTML Shell", "13": "Documentation"}};
+
+const svg = document.getElementById('canvas');
+const W = window.innerWidth, H = window.innerHeight;
+svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+// Legend
+const legendEl = document.getElementById('legend-items');
+const comColors = {};
+GRAPH.nodes.forEach(n => { comColors[n.community] = { color: n.color, label: n.community_label }; });
+Object.entries(comColors).sort((a,b)=>a[0]-b[0]).forEach(([cid,{color,label}]) => {
+  const d = document.createElement('div');
+  d.className = 'legend-item';
+  d.innerHTML = `<div class="legend-dot" style="background:${color}"></div><span>${label}</span>`;
+  legendEl.appendChild(d);
+});
+document.getElementById('stat-text').textContent = `${GRAPH.nodes.length} nodes · ${GRAPH.links.length} edges · ${Object.keys(GRAPH.communities).length} communities`;
+
+// Force simulation (vanilla JS)
+const nodes = GRAPH.nodes.map(n => ({...n, x: W/2 + (Math.random()-0.5)*300, y: H/2 + (Math.random()-0.5)*300, vx:0, vy:0}));
+const links = GRAPH.links;
+const nodeMap = {};
+nodes.forEach(n => nodeMap[n.id] = n);
+
+// Group nodes by community for clustering
+const comCenters = {};
+const comCounts = {};
+nodes.forEach(n => {
+  if (!comCenters[n.community]) comCenters[n.community] = {x:0,y:0};
+  comCounts[n.community] = (comCounts[n.community]||0) + 1;
+});
+// Arrange community centers in a circle
+const comIds = Object.keys(comCenters);
+const R = Math.min(W,H)*0.35;
+comIds.forEach((cid,i) => {
+  const angle = (i/comIds.length)*Math.PI*2 - Math.PI/2;
+  comCenters[cid] = { x: W/2 + R*Math.cos(angle), y: H/2 + R*Math.sin(angle) };
+});
+nodes.forEach(n => {
+  n.x = comCenters[n.community].x + (Math.random()-0.5)*80;
+  n.y = comCenters[n.community].y + (Math.random()-0.5)*80;
+});
+
+// SVG groups
+const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+const filter = document.createElementNS('http://www.w3.org/2000/svg','filter');
+filter.setAttribute('id','glow');
+const fegb = document.createElementNS('http://www.w3.org/2000/svg','feGaussianBlur');
+fegb.setAttribute('stdDeviation','3'); fegb.setAttribute('result','blur');
+const femerge = document.createElementNS('http://www.w3.org/2000/svg','feMerge');
+['blur','SourceGraphic'].forEach(v => {
+  const n = document.createElementNS('http://www.w3.org/2000/svg','feMergeNode');
+  n.setAttribute('in', v); femerge.appendChild(n);
+});
+filter.appendChild(fegb); filter.appendChild(femerge); defs.appendChild(filter);
+svg.appendChild(defs);
+
+const gLinks = document.createElementNS('http://www.w3.org/2000/svg','g');
+const gNodes = document.createElementNS('http://www.w3.org/2000/svg','g');
+svg.appendChild(gLinks); svg.appendChild(gNodes);
+
+// Draw edges
+const lineEls = links.map(l => {
+  const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('stroke', l.confidence==='EXTRACTED' ? '#3A4F6E' : '#2a3d55');
+  line.setAttribute('stroke-width', l.confidence==='EXTRACTED' ? '1.5' : '0.8');
+  line.setAttribute('stroke-dasharray', l.confidence==='INFERRED' ? '4,3' : 'none');
+  line.setAttribute('opacity', '0.6');
+  gLinks.appendChild(line);
+  return {el: line, link: l};
+});
+
+// Draw nodes
+const nodeEls = {};
+nodes.forEach(n => {
+  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.style.cursor = 'pointer';
+  const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  circle.setAttribute('r', n.size);
+  circle.setAttribute('fill', n.color);
+  circle.setAttribute('stroke', '#0A1931');
+  circle.setAttribute('stroke-width', '1.5');
+  const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+  text.setAttribute('text-anchor','middle');
+  text.setAttribute('dominant-baseline','hanging');
+  text.setAttribute('y', n.size+3);
+  text.setAttribute('font-size','9');
+  text.setAttribute('fill','#8A9BB5');
+  text.setAttribute('pointer-events','none');
+  const shortLabel = n.label.length > 14 ? n.label.slice(0,12)+'…' : n.label;
+  text.textContent = shortLabel;
+  g.appendChild(circle); g.appendChild(text);
+
+  // Hover
+  const tooltip = document.getElementById('tooltip');
+  g.addEventListener('mouseenter', (e) => {
+    circle.setAttribute('filter','url(#glow)');
+    circle.setAttribute('stroke', n.color);
+    circle.setAttribute('stroke-width','2.5');
+    tooltip.style.display = 'block';
+    tooltip.innerHTML = `<strong>${n.label}</strong><br><span style="color:#8A9BB5">${n.community_label}</span><br><span style="color:#8A9BB5">degree ${n.degree} · ${n.source_file}</span>`;
+  });
+  g.addEventListener('mousemove', (e) => {
+    tooltip.style.left = (e.clientX+12)+'px';
+    tooltip.style.top = (e.clientY-8)+'px';
+  });
+  g.addEventListener('mouseleave', () => {
+    circle.removeAttribute('filter');
+    circle.setAttribute('stroke','#0A1931');
+    circle.setAttribute('stroke-width','1.5');
+    tooltip.style.display='none';
+  });
+  g.addEventListener('click', () => {
+    const connLinks = links.filter(l => l.source===n.id||l.target===n.id);
+    const sb = document.getElementById('sidebar');
+    const sc = document.getElementById('sidebar-content');
+    sc.innerHTML = `
+      <div class="node-title" style="color:${n.color}">${n.label}</div>
+      <div class="meta">Community: ${n.community_label}</div>
+      <div class="meta">File: ${n.source_file}${n.source_location ? ':'+n.source_location : ''}</div>
+      <div class="meta">Type: ${n.file_type} · Degree: ${n.degree}</div>
+      <div class="edges-list"><strong style="font-size:11px;color:#B4FF02;text-transform:uppercase;letter-spacing:1px">Connections</strong>
+      ${connLinks.map(l => {
+        const other = l.source===n.id ? l.target : l.source;
+        const otherNode = nodeMap[other];
+        const dir = l.source===n.id ? '→' : '←';
+        return `<div class="edge-item">${dir} <span>${otherNode?.label||other}</span> <em style="color:#3A4F6E">${l.relation}</em></div>`;
+      }).join('')}
+      </div>`;
+    sb.classList.add('open');
+  });
+
+  gNodes.appendChild(g);
+  nodeEls[n.id] = {g, circle, x: n.x, y: n.y, node: n};
+});
+
+// Force sim
+function simulate() {
+  const REPULSE = 800, ATTRACT = 0.03, DAMPING = 0.85, CLUSTER = 0.015;
+  for (let i=0; i<nodes.length; i++) {
+    const a = nodes[i];
+    // Repulsion
+    for (let j=i+1; j<nodes.length; j++) {
+      const b = nodes[j];
+      const dx = b.x-a.x, dy = b.y-a.y;
+      const dist = Math.sqrt(dx*dx+dy*dy)||1;
+      const force = REPULSE/(dist*dist);
+      const fx = dx/dist*force, fy = dy/dist*force;
+      a.vx -= fx; a.vy -= fy;
+      b.vx += fx; b.vy += fy;
+    }
+    // Cluster gravity
+    const cc = comCenters[a.community];
+    a.vx += (cc.x - a.x) * CLUSTER;
+    a.vy += (cc.y - a.y) * CLUSTER;
+  }
+  // Link attraction
+  links.forEach(l => {
+    const a = nodeMap[l.source], b = nodeMap[l.target];
+    if (!a||!b) return;
+    const dx = b.x-a.x, dy = b.y-a.y;
+    a.vx += dx*ATTRACT; a.vy += dy*ATTRACT;
+    b.vx -= dx*ATTRACT; b.vy -= dy*ATTRACT;
+  });
+  // Integrate
+  nodes.forEach(n => {
+    n.vx *= DAMPING; n.vy *= DAMPING;
+    n.x = Math.max(30, Math.min(W-30, n.x+n.vx));
+    n.y = Math.max(30, Math.min(H-30, n.y+n.vy));
+    const el = nodeEls[n.id];
+    if (el) { el.x = n.x; el.y = n.y; }
+  });
+  // Update DOM
+  lineEls.forEach(({el, link}) => {
+    const a = nodeMap[link.source], b = nodeMap[link.target];
+    if (a&&b) { el.setAttribute('x1',a.x);el.setAttribute('y1',a.y);el.setAttribute('x2',b.x);el.setAttribute('y2',b.y); }
+  });
+  Object.values(nodeEls).forEach(({g,node}) => {
+    g.setAttribute('transform', `translate(${node.x},${node.y})`);
+  });
+}
+
+let frame = 0;
+function loop() {
+  if (frame < 300) { simulate(); frame++; }
+  requestAnimationFrame(loop);
+}
+// Also allow drag
+let dragging = null;
+svg.addEventListener('mousedown', e => {
+  const target = e.target.closest('g');
+  if (target) { const nid = Object.keys(nodeEls).find(k => nodeEls[k].g === target); if (nid) dragging = nid; }
+});
+svg.addEventListener('mousemove', e => {
+  if (dragging) {
+    const n = nodeMap[dragging];
+    if (n) { n.x = e.clientX; n.y = e.clientY; n.vx=0; n.vy=0; }
+  }
+});
+svg.addEventListener('mouseup', () => dragging = null);
+
+loop();
+</script>
+</body></html>
