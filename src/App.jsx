@@ -6,8 +6,8 @@ const DARK_T = {
   navy: "#0A1931",
   navyMid: "#0F2847",
   navyLight: "#162F55",
-  gold: "#C8A951",
-  goldLight: "#E2C46A",
+  gold: "#B4FF02",
+  goldLight: "#C8FF3A",
   red: "#E63946",
   white: "#F5F0E8",
   gray: "#8A9BB5",
@@ -19,8 +19,8 @@ const LIGHT_T = {
   navy: "#F0F4F8",
   navyMid: "#FFFFFF",
   navyLight: "#DDE3ED",
-  gold: "#8A6A00",
-  goldLight: "#A07D00",
+  gold: "#014E46",
+  goldLight: "#016B5F",
   red: "#DC2626",
   white: "#1E293B",
   gray: "#5A6A80",
@@ -35,9 +35,12 @@ const makeGlobalStyle = (t) => `
   @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: ${t.navy}; color: ${t.white}; font-family: 'Barlow', sans-serif; }
-  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: ${t.navy}; }
   ::-webkit-scrollbar-thumb { background: ${t.grayDark}; border-radius: 2px; }
+  .slider-row::-webkit-scrollbar { display: none; }
+  .topbar-trophy { display: none; }
+  @media (min-width: 768px) { .topbar-trophy { display: block; } }
   @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
   @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
   @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
@@ -78,7 +81,7 @@ const GROUPS = {
   F: { teams: ["France", "Netherlands", "Senegal", "Cameroon"] },
   G: { teams: ["Germany", "England", "Serbia", "Algeria"] },
   H: { teams: ["Italy", "Croatia", "Slovakia", "Nigeria"] },
-  I: { teams: ["Uruguay", "Ecuador", "Japan", "Iraq"] },
+  I: { teams: ["Uruguay", "Switzerland", "Japan", "Iraq"] },
   J: { teams: ["South Korea", "Australia", "Saudi Arabia", "Bahrain"] },
   K: { teams: ["Poland", "Austria", "Ukraine", "Egypt"] },
   L: { teams: ["Iran", "Uzbekistan", "New Zealand", "Honduras"] },
@@ -205,7 +208,7 @@ const TEAM_DATA = {
       { name:"Olivier Boscagli",   pos:"DEF", club:"PSV Eindhoven",      xi:false },
     ]
   },
-  England: { flag: "🏴", kit: ["#FFFFFF","#012169"], rank: 5, conf: "UEFA",
+  England: { flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", kit: ["#FFFFFF","#012169"], rank: 5, conf: "UEFA",
     squad: [
       { name:"Jordan Pickford",    pos:"GK",  club:"Everton",            xi:true  },
       { name:"Aaron Ramsdale",     pos:"GK",  club:"Southampton",        xi:false },
@@ -1053,6 +1056,19 @@ const TEAM_DATA = {
       { name:"Jose Mario Pinto",pos:"FWD",club:"Olimpia",xi:false },{ name:"Jorge Benguche",pos:"FWD",club:"RB Bragantino",xi:false },{ name:"Kervin Arriaga",pos:"MID",club:"Motagua",xi:false },
       { name:"Cristian Altamirano",pos:"FWD",club:"Olimpia",xi:false },{ name:"Jorge Alvarez",pos:"MID",club:"Olimpia",xi:false },
     ]
+  },
+  Switzerland: { flag: "🇨🇭", kit: ["#FF0000","#FFFFFF"], rank: 19, conf: "UEFA",
+    squad: [
+      { name:"Yann Sommer",pos:"GK",club:"Inter Milan",xi:true },{ name:"Gregor Kobel",pos:"GK",club:"Dortmund",xi:false },{ name:"Jonas Omlin",pos:"GK",club:"Monaco",xi:false },
+      { name:"Manuel Akanji",pos:"DEF",club:"Man City",xi:true },{ name:"Nico Elvedi",pos:"DEF",club:"B.Mönchengladbach",xi:true },{ name:"Ricardo Rodriguez",pos:"DEF",club:"Torino",xi:true },
+      { name:"Silvan Widmer",pos:"DEF",club:"Mainz",xi:true },{ name:"Fabian Schär",pos:"DEF",club:"Newcastle",xi:true },{ name:"Kevin Mbabu",pos:"DEF",club:"Fulham",xi:false },
+      { name:"Granit Xhaka",pos:"MID",club:"Bayer Leverkusen",xi:true },{ name:"Remo Freuler",pos:"MID",club:"Nottm Forest",xi:true },{ name:"Denis Zakaria",pos:"MID",club:"Monaco",xi:true },
+      { name:"Xherdan Shaqiri",pos:"MID",club:"Chicago Fire",xi:false },{ name:"Michel Aebischer",pos:"MID",club:"Bologna",xi:false },{ name:"Fabian Frei",pos:"MID",club:"Basel",xi:false },
+      { name:"Noah Okafor",pos:"FWD",club:"AC Milan",xi:true },{ name:"Breel Embolo",pos:"FWD",club:"Monaco",xi:true },{ name:"Haris Seferovic",pos:"FWD",club:"Fenerbahce",xi:false },
+      { name:"Ruben Vargas",pos:"FWD",club:"Augsburg",xi:true },{ name:"Zeki Amdouni",pos:"FWD",club:"Burnley",xi:false },{ name:"Christian Fassnacht",pos:"FWD",club:"Leicester",xi:false },
+      { name:"Dan Ndoye",pos:"FWD",club:"Bologna",xi:false },{ name:"Vincent Sierro",pos:"MID",club:"Toulouse",xi:false },{ name:"Ardon Jashari",pos:"MID",club:"Club Brugge",xi:false },
+      { name:"Edimilson Fernandes",pos:"MID",club:"Mainz",xi:false },{ name:"Luca Jaques",pos:"DEF",club:"Basel",xi:false },
+    ]
   },};
 
 
@@ -1169,63 +1185,149 @@ function MatchCard({ fixture, onPredict, userPrediction }) {
 }
 
 // ─── TAB: FIXTURES ────────────────────────────────────────────────────────────
-function FixturesTab({ predictions, onPredictOpen }) {
-  const [filter, setFilter] = useState("All");
-  const groups = ["All", ...Object.keys(GROUPS)];
-  const filtered = filter === "All" ? FIXTURES : FIXTURES.filter(f => f.group === filter);
+function MatchCardSlide({ fixture, onPredict, userPrediction }) {
+  const home = getTeam(fixture.home);
+  const away = getTeam(fixture.away);
+  const isLive = fixture.status === "Live";
+  const isFT = fixture.status === "FT";
 
   return (
-    <div style={{ padding: "16px", paddingBottom: 80 }}>
-      {/* Header */}
-      <div style={{ marginBottom: 16 }}>
-        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: 2, color: T.gold }}>
-          FIXTURES
-        </div>
-        <div style={{ fontSize: 13, color: T.gray }}>FIFA World Cup 2026™</div>
-      </div>
-
-      {/* Live banner */}
-      <div style={{
-        background: `linear-gradient(135deg, ${T.red}22, ${T.red}11)`,
-        border: `1px solid ${T.red}44`, borderRadius: 10,
-        padding: "10px 14px", marginBottom: 16,
-        display: "flex", alignItems: "center", gap: 8,
-      }}>
-        <span style={{ animation: "pulse 1s infinite", color: T.red, fontSize: 16 }}>●</span>
-        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14 }}>
-          2 MATCHES LIVE NOW
+    <div style={{
+      minWidth: 230, maxWidth: 230, flexShrink: 0,
+      background: T.navyMid, borderRadius: 14,
+      padding: "14px 14px 12px",
+      border: `1px solid ${isLive ? T.red + "55" : T.navyLight}`,
+      boxShadow: isLive ? `0 0 12px ${T.red}22` : "none",
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+        <span style={{ fontSize: 10, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.5 }}>
+          GRP {fixture.group} · {fixture.time}
         </span>
+        <StatusBadge status={fixture.status} />
       </div>
 
-      {/* Filter */}
-      <div style={{ display: "flex", gap: 8, overflowX: "auto", marginBottom: 16, paddingBottom: 4 }}>
-        {groups.map(g => (
-          <button key={g} onClick={() => setFilter(g)} style={{
-            padding: "6px 14px", borderRadius: 20, border: "none", cursor: "pointer",
-            background: filter === g ? T.gold : T.navyLight,
-            color: filter === g ? T.navy : T.gray,
-            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13,
-            whiteSpace: "nowrap", letterSpacing: 0.5,
-          }}>
-            {g === "All" ? "All" : `Grp ${g}`}
-          </button>
-        ))}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ flex: 1, textAlign: "center" }}>
+          <div style={{ fontSize: 32 }}>{home.flag}</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, marginTop: 3, color: T.white }}>{fixture.home}</div>
+        </div>
+        <div style={{ textAlign: "center", padding: "0 8px" }}>
+          {isFT || isLive ? (
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: T.gold, letterSpacing: 2 }}>
+              {fixture.homeScore}–{fixture.awayScore}
+            </div>
+          ) : (
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 20, color: T.gray }}>VS</div>
+          )}
+          <div style={{ fontSize: 10, color: T.grayDark, marginTop: 2, fontFamily: "'Barlow Condensed', sans-serif" }}>{fixture.date}</div>
+        </div>
+        <div style={{ flex: 1, textAlign: "center" }}>
+          <div style={{ fontSize: 32 }}>{away.flag}</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, marginTop: 3, color: T.white }}>{fixture.away}</div>
+        </div>
       </div>
 
-      {filtered.map(f => (
-        <MatchCard
-          key={f.id} fixture={f}
-          userPrediction={predictions[f.id]}
-          onPredict={onPredictOpen}
-        />
-      ))}
+      {userPrediction && (
+        <div style={{ marginTop: 8, textAlign: "center", fontSize: 11, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif" }}>
+          You: {userPrediction.homeScore}–{userPrediction.awayScore}
+        </div>
+      )}
+
+      {fixture.status === "Upcoming" && (
+        <button onClick={() => onPredict(fixture)} style={{
+          marginTop: 10, width: "100%", padding: "6px",
+          background: "transparent", border: `1px solid ${T.gold}`,
+          color: T.gold, borderRadius: 7, cursor: "pointer",
+          fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: 1,
+        }}>
+          {userPrediction ? "EDIT" : "PREDICT"}
+        </button>
+      )}
+
+      <div style={{ marginTop: 8, fontSize: 10, color: T.grayDark, textAlign: "center", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.3 }}>
+        {fixture.venue}
+      </div>
     </div>
   );
 }
 
-// ─── TAB: GROUPS ─────────────────────────────────────────────────────────────
-function GroupsTab({ onTeamOpen }) {
+function MatchSliderSection({ title, dot, dotColor, matches, predictions, onPredictOpen, emptyMsg }) {
+  return (
+    <div style={{ marginBottom: 28 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+        {dot && <span style={{ color: dotColor, fontSize: 14, animation: "pulse 1.5s infinite" }}>●</span>}
+        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: 1, color: T.white }}>
+          {title}
+        </span>
+        <span style={{ marginLeft: "auto", fontFamily: "'Barlow Condensed', sans-serif", fontSize: 12, color: T.gray }}>
+          {matches.length} {matches.length === 1 ? "match" : "matches"}
+        </span>
+      </div>
+      {matches.length === 0 ? (
+        <div style={{ color: T.gray, fontSize: 13, padding: "14px 0 6px" }}>{emptyMsg}</div>
+      ) : (
+        <div className="slider-row" style={{
+          display: "flex", gap: 12,
+          overflowX: "auto", paddingBottom: 10,
+          scrollbarWidth: "none",
+          WebkitOverflowScrolling: "touch",
+        }}>
+          {matches.map(f => (
+            <MatchCardSlide
+              key={f.id} fixture={f}
+              userPrediction={predictions[f.id]}
+              onPredict={onPredictOpen}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FixturesTab({ predictions, onPredictOpen }) {
+  const live     = FIXTURES.filter(f => f.status === "Live");
+  const upcoming = FIXTURES.filter(f => f.status === "Upcoming");
+  const results  = FIXTURES.filter(f => f.status === "FT");
+
+  return (
+    <div style={{ padding: "16px", paddingBottom: 80 }}>
+      <div style={{ marginBottom: 20 }}>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 24, letterSpacing: 2, color: T.gold }}>FIFA World Cup 2026™</div>
+        <div style={{ fontSize: 13, color: T.gray }}>Tournament Hub</div>
+      </div>
+
+      <MatchSliderSection
+        title="Live Now" dot dotColor={T.red}
+        matches={live} predictions={predictions} onPredictOpen={onPredictOpen}
+        emptyMsg="No matches live right now"
+      />
+      <MatchSliderSection
+        title="Today's Upcoming"
+        matches={upcoming} predictions={predictions} onPredictOpen={onPredictOpen}
+        emptyMsg="No upcoming matches today"
+      />
+      <MatchSliderSection
+        title="Match Results"
+        matches={results} predictions={predictions} onPredictOpen={onPredictOpen}
+        emptyMsg="No results yet"
+      />
+    </div>
+  );
+}
+
+// ─── TAB: TEAMS (Groups + Teams combined) ────────────────────────────────────
+function TeamsTab({ selectedTeam, onTeamOpen }) {
+  const [subTab, setSubTab] = useState("group");
   const [expanded, setExpanded] = useState(null);
+  const [search, setSearch] = useState("");
+
+  if (selectedTeam) {
+    return <TeamDetail name={selectedTeam} onBack={() => onTeamOpen(null)} />;
+  }
+
+  const allTeams = Object.keys(TEAM_DATA);
+  const filtered = allTeams.filter(t => t.toLowerCase().includes(search.toLowerCase()));
 
   const standings = (groupKey) => {
     return GROUPS[groupKey].teams.map((name, i) => ({
@@ -1238,134 +1340,126 @@ function GroupsTab({ onTeamOpen }) {
 
   return (
     <div style={{ padding: "16px", paddingBottom: 80 }}>
-      <div style={{ marginBottom: 16 }}>
-        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: 2, color: T.gold }}>
-          GROUPS
-        </div>
-        <div style={{ fontSize: 13, color: T.gray }}>12 Groups · 48 Teams</div>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        {Object.keys(GROUPS).map(gk => (
-          <div key={gk} onClick={() => setExpanded(expanded === gk ? null : gk)}
-            style={{
-              gridColumn: expanded === gk ? "1 / -1" : "auto",
-              background: T.navyMid, borderRadius: 12,
-              border: `1px solid ${expanded === gk ? T.gold : T.navyLight}`,
-              overflow: "hidden", cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}>
-            {/* Group header */}
-            <div style={{
-              padding: "12px 14px",
-              display: "flex", justifyContent: "space-between", alignItems: "center",
-              background: expanded === gk ? `linear-gradient(135deg, ${T.gold}22, transparent)` : "transparent",
-            }}>
-              <div>
-                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: T.gold }}>
-                  GROUP {gk}
-                </div>
-                <div style={{ fontSize: 11, color: T.gray, marginTop: 2 }}>
-                  {GROUPS[gk].teams.map(t => getTeam(t).flag).join(" ")}
-                </div>
-              </div>
-              <div style={{ color: T.gray, fontSize: 16 }}>{expanded === gk ? "▲" : "▼"}</div>
-            </div>
-
-            {/* Expanded standing */}
-            {expanded === gk && (
-              <div style={{ padding: "0 14px 14px" }}>
-                {/* Header row */}
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 6, padding: "0 4px" }}>
-                  <span style={{ flex: 1 }}>TEAM</span>
-                  {["P","W","D","L","GF","GA","GD","PTS"].map(h => (
-                    <span key={h} style={{ width: 24, textAlign: "center" }}>{h}</span>
-                  ))}
-                </div>
-
-                {standings(gk).map((team, idx) => (
-                  <div key={team.name} onClick={(e) => { e.stopPropagation(); onTeamOpen(team.name); }}
-                    style={{
-                      display: "flex", alignItems: "center", padding: "8px 4px",
-                      borderTop: `1px solid ${T.navyLight}`,
-                      background: idx < 2 ? `${T.gold}08` : "transparent",
-                      borderRadius: 6,
-                    }}>
-                    <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8 }}>
-                      {idx < 2 && <div style={{ width: 3, height: 20, background: T.gold, borderRadius: 2 }} />}
-                      {idx >= 2 && <div style={{ width: 3, height: 20 }} />}
-                      <span style={{ fontSize: 20 }}>{team.flag}</span>
-                      <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600, fontSize: 14 }}>
-                        {team.name.length > 10 ? team.name.split(" ")[0] : team.name}
-                      </span>
-                    </div>
-                    {[team.p, team.w, team.d, team.l, team.gf, team.ga, team.gd, team.pts].map((v, i) => (
-                      <span key={i} style={{
-                        width: 24, textAlign: "center", fontSize: 13,
-                        fontFamily: "'Barlow Condensed', sans-serif",
-                        fontWeight: i === 7 ? 800 : 400,
-                        color: i === 7 ? T.gold : T.white,
-                      }}>{v}</span>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── TAB: TEAMS ──────────────────────────────────────────────────────────────
-function TeamsTab({ selectedTeam, onTeamOpen }) {
-  const [search, setSearch] = useState("");
-  const allTeams = Object.keys(TEAM_DATA);
-  const filtered = allTeams.filter(t => t.toLowerCase().includes(search.toLowerCase()));
-
-  if (selectedTeam) {
-    return <TeamDetail name={selectedTeam} onBack={() => onTeamOpen(null)} />;
-  }
-
-  return (
-    <div style={{ padding: "16px", paddingBottom: 80 }}>
-      <div style={{ marginBottom: 16 }}>
-        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: 2, color: T.gold }}>
-          TEAMS
-        </div>
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: 2, color: T.gold }}>TEAMS</div>
         <div style={{ fontSize: 13, color: T.gray }}>48 Nations · FIFA World Cup 2026™</div>
       </div>
 
-      <input
-        placeholder="Search team..."
-        value={search} onChange={e => setSearch(e.target.value)}
-        style={{
-          width: "100%", padding: "10px 14px", marginBottom: 14,
-          background: T.navyMid, border: `1px solid ${T.navyLight}`,
-          borderRadius: 10, color: T.white, fontSize: 14,
-          fontFamily: "'Barlow', sans-serif", outline: "none",
-        }}
-      />
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
-        {filtered.map(name => {
-          const t = getTeam(name);
-          return (
-            <div key={name} onClick={() => onTeamOpen(name)}
-              style={{
-                background: T.navyMid, borderRadius: 10, padding: "12px 8px",
-                textAlign: "center", cursor: "pointer",
-                border: `1px solid ${T.navyLight}`,
-                transition: "border-color 0.2s",
-              }}>
-              <div style={{ fontSize: 32 }}>{t.flag}</div>
-              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, marginTop: 6, lineHeight: 1.2 }}>{name}</div>
-              <div style={{ fontSize: 10, color: T.gray, marginTop: 2 }}>#{t.rank}</div>
-            </div>
-          );
-        })}
+      {/* Sub-tab toggle */}
+      <div style={{ display: "flex", marginBottom: 16, background: T.navyLight, borderRadius: 10, padding: 3 }}>
+        {[["group", "📊  GROUPS"], ["team", "👕  TEAMS"]].map(([id, label]) => (
+          <button key={id} onClick={() => setSubTab(id)} style={{
+            flex: 1, padding: "8px", border: "none", borderRadius: 8, cursor: "pointer",
+            background: subTab === id ? T.gold : "transparent",
+            color: subTab === id ? T.navy : T.gray,
+            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 13,
+            transition: "all 0.2s",
+          }}>{label}</button>
+        ))}
       </div>
+
+      {/* Groups sub-tab */}
+      {subTab === "group" && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          {Object.keys(GROUPS).map(gk => (
+            <div key={gk} onClick={() => setExpanded(expanded === gk ? null : gk)}
+              style={{
+                gridColumn: expanded === gk ? "1 / -1" : "auto",
+                background: T.navyMid, borderRadius: 12,
+                border: `1px solid ${expanded === gk ? T.gold : T.navyLight}`,
+                overflow: "hidden", cursor: "pointer",
+                transition: "all 0.3s ease",
+              }}>
+              <div style={{
+                padding: "12px 14px",
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                background: expanded === gk ? `linear-gradient(135deg, ${T.gold}22, transparent)` : "transparent",
+              }}>
+                <div>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: T.gold }}>
+                    GROUP {gk}
+                  </div>
+                  <div style={{ fontSize: 11, color: T.gray, marginTop: 2 }}>
+                    {GROUPS[gk].teams.map(t => getTeam(t).flag).join(" ")}
+                  </div>
+                </div>
+                <div style={{ color: T.gray, fontSize: 16 }}>{expanded === gk ? "▲" : "▼"}</div>
+              </div>
+
+              {expanded === gk && (
+                <div style={{ padding: "0 14px 14px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 6, padding: "0 4px" }}>
+                    <span style={{ flex: 1 }}>TEAM</span>
+                    {["P","W","D","L","GF","GA","GD","PTS"].map(h => (
+                      <span key={h} style={{ width: 24, textAlign: "center" }}>{h}</span>
+                    ))}
+                  </div>
+                  {standings(gk).map((team, idx) => (
+                    <div key={team.name} onClick={(e) => { e.stopPropagation(); onTeamOpen(team.name); }}
+                      style={{
+                        display: "flex", alignItems: "center", padding: "8px 4px",
+                        borderTop: `1px solid ${T.navyLight}`,
+                        background: idx < 2 ? `${T.gold}08` : "transparent",
+                        borderRadius: 6,
+                      }}>
+                      <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8 }}>
+                        {idx < 2 && <div style={{ width: 3, height: 20, background: T.gold, borderRadius: 2 }} />}
+                        {idx >= 2 && <div style={{ width: 3, height: 20 }} />}
+                        <span style={{ fontSize: 20 }}>{team.flag}</span>
+                        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600, fontSize: 14 }}>
+                          {team.name.length > 10 ? team.name.split(" ")[0] : team.name}
+                        </span>
+                      </div>
+                      {[team.p, team.w, team.d, team.l, team.gf, team.ga, team.gd, team.pts].map((v, i) => (
+                        <span key={i} style={{
+                          width: 24, textAlign: "center", fontSize: 13,
+                          fontFamily: "'Barlow Condensed', sans-serif",
+                          fontWeight: i === 7 ? 800 : 400,
+                          color: i === 7 ? T.gold : T.white,
+                        }}>{v}</span>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Teams sub-tab */}
+      {subTab === "team" && (
+        <>
+          <input
+            placeholder="Search team..."
+            value={search} onChange={e => setSearch(e.target.value)}
+            style={{
+              width: "100%", padding: "10px 14px", marginBottom: 14,
+              background: T.navyMid, border: `1px solid ${T.navyLight}`,
+              borderRadius: 10, color: T.white, fontSize: 14,
+              fontFamily: "'Barlow', sans-serif", outline: "none",
+            }}
+          />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+            {filtered.map(name => {
+              const t = getTeam(name);
+              return (
+                <div key={name} onClick={() => onTeamOpen(name)}
+                  style={{
+                    background: T.navyMid, borderRadius: 10, padding: "12px 8px",
+                    textAlign: "center", cursor: "pointer",
+                    border: `1px solid ${T.navyLight}`,
+                    transition: "border-color 0.2s",
+                  }}>
+                  <div style={{ fontSize: 32 }}>{t.flag}</div>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, marginTop: 6, lineHeight: 1.2 }}>{name}</div>
+                  <div style={{ fontSize: 10, color: T.gray, marginTop: 2 }}>#{t.rank}</div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -1993,7 +2087,7 @@ function BracketTab({ user }) {
       );
     }
   };
-  const [viewMode, setViewMode] = useState("list");
+  const [viewMode, setViewMode] = useState("tree");
   const [modal, setModal] = useState(null);
   // modal: { type: "team"|"winner", match, round, side, current, teams }
 
@@ -2119,7 +2213,7 @@ function BracketTab({ user }) {
 
       {/* View toggle */}
       <div style={{ display: "flex", marginBottom: 16, background: T.navyLight, borderRadius: 10, padding: 3 }}>
-        {[["list", "☰  LIST VIEW"], ["tree", "⟶  TREE VIEW"]].map(([mode, label]) => (
+        {[["tree", "⟶  TREE VIEW"], ["list", "☰  LIST VIEW"]].map(([mode, label]) => (
           <button key={mode} onClick={() => setViewMode(mode)} style={{
             flex: 1, padding: "8px", border: "none", borderRadius: 8, cursor: "pointer",
             background: viewMode === mode ? T.gold : "transparent",
@@ -2183,6 +2277,11 @@ function VoteTab({ predictions, setPredictions, user }) {
   const [baseTallies] = useState({ home: 4200, draw: 1300, away: 3100 });
   const [predictOpen, setPredictOpen] = useState(null);
   const [scoreInput, setScoreInput] = useState({ home: 0, away: 0 });
+  const [motmMatch, setMotmMatch] = useState(() => {
+    const live = FIXTURES.find(f => f.status === "Live");
+    return live ? live.id : (FIXTURES.find(f => f.status === "FT")?.id ?? null);
+  });
+  const [motmVote, setMotmVote] = useState(() => ls.get("motm_vote", null));
 
   const homeTeam = getTeam(POLL_MATCH.home);
   const awayTeam = getTeam(POLL_MATCH.away);
@@ -2334,6 +2433,81 @@ function VoteTab({ predictions, setPredictions, user }) {
         );
       })}
 
+      {/* Man of the Match */}
+      <div style={{ marginTop: 8, marginBottom: 8 }}>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: 1, marginBottom: 12 }}>
+          ⭐ MAN OF THE MATCH
+        </div>
+
+        {/* Match selector */}
+        <div style={{ display: "flex", gap: 8, overflowX: "auto", marginBottom: 14, paddingBottom: 4, scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
+          {FIXTURES.filter(f => f.status === "FT" || f.status === "Live").map(f => (
+            <button key={f.id} onClick={() => setMotmMatch(f.id)} style={{
+              flexShrink: 0, padding: "8px 12px",
+              background: motmMatch === f.id ? T.gold + "22" : T.navyMid,
+              border: `1px solid ${motmMatch === f.id ? T.gold : T.navyLight}`,
+              borderRadius: 8, cursor: "pointer",
+              fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12,
+              color: motmMatch === f.id ? T.gold : T.gray,
+              whiteSpace: "nowrap",
+            }}>
+              {getTeam(f.home).flag} {f.home} vs {f.away} {getTeam(f.away).flag}
+            </button>
+          ))}
+        </div>
+
+        {motmMatch && (() => {
+          const match = FIXTURES.find(f => f.id === motmMatch);
+          if (!match) return null;
+          return (
+            <div style={{ background: T.navyMid, borderRadius: 12, padding: "16px", border: `1px solid ${T.navyLight}` }}>
+              <div style={{ fontSize: 12, color: T.gray, marginBottom: 14, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                Pick the standout player · {match.home} vs {match.away}
+              </div>
+              {[match.home, match.away].map(teamName => {
+                const team = getTeam(teamName);
+                const starters = (team.squad || []).filter(p => p.xi);
+                return (
+                  <div key={teamName} style={{ marginBottom: 16 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                      <span style={{ fontSize: 22 }}>{team.flag}</span>
+                      <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 15, color: T.white }}>{teamName}</span>
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                      {starters.map(p => {
+                        const key = `${motmMatch}_${p.name}`;
+                        const isSelected = motmVote === key;
+                        return (
+                          <div key={p.name} onClick={() => { setMotmVote(key); ls.set("motm_vote", key); }}
+                            style={{
+                              padding: "9px 11px", borderRadius: 8, cursor: "pointer",
+                              background: isSelected ? T.gold + "28" : T.navyLight,
+                              border: `1px solid ${isSelected ? T.gold : T.grayDark + "55"}`,
+                              display: "flex", alignItems: "center", gap: 8,
+                              transition: "all 0.15s",
+                            }}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: isSelected ? T.gold : T.white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
+                              <div style={{ fontSize: 10, color: T.gray }}>{p.pos}</div>
+                            </div>
+                            {isSelected && <span style={{ color: T.gold, fontSize: 14, flexShrink: 0 }}>⭐</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+              {motmVote?.startsWith(String(motmMatch) + "_") && (
+                <div style={{ textAlign: "center", padding: "10px 0 4px", fontSize: 12, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                  ✓ Your vote: {motmVote.replace(String(motmMatch) + "_", "")}
+                </div>
+              )}
+            </div>
+          );
+        })()}
+      </div>
+
       {/* Score input modal */}
       {predictOpen && (
         <div onClick={() => setPredictOpen(null)} style={{
@@ -2403,7 +2577,7 @@ const MOCK_USERS = [
   { name: "Carlos M", flag: "🇲🇽", pts: 43, correct: 13, total: 18, acc: 72 },
   { name: "Yuki T", flag: "🇯🇵", pts: 38, correct: 11, total: 16, acc: 69 },
   { name: "Amira K", flag: "🇲🇦", pts: 35, correct: 10, total: 16, acc: 63 },
-  { name: "James W", flag: "🏴", pts: 32, correct: 9, total: 15, acc: 60 },
+  { name: "James W", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", pts: 32, correct: 9, total: 15, acc: 60 },
   { name: "Lucas B", flag: "🇧🇷", pts: 29, correct: 8, total: 15, acc: 53 },
   { name: "Sofia P", flag: "🇵🇹", pts: 27, correct: 8, total: 16, acc: 50 },
   { name: "Ahmed N", flag: "🇳🇬", pts: 24, correct: 7, total: 14, acc: 50 },
@@ -2488,19 +2662,268 @@ function LeaderboardTab() {
   );
 }
 
+// ─── STATS DATA ──────────────────────────────────────────────────────────────
+const MOCK_STATS = {
+  goals: [
+    { name: "Lionel Messi",      team: "Argentina", flag: "🇦🇷", goals: 3 },
+    { name: "Kylian Mbappe",     team: "France",    flag: "🇫🇷", goals: 3 },
+    { name: "Vinicius Jr",       team: "Brazil",    flag: "🇧🇷", goals: 2 },
+    { name: "Christian Pulisic", team: "USA",       flag: "🇺🇸", goals: 2 },
+    { name: "Mohamed Salah",     team: "Egypt",     flag: "🇪🇬", goals: 2 },
+    { name: "Robert Lewandowski",team: "Poland",    flag: "🇵🇱", goals: 1 },
+    { name: "Mehdi Taremi",      team: "Iran",      flag: "🇮🇷", goals: 1 },
+    { name: "Eldor Shomurodov",  team: "Uzbekistan",flag: "🇺🇿", goals: 1 },
+  ],
+  yellowCards: [
+    { name: "Casemiro",          team: "Brazil",    flag: "🇧🇷" },
+    { name: "Leandro Paredes",   team: "Argentina", flag: "🇦🇷" },
+    { name: "Tyler Adams",       team: "USA",       flag: "🇺🇸" },
+    { name: "Rodrigo De Paul",   team: "Argentina", flag: "🇦🇷" },
+    { name: "Piotr Zielinski",   team: "Poland",    flag: "🇵🇱" },
+    { name: "Granit Xhaka",      team: "Switzerland",flag: "🇨🇭" },
+  ],
+  redCards: [
+    { name: "Casemiro",          team: "Brazil",    flag: "🇧🇷" },
+  ],
+};
+
+// ─── TAB: MORE ───────────────────────────────────────────────────────────────
+function MoreTab({ user, onSignIn }) {
+  const [section, setSection] = useState("profile");
+  const [showChangePwd, setShowChangePwd] = useState(false);
+  const [pwdData, setPwdData] = useState({ next: "", confirm: "" });
+  const [pwdMsg, setPwdMsg] = useState("");
+  const [displayName, setDisplayName] = useState(user?.user_metadata?.full_name || "");
+  const [editingName, setEditingName] = useState(false);
+  const [nameMsg, setNameMsg] = useState("");
+
+  const handleChangePwd = async (e) => {
+    e.preventDefault();
+    setPwdMsg("");
+    if (pwdData.next !== pwdData.confirm) { setPwdMsg("Passwords don't match"); return; }
+    const { error } = await supabase.auth.updateUser({ password: pwdData.next });
+    if (error) setPwdMsg(error.message);
+    else { setPwdMsg("Password updated!"); setTimeout(() => { setShowChangePwd(false); setPwdMsg(""); setPwdData({ next: "", confirm: "" }); }, 1500); }
+  };
+
+  const handleUpdateName = async () => {
+    const { error } = await supabase.auth.updateUser({ data: { full_name: displayName } });
+    if (error) setNameMsg(error.message);
+    else { setEditingName(false); setNameMsg(""); }
+  };
+
+  const inp = {
+    width: "100%", padding: "10px 12px", borderRadius: 8,
+    background: T.navyLight, border: `1px solid ${T.grayDark}`,
+    color: T.white, fontFamily: "'Barlow', sans-serif", fontSize: 14, outline: "none",
+  };
+
+  return (
+    <div style={{ padding: "16px", paddingBottom: 80 }}>
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: 2, color: T.gold }}>MORE</div>
+        <div style={{ fontSize: 13, color: T.gray }}>Profile & Tournament Stats</div>
+      </div>
+
+      {/* Section toggle */}
+      <div style={{ display: "flex", marginBottom: 20, background: T.navyLight, borderRadius: 10, padding: 3 }}>
+        {[["profile", "👤  PROFILE"], ["stats", "📊  STATS"]].map(([id, label]) => (
+          <button key={id} onClick={() => setSection(id)} style={{
+            flex: 1, padding: "8px", border: "none", borderRadius: 8, cursor: "pointer",
+            background: section === id ? T.gold : "transparent",
+            color: section === id ? T.navy : T.gray,
+            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 13,
+            transition: "all 0.2s",
+          }}>{label}</button>
+        ))}
+      </div>
+
+      {/* Profile section */}
+      {section === "profile" && (
+        user ? (
+          <>
+            {/* Avatar + name card */}
+            <div style={{ background: T.navyMid, borderRadius: 14, padding: "20px 16px", border: `1px solid ${T.navyLight}`, marginBottom: 12, textAlign: "center" }}>
+              <div style={{
+                width: 64, height: 64, borderRadius: "50%", background: T.gold,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: T.navy,
+                margin: "0 auto 12px",
+              }}>
+                {(user.user_metadata?.full_name?.[0] || user.email?.[0] || "?").toUpperCase()}
+              </div>
+              {editingName ? (
+                <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+                  <input value={displayName} onChange={e => setDisplayName(e.target.value)}
+                    style={{ ...inp, width: "auto", flex: 1, minWidth: 140 }} />
+                  <button onClick={handleUpdateName} style={{ padding: "8px 14px", background: T.gold, border: "none", borderRadius: 8, color: T.navy, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 13 }}>SAVE</button>
+                  <button onClick={() => { setEditingName(false); setNameMsg(""); }} style={{ padding: "8px 10px", background: T.navyLight, border: "none", borderRadius: 8, color: T.gray, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13 }}>✕</button>
+                </div>
+              ) : (
+                <>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 20, color: T.white }}>
+                    {user.user_metadata?.full_name || user.email?.split("@")[0]}
+                  </div>
+                  <div style={{ fontSize: 12, color: T.gray, marginTop: 4 }}>{user.email}</div>
+                </>
+              )}
+              {nameMsg && <div style={{ fontSize: 11, color: T.red, marginTop: 6 }}>{nameMsg}</div>}
+            </div>
+
+            {/* Action rows */}
+            {[
+              { label: "Edit Profile", icon: "✏️", action: () => { setEditingName(true); setShowChangePwd(false); } },
+              { label: "Change Password", icon: "🔒", action: () => { setShowChangePwd(v => !v); setEditingName(false); } },
+            ].map(({ label, icon, action }) => (
+              <div key={label} onClick={action} style={{
+                background: T.navyMid, borderRadius: 12, padding: "14px 16px",
+                border: `1px solid ${T.navyLight}`, marginBottom: 8,
+                display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
+              }}>
+                <span style={{ fontSize: 20 }}>{icon}</span>
+                <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 16, color: T.white }}>{label}</span>
+                <span style={{ marginLeft: "auto", color: T.gray, fontSize: 18 }}>›</span>
+              </div>
+            ))}
+
+            {/* Change password form */}
+            {showChangePwd && (
+              <form onSubmit={handleChangePwd} style={{ background: T.navyMid, borderRadius: 12, padding: "16px", border: `1px solid ${T.navyLight}`, marginBottom: 8 }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 14, letterSpacing: 1, color: T.gold, marginBottom: 12 }}>CHANGE PASSWORD</div>
+                <input type="password" placeholder="New password" required value={pwdData.next}
+                  onChange={e => setPwdData(d => ({ ...d, next: e.target.value }))}
+                  style={{ ...inp, marginBottom: 10 }} />
+                <input type="password" placeholder="Confirm new password" required value={pwdData.confirm}
+                  onChange={e => setPwdData(d => ({ ...d, confirm: e.target.value }))}
+                  style={{ ...inp, marginBottom: 12 }} />
+                {pwdMsg && (
+                  <div style={{ fontSize: 12, color: pwdMsg.includes("updated") ? T.green : T.red, marginBottom: 10, padding: "8px 10px", background: (pwdMsg.includes("updated") ? T.green : T.red) + "18", borderRadius: 8 }}>
+                    {pwdMsg}
+                  </div>
+                )}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  <button type="button" onClick={() => { setShowChangePwd(false); setPwdMsg(""); setPwdData({ next: "", confirm: "" }); }}
+                    style={{ padding: "10px", background: T.navyLight, border: "none", borderRadius: 8, color: T.gray, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13 }}>CANCEL</button>
+                  <button type="submit"
+                    style={{ padding: "10px", background: T.gold, border: "none", borderRadius: 8, color: T.navy, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 13 }}>UPDATE</button>
+                </div>
+              </form>
+            )}
+
+            {/* Sign out */}
+            <div onClick={() => supabase.auth.signOut()} style={{
+              background: T.red + "18", borderRadius: 12, padding: "14px 16px",
+              border: `1px solid ${T.red}44`, marginTop: 4,
+              display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
+            }}>
+              <span style={{ fontSize: 20 }}>🚪</span>
+              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 16, color: T.red }}>Sign Out</span>
+            </div>
+          </>
+        ) : (
+          <div style={{ textAlign: "center", padding: "40px 20px", background: T.navyMid, borderRadius: 14, border: `1px solid ${T.navyLight}` }}>
+            <div style={{ fontSize: 48, marginBottom: 12 }}>👤</div>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 20, color: T.white, marginBottom: 6 }}>Not signed in</div>
+            <div style={{ fontSize: 13, color: T.gray, marginBottom: 20 }}>Sign in to save your predictions and profile</div>
+            <button onClick={onSignIn} style={{
+              padding: "12px 32px", background: T.gold, border: "none", borderRadius: 10, color: T.navy,
+              fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 16, cursor: "pointer",
+            }}>SIGN IN</button>
+          </div>
+        )
+      )}
+
+      {/* Stats section */}
+      {section === "stats" && (
+        <div>
+          {/* Top Scorers */}
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+              <span style={{ fontSize: 22 }}>⚽</span>
+              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: 1, color: T.white }}>TOP SCORERS</span>
+            </div>
+            {MOCK_STATS.goals.map((p, i) => (
+              <div key={p.name} style={{
+                background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
+                border: `1px solid ${i === 0 ? T.gold + "55" : T.navyLight}`,
+                display: "flex", alignItems: "center", gap: 12,
+              }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 16, color: i === 0 ? T.gold : T.gray, width: 22, textAlign: "center" }}>{i + 1}</div>
+                <span style={{ fontSize: 24 }}>{p.flag}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
+                  <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: T.gold }}>{p.goals}</span>
+                  <span style={{ fontSize: 16 }}>⚽</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Yellow Cards */}
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+              <span style={{ fontSize: 22 }}>🟨</span>
+              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: 1, color: T.white }}>YELLOW CARDS</span>
+            </div>
+            {MOCK_STATS.yellowCards.map((p) => (
+              <div key={p.name} style={{
+                background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
+                border: `1px solid ${T.navyLight}`, display: "flex", alignItems: "center", gap: 12,
+              }}>
+                <span style={{ fontSize: 24 }}>{p.flag}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
+                  <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
+                </div>
+                <span style={{ fontSize: 20 }}>🟨</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Red Cards */}
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+              <span style={{ fontSize: 22 }}>🟥</span>
+              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: 1, color: T.white }}>RED CARDS</span>
+            </div>
+            {MOCK_STATS.redCards.length === 0 ? (
+              <div style={{ color: T.gray, fontSize: 13, padding: "14px 0" }}>No red cards yet</div>
+            ) : MOCK_STATS.redCards.map((p) => (
+              <div key={p.name} style={{
+                background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
+                border: `1px solid ${T.red}44`, display: "flex", alignItems: "center", gap: 12,
+              }}>
+                <span style={{ fontSize: 24 }}>{p.flag}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
+                  <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
+                </div>
+                <span style={{ fontSize: 20 }}>🟥</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── BOTTOM NAV ──────────────────────────────────────────────────────────────
 const TABS = [
   { id: "fixtures", label: "Fixtures", icon: "🏟️" },
-  { id: "groups", label: "Groups", icon: "📊" },
-  { id: "teams", label: "Teams", icon: "👕" },
-  { id: "bracket", label: "Bracket", icon: "🔮" },
-  { id: "vote", label: "Vote", icon: "🗳️" },
-  { id: "board", label: "Board", icon: "🏅" },
+  { id: "teams",    label: "Teams",    icon: "👕" },
+  { id: "bracket",  label: "Bracket",  icon: "🔮" },
+  { id: "vote",     label: "Vote",     icon: "🗳️" },
+  { id: "board",    label: "Board",    icon: "🏅" },
+  { id: "more",     label: "More",     icon: "⋯" },
 ];
 
 // ─── APP ─────────────────────────────────────────────────────────────────────
 // ─── SIDE DRAWER ─────────────────────────────────────────────────────────────
-function SideDrawer({ open, onClose }) {
+function SideDrawer({ open, onClose, theme }) {
   return (
     <>
       {/* Backdrop */}
@@ -2514,16 +2937,17 @@ function SideDrawer({ open, onClose }) {
       {/* Drawer panel */}
       <div style={{
         position: "absolute", top: 0, right: 0,
-        width: 280, minHeight: "100%", height: "100%",
+        width: 280, height: "100%",
         background: T.navyMid, zIndex: 310,
         transform: open ? "translateX(0)" : "translateX(100%)",
         transition: "transform 0.3s cubic-bezier(0.4,0,0.2,1)",
         display: "flex", flexDirection: "column",
         borderLeft: `1px solid ${T.navyLight}`,
         boxShadow: open ? "-8px 0 32px #0008" : "none",
+        overflow: "hidden",
       }}>
         {/* Close button */}
-        <div style={{ padding: "16px 16px 12px", display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ padding: "16px 16px 12px", display: "flex", justifyContent: "flex-end", flexShrink: 0 }}>
           <button onClick={onClose} style={{
             background: T.navyLight, border: "none", color: T.white,
             width: 36, height: 36, borderRadius: "50%", cursor: "pointer",
@@ -2532,26 +2956,23 @@ function SideDrawer({ open, onClose }) {
           }}>✕</button>
         </div>
 
-        {/* Trophy icon */}
-        <div style={{ textAlign: "center", padding: "10px 0 4px" }}>
-          <div style={{ fontSize: 48 }}>🏆</div>
-        </div>
-
-        {/* Title */}
-        <div style={{ textAlign: "center", padding: "0 20px 20px" }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, letterSpacing: 3, color: T.gold }}>
-            FIFA WORLD CUP
-          </div>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 32, color: T.white, letterSpacing: 2, lineHeight: 1 }}>
-            2026™
+        {/* Trophy image + Kickcast logo */}
+        <div style={{ textAlign: "center", padding: "0 20px 16px", flexShrink: 0 }}>
+          <img src="/trophy.png" alt="FIFA World Cup" style={{ height: 120, objectFit: "contain", marginBottom: 12 }} />
+          <div>
+            <img
+              src={theme === "dark" ? "/logo-dark.png" : "/logo-light.png"}
+              alt="KickCast"
+              style={{ height: 28, objectFit: "contain" }}
+            />
           </div>
         </div>
 
         {/* Divider */}
-        <div style={{ height: 1, background: T.navyLight, margin: "0 20px 20px" }} />
+        <div style={{ height: 1, background: T.navyLight, margin: "0 20px 16px", flexShrink: 0 }} />
 
-        {/* Info content */}
-        <div style={{ padding: "0 20px", flex: 1 }}>
+        {/* Scrollable content */}
+        <div style={{ padding: "0 20px", flex: 1, overflowY: "auto", scrollbarWidth: "thin" }}>
 
           {/* Info rows */}
           {[
@@ -2839,11 +3260,6 @@ export default function App() {
     setPredictModal(null);
   };
 
-  const handleTeamOpen = (name) => {
-    setSelectedTeam(name);
-    if (name) setTab("teams");
-  };
-
   return (
     <div className="wc-root" style={{
       background: T.navy, position: "relative", display: "flex", flexDirection: "column",
@@ -2858,19 +3274,19 @@ export default function App() {
         borderBottom: `1px solid ${T.navyLight}`,
         position: "sticky", top: 0, zIndex: 50,
       }}>
-        {/* Left: title */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: T.gold }} />
-          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, letterSpacing: 3, color: T.gold }}>
-            FIFA WORLD CUP
-          </span>
+        {/* Left: Kickcast logo */}
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img
+            src={theme === "dark" ? "/logo-dark.png" : "/logo-light.png"}
+            alt="KickCast"
+            style={{ height: 30, objectFit: "contain" }}
+          />
         </div>
 
-        {/* Right: year + auth + burger */}
+        {/* Right: trophy + auth + theme + burger */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, color: T.white, letterSpacing: 2 }}>
-            2026™
-          </div>
+          {/* Trophy */}
+          <img src="/trophy.png" alt="FIFA World Cup" className="topbar-trophy" style={{ height: 38, objectFit: "contain" }} />
 
           {/* Auth area */}
           {user ? (
@@ -2938,11 +3354,11 @@ export default function App() {
       {/* Content */}
       <div className="wc-content" style={{ overflowY: "auto", flex: 1, minHeight: 0 }}>
         {tab === "fixtures" && <FixturesTab predictions={predictions} onPredictOpen={openPredict} />}
-        {tab === "groups" && <GroupsTab onTeamOpen={handleTeamOpen} />}
-        {tab === "teams" && <TeamsTab selectedTeam={selectedTeam} onTeamOpen={(name) => { setSelectedTeam(name); }} />}
+        {tab === "teams" && <TeamsTab selectedTeam={selectedTeam} onTeamOpen={(name) => { setSelectedTeam(name); if (name) setTab("teams"); }} />}
         {tab === "bracket" && <BracketTab key={`bracket-${dataVersion}`} user={user} />}
         {tab === "vote" && <VoteTab key={`vote-${dataVersion}`} predictions={predictions} setPredictions={setPredictions} user={user} />}
         {tab === "board" && <LeaderboardTab />}
+        {tab === "more" && <MoreTab user={user} onSignIn={() => setShowAuth(true)} />}
       </div>
 
       {/* Desktop Sidebar Nav — hidden on mobile via CSS */}
@@ -3048,7 +3464,7 @@ export default function App() {
       )}
 
       {/* Side drawer */}
-      <SideDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <SideDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} theme={theme} />
 
       {/* Auth modal */}
       {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
