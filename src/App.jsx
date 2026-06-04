@@ -51,14 +51,13 @@ const makeGlobalStyle = (t) => `
     overflow: hidden; height: 100vh; height: 100dvh; }
   @media (min-width: 768px) {
     .wc-root { max-width: 100% !important; display: grid !important;
-      grid-template-columns: 260px 1fr; grid-template-rows: 56px 1fr;
-      grid-template-areas: "topbar topbar" "sidebar content";
+      grid-template-columns: 1fr; grid-template-rows: 56px 1fr;
+      grid-template-areas: "topbar" "content";
       height: 100vh; height: 100dvh; }
     .wc-topbar   { grid-area: topbar; z-index: 50; }
-    .wc-sidebar  { grid-area: sidebar; overflow-y: auto; border-right: 1px solid ${t.navyLight};
-      display: flex; flex-direction: column; gap: 4px; padding: 16px 12px; background: ${t.navyMid}; min-height: 0; }
+    .wc-sidebar  { display: none !important; }
     .wc-content  { grid-area: content; overflow-y: auto; min-height: 0; }
-    .wc-inner { max-width: 900px; margin: 0 auto; width: 100%; }
+    .wc-inner { max-width: 100%; margin: 0 auto; width: 100%; }
     .wc-bottomnav { display: flex !important; }
     .wc-drawer { width: 520px !important; }
     .drawer-info-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px; }
@@ -70,7 +69,7 @@ const makeGlobalStyle = (t) => `
     .wc-sidebar-btn:hover:not(.active) { background: ${t.navyLight}; color: ${t.white}; }
   }
   @media (min-width: 1200px) {
-    .wc-root { grid-template-columns: 280px 1fr; }
+    .wc-inner { max-width: 1200px; margin: 0 auto; }
   }
 
   /* Floating bottom nav */
@@ -3439,7 +3438,7 @@ export default function App() {
               cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
               transition: "all 0.2s",
             }}>
-            <span style={{ fontSize: 18 }}>{t.icon}</span>
+            <span style={{ fontSize: 18, color: tab === t.id ? T.gold : T.white }}>{t.icon}</span>
             <span style={{
               fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
               fontSize: 9, letterSpacing: 0.5,
