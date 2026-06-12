@@ -4,3 +4,38 @@ body,
   margin: 0;
   min-height: 100%;
 }
+
+/* ── Bracket design tokens (dark mode default) ── */
+:root {
+  --bk-page:             #0d1b2a;
+  --bk-surface:          #132338;
+  --bk-surface-hover:    #1a2f47;
+  --bk-active-card:      #1e3a5f;
+  --bk-border-empty:     #2a4060;
+  --bk-border-active:    #c8f135;
+  --bk-connector:        #2a4060;
+  --bk-connector-active: #c8f135;
+  --bk-text-primary:     #e8f4f8;
+  --bk-text-secondary:   #6b8fa8;
+  --bk-accent:           #c8f135;
+  --bk-tab-active-bg:    #1e3a5f;
+  --bk-tab-active-text:  #c8f135;
+}
+
+[data-theme="light"] {
+  --bk-page:             #f5f7fa;
+  --bk-surface:          #ffffff;
+  --bk-surface-hover:    #eef2f7;
+  --bk-active-card:      #e8f5e9;
+  --bk-border-empty:     #d0dae6;
+  --bk-border-active:    #1a6b4a;
+  --bk-connector:        #c8d6e0;
+  --bk-connector-active: #1a6b4a;
+  --bk-text-primary:     #0d1b2a;
+  --bk-text-secondary:   #6b8499;
+  --bk-accent:           #1a6b4a;
+  --bk-tab-active-bg:    #1a6b4a;
+  --bk-tab-active-text:  #ffffff;
+}
+
+.hide-for-capture { display: none !important; }

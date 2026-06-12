@@ -93,18 +93,18 @@ const makeGlobalStyle = (t) => `
 
 // ─── 2026 WORLD CUP DATA ──────────────────────────────────────────────────────
 const GROUPS = {
-  A: { teams: ["USA", "Panama", "Bolivia", "Iceland"] },
-  B: { teams: ["Mexico", "Ecuador", "Jamaica", "Venezuela"] },
-  C: { teams: ["Argentina", "Chile", "Peru", "Canada"] },
-  D: { teams: ["Brazil", "Colombia", "Paraguay", "Costa Rica"] },
-  E: { teams: ["Spain", "Portugal", "Belgium", "Morocco"] },
-  F: { teams: ["France", "Netherlands", "Senegal", "Cameroon"] },
-  G: { teams: ["Germany", "England", "Serbia", "Algeria"] },
-  H: { teams: ["Italy", "Croatia", "Slovakia", "Nigeria"] },
-  I: { teams: ["Uruguay", "Switzerland", "Japan", "Iraq"] },
-  J: { teams: ["South Korea", "Australia", "Saudi Arabia", "Bahrain"] },
-  K: { teams: ["Poland", "Austria", "Ukraine", "Egypt"] },
-  L: { teams: ["Iran", "Uzbekistan", "New Zealand", "Honduras"] },
+  A: { teams: ["Mexico", "South Africa", "South Korea", "Czechia"] },
+  B: { teams: ["Canada", "Bosnia-Herzegovina", "Qatar", "Switzerland"] },
+  C: { teams: ["Brazil", "Morocco", "Haiti", "Scotland"] },
+  D: { teams: ["United States", "Paraguay", "Australia", "Türkiye"] },
+  E: { teams: ["Germany", "Curaçao", "Ivory Coast", "Ecuador"] },
+  F: { teams: ["Netherlands", "Japan", "Sweden", "Tunisia"] },
+  G: { teams: ["Belgium", "Iran", "Egypt", "New Zealand"] },
+  H: { teams: ["Spain", "Saudi Arabia", "Uruguay", "Cape Verde"] },
+  I: { teams: ["France", "Senegal", "Iraq", "Norway"] },
+  J: { teams: ["Argentina", "Algeria", "Austria", "Jordan"] },
+  K: { teams: ["Portugal", "Congo DR", "Uzbekistan", "Colombia"] },
+  L: { teams: ["England", "Croatia", "Ghana", "Panama"] },
 };
 
 const TEAM_DATA = {
@@ -1089,28 +1089,74 @@ const TEAM_DATA = {
       { name:"Dan Ndoye",pos:"FWD",club:"Bologna",xi:false },{ name:"Vincent Sierro",pos:"MID",club:"Toulouse",xi:false },{ name:"Ardon Jashari",pos:"MID",club:"Club Brugge",xi:false },
       { name:"Edimilson Fernandes",pos:"MID",club:"Mainz",xi:false },{ name:"Luca Jaques",pos:"DEF",club:"Basel",xi:false },
     ]
-  },};
+  },
+  "United States": { flag: "🇺🇸", kit: ["#B22234","#FFFFFF"], rank: 13, conf: "CONCACAF", squad: [] },
+  Czechia: { flag: "🇨🇿", kit: ["#D7141A","#FFFFFF"], rank: 37, conf: "UEFA", squad: [] },
+  "Bosnia-Herzegovina": { flag: "🇧🇦", kit: ["#002395","#FCCA00"], rank: 60, conf: "UEFA", squad: [] },
+  Norway: { flag: "🇳🇴", kit: ["#EF2B2D","#FFFFFF"], rank: 29, conf: "UEFA", squad: [] },
+  Sweden: { flag: "🇸🇪", kit: ["#006AA7","#FECC00"], rank: 24, conf: "UEFA", squad: [] },
+  Scotland: { flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", kit: ["#003078","#FFFFFF"], rank: 30, conf: "UEFA", squad: [] },
+  Türkiye: { flag: "🇹🇷", kit: ["#E30A17","#FFFFFF"], rank: 28, conf: "UEFA", squad: [] },
+  "South Africa": { flag: "🇿🇦", kit: ["#007A4D","#FFB612"], rank: 58, conf: "CAF", squad: [] },
+  "Ivory Coast": { flag: "🇨🇮", kit: ["#F77F00","#FFFFFF"], rank: 47, conf: "CAF", squad: [] },
+  Ghana: { flag: "🇬🇭", kit: ["#006B3F","#FCD116"], rank: 60, conf: "CAF", squad: [] },
+  Tunisia: { flag: "🇹🇳", kit: ["#E70013","#FFFFFF"], rank: 26, conf: "CAF", squad: [] },
+  "Congo DR": { flag: "🇨🇩", kit: ["#007FFF","#F7D618"], rank: 57, conf: "CAF", squad: [] },
+  "Cape Verde": { flag: "🇨🇻", kit: ["#003893","#CF2027"], rank: 75, conf: "CAF", squad: [] },
+  Qatar: { flag: "🇶🇦", kit: ["#8D1B3D","#FFFFFF"], rank: 82, conf: "AFC", squad: [] },
+  Jordan: { flag: "🇯🇴", kit: ["#007A3D","#FFFFFF"], rank: 70, conf: "AFC", squad: [] },
+  Haiti: { flag: "🇭🇹", kit: ["#00209F","#D21034"], rank: 87, conf: "CONCACAF", squad: [] },
+  Curaçao: { flag: "🇨🇼", kit: ["#002B7F","#F9E814"], rank: 85, conf: "CONCACAF", squad: [] },
+};
 
 
-// Fixtures data
-const FIXTURES = [
-  { id:1, group:"A", home:"USA", away:"Panama", date:"Jun 12", time:"19:00", venue:"SoFi Stadium", homeScore:2, awayScore:0, status:"FT" },
-  { id:2, group:"A", home:"Bolivia", away:"Iceland", date:"Jun 12", time:"16:00", venue:"AT&T Stadium", homeScore:1, awayScore:1, status:"FT" },
-  { id:3, group:"B", home:"Mexico", away:"Ecuador", date:"Jun 13", time:"19:00", venue:"Cowboys Stadium", homeScore:null, awayScore:null, status:"Live" },
-  { id:4, group:"B", home:"Jamaica", away:"Venezuela", date:"Jun 13", time:"16:00", venue:"Rose Bowl", homeScore:null, awayScore:null, status:"Live" },
-  { id:5, group:"C", home:"Argentina", away:"Chile", date:"Jun 14", time:"21:00", venue:"MetLife Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:6, group:"C", home:"Peru", away:"Canada", date:"Jun 14", time:"18:00", venue:"Levi's Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:7, group:"D", home:"Brazil", away:"Colombia", date:"Jun 15", time:"21:00", venue:"Hard Rock Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:8, group:"D", home:"Paraguay", away:"Costa Rica", date:"Jun 15", time:"18:00", venue:"NRG Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:9, group:"E", home:"Spain", away:"Portugal", date:"Jun 16", time:"21:00", venue:"MetLife Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:10, group:"E", home:"Belgium", away:"Morocco", date:"Jun 16", time:"18:00", venue:"Rose Bowl", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:11, group:"F", home:"France", away:"Netherlands", date:"Jun 17", time:"21:00", venue:"AT&T Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:12, group:"F", home:"Senegal", away:"Cameroon", date:"Jun 17", time:"18:00", venue:"SoFi Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:13, group:"G", home:"Germany", away:"England", date:"Jun 18", time:"21:00", venue:"Cowboys Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:14, group:"G", home:"Serbia", away:"Algeria", date:"Jun 18", time:"18:00", venue:"Levi's Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:15, group:"H", home:"Italy", away:"Croatia", date:"Jun 19", time:"21:00", venue:"MetLife Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-  { id:16, group:"H", home:"Slovakia", away:"Nigeria", date:"Jun 19", time:"18:00", venue:"Hard Rock Stadium", homeScore:null, awayScore:null, status:"Upcoming" },
-];
+const ESPN_TEAM_IDS = {
+  Algeria:"624", Argentina:"202", Australia:"628", Austria:"474",
+  Belgium:"459", "Bosnia-Herzegovina":"452", Brazil:"205", Canada:"206",
+  "Cape Verde":"2597", Colombia:"208", "Congo DR":"2850", Croatia:"477",
+  "Curaçao":"11678", Czechia:"450", Ecuador:"209", Egypt:"2620",
+  England:"448", France:"478", Germany:"481", Ghana:"4469",
+  Haiti:"2654", Iran:"469", Iraq:"4375", "Ivory Coast":"4789",
+  Japan:"627", Jordan:"2917", Mexico:"203", Morocco:"2869",
+  Netherlands:"449", "New Zealand":"2666", Norway:"464", Panama:"2659",
+  Paraguay:"210", Portugal:"482", Qatar:"4398", "Saudi Arabia":"655",
+  Scotland:"580", Senegal:"654", "South Africa":"467", "South Korea":"451",
+  Spain:"164", Sweden:"466", Switzerland:"475", Tunisia:"659",
+  Türkiye:"465", "United States":"660", Uruguay:"212", Uzbekistan:"2570",
+};
+const ESPN_POS = { G:"GK", D:"DEF", M:"MID", F:"FWD" };
+
+// Live fixtures — populated from Supabase on mount, updated via realtime
+function mapMatch(row) {
+  const d = new Date(row.date);
+  const month = d.toLocaleDateString('en-US', { month: 'short' });
+  const day = d.toLocaleDateString('en-US', { day: 'numeric' });
+  const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  const groupLetter = row.group_name ? row.group_name.replace('Group ', '') :
+    Object.entries(GROUPS).find(([, g]) => g.teams.includes(row.home_team) || g.teams.includes(row.away_team))?.[0] || null;
+  const statusMap = { pre: 'Upcoming', in: 'Live', post: 'FT' };
+  return {
+    id: row.id,
+    group: groupLetter,
+    home: row.home_team,
+    away: row.away_team,
+    date: `${month} ${day}`,
+    time,
+    isoDate: row.date,
+    venue: row.venue || '',
+    homeScore: row.status_state !== 'pre' ? row.home_score : null,
+    awayScore: row.status_state !== 'pre' ? row.away_score : null,
+    status: statusMap[row.status_state] || 'Upcoming',
+    clock: row.clock,
+    stage: row.stage,
+    goals: row.goals || [],
+    yellowCards: row.yellow_cards || [],
+    redCards: row.red_cards || [],
+  };
+}
+
+let FIXTURES = [];
+let POLL_MATCH = null;
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────
 const getTeam = (name) => TEAM_DATA[name] || { flag: "🏳️", kit: ["#888","#aaa"], rank: 99, conf: "—", squad: [] };
@@ -1204,8 +1250,122 @@ function MatchCard({ fixture, onPredict, userPrediction }) {
   );
 }
 
+// ─── MATCH DETAILS MODAL ──────────────────────────────────────────────────────
+function MatchDetailsModal({ fixture, userPrediction, onClose }) {
+  const home = getTeam(fixture.home);
+  const away = getTeam(fixture.away);
+  const homeWin = fixture.homeScore > fixture.awayScore;
+  const awayWin = fixture.awayScore > fixture.homeScore;
+  const draw = fixture.homeScore === fixture.awayScore;
+  const result = homeWin ? `${fixture.home} Win` : awayWin ? `${fixture.away} Win` : "Draw";
+
+  let predLabel = null;
+  if (userPrediction != null) {
+    const pH = userPrediction.homeScore, pA = userPrediction.awayScore;
+    const exact = pH === fixture.homeScore && pA === fixture.awayScore;
+    const correctResult = (pH > pA && homeWin) || (pA > pH && awayWin) || (pH === pA && draw);
+    predLabel = exact ? "✅ Exact!" : correctResult ? "🎯 Correct result" : "❌ Wrong";
+  }
+
+  return (
+    <div onClick={onClose} style={{
+      position: "fixed", inset: 0, background: "#000c", zIndex: 300,
+      display: "flex", alignItems: "flex-end", justifyContent: "center",
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        background: T.navyMid, width: "100%", maxWidth: 430,
+        padding: "24px 20px 32px", borderRadius: "20px 20px 0 0",
+        border: `1px solid ${T.navyLight}`,
+      }}>
+        {/* Header */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+          <div>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: T.white, letterSpacing: 1 }}>MATCH DETAILS</div>
+            <div style={{ fontSize: 12, color: T.gray, marginTop: 2 }}>
+              {fixture.group ? `GROUP ${fixture.group} · ` : ""}{fixture.date} · {fixture.time}
+            </div>
+            {fixture.venue && <div style={{ fontSize: 12, color: T.gray }}>{fixture.venue}</div>}
+          </div>
+          <button onClick={onClose} style={{ background: "none", border: "none", color: T.gray, fontSize: 22, cursor: "pointer", padding: 0 }}>✕</button>
+        </div>
+
+        {/* Teams + Score */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+          <div style={{ flex: 1, textAlign: "center" }}>
+            <div style={{ fontSize: 48 }}>{home.flag}</div>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, marginTop: 6, color: homeWin ? T.gold : T.white }}>{fixture.home}</div>
+          </div>
+          <div style={{ textAlign: "center", padding: "0 16px" }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 44, color: T.gold, letterSpacing: 4 }}>
+              {fixture.homeScore} — {fixture.awayScore}
+            </div>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, color: T.gray, marginTop: 4 }}>FULL TIME</div>
+          </div>
+          <div style={{ flex: 1, textAlign: "center" }}>
+            <div style={{ fontSize: 48 }}>{away.flag}</div>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, marginTop: 6, color: awayWin ? T.gold : T.white }}>{fixture.away}</div>
+          </div>
+        </div>
+
+        {/* Result pill */}
+        <div style={{ textAlign: "center", marginBottom: 16 }}>
+          <span style={{ background: T.gold + "22", color: T.gold, padding: "5px 16px", borderRadius: 20, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: 1 }}>
+            {result}
+          </span>
+        </div>
+
+        {/* Goals */}
+        {fixture.goals?.length > 0 && (
+          <div style={{ background: T.navy, borderRadius: 12, padding: "12px 16px", marginBottom: 10 }}>
+            <div style={{ fontSize: 11, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 8 }}>GOALS</div>
+            {fixture.goals.map((g, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: g.side === "home" ? "flex-start" : "flex-end", marginBottom: 4 }}>
+                <span style={{ fontSize: 12, color: T.white, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                  {g.side === "home" ? `⚽ ${g.own ? "(OG) " : ""}${g.player} ${g.minute}` : `${g.minute} ${g.player}${g.own ? " (OG)" : ""} ⚽`}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Cards */}
+        {(fixture.yellowCards?.length > 0 || fixture.redCards?.length > 0) && (
+          <div style={{ background: T.navy, borderRadius: 12, padding: "12px 16px", marginBottom: 10 }}>
+            <div style={{ fontSize: 11, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 8 }}>CARDS</div>
+            {fixture.yellowCards?.map((c, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: c.side === "home" ? "flex-start" : "flex-end", marginBottom: 4 }}>
+                <span style={{ fontSize: 12, color: T.white, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                  {c.side === "home" ? `🟨 ${c.player} ${c.minute}` : `${c.minute} ${c.player} 🟨`}
+                </span>
+              </div>
+            ))}
+            {fixture.redCards?.map((c, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: c.side === "home" ? "flex-start" : "flex-end", marginBottom: 4 }}>
+                <span style={{ fontSize: 12, color: T.white, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                  {c.side === "home" ? `🟥 ${c.player} ${c.minute}` : `${c.minute} ${c.player} 🟥`}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* User prediction */}
+        {userPrediction != null && (
+          <div style={{ background: T.navy, borderRadius: 12, padding: "12px 16px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 4 }}>YOUR PREDICTION</div>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 16, color: T.white }}>
+              {fixture.home} {userPrediction.homeScore} — {userPrediction.awayScore} {fixture.away}
+            </div>
+            <div style={{ fontSize: 13, color: T.gray, marginTop: 4 }}>{predLabel}</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── TAB: FIXTURES ────────────────────────────────────────────────────────────
-function MatchCardSlide({ fixture, onPredict, userPrediction }) {
+function MatchCardSlide({ fixture, onPredict, onViewDetails, userPrediction }) {
   const home = getTeam(fixture.home);
   const away = getTeam(fixture.away);
   const isLive = fixture.status === "Live";
@@ -1213,14 +1373,15 @@ function MatchCardSlide({ fixture, onPredict, userPrediction }) {
 
   return (
     <div style={{
-      minWidth: 230, maxWidth: 230, flexShrink: 0,
+      minWidth: 270, maxWidth: 270, flexShrink: 0,
       background: T.navyMid, borderRadius: 14,
       padding: "14px 14px 12px",
       border: `1px solid ${isLive ? T.red + "55" : T.navyLight}`,
       boxShadow: isLive ? `0 0 12px ${T.red}22` : "none",
+      display: "flex", flexDirection: "column",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-        <span style={{ fontSize: 10, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.5 }}>
+        <span style={{ fontSize: 12, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.5 }}>
           GRP {fixture.group} · {fixture.time}
         </span>
         <StatusBadge status={fixture.status} />
@@ -1239,7 +1400,7 @@ function MatchCardSlide({ fixture, onPredict, userPrediction }) {
           ) : (
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 20, color: T.gray }}>VS</div>
           )}
-          <div style={{ fontSize: 10, color: T.grayDark, marginTop: 2, fontFamily: "'Barlow Condensed', sans-serif" }}>{fixture.date}</div>
+          <div style={{ fontSize: 10, color: T.gray, marginTop: 2, fontFamily: "'Barlow Condensed', sans-serif" }}>{fixture.date}</div>
         </div>
         <div style={{ flex: 1, textAlign: "center" }}>
           <div style={{ fontSize: 32 }}>{away.flag}</div>
@@ -1247,31 +1408,46 @@ function MatchCardSlide({ fixture, onPredict, userPrediction }) {
         </div>
       </div>
 
+      <div style={{ height: 1, background: "#3a4a6b", margin: "10px 0 4px" }} />
+
       {userPrediction && (
-        <div style={{ marginTop: 8, textAlign: "center", fontSize: 11, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif" }}>
+        <div style={{ marginTop: 4, textAlign: "center", fontSize: 13, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif" }}>
           You: {userPrediction.homeScore}–{userPrediction.awayScore}
         </div>
       )}
 
-      {fixture.status === "Upcoming" && (
-        <button onClick={() => onPredict(fixture)} style={{
-          marginTop: 10, width: "100%", padding: "6px",
-          background: "transparent", border: `1px solid ${T.gold}`,
-          color: T.gold, borderRadius: 7, cursor: "pointer",
-          fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: 1,
-        }}>
-          {userPrediction ? "EDIT" : "PREDICT"}
-        </button>
-      )}
+      <div style={{ marginTop: "auto", paddingTop: 8 }}>
+        {fixture.status === "Upcoming" && (
+          <button onClick={() => onPredict(fixture)} style={{
+            width: "100%", padding: "6px",
+            background: "transparent", border: `1px solid ${T.gold}`,
+            color: T.gold, borderRadius: 7, cursor: "pointer",
+            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: 1,
+          }}>
+            {userPrediction ? "EDIT" : "PREDICT"}
+          </button>
+        )}
 
-      <div style={{ marginTop: 8, fontSize: 10, color: T.grayDark, textAlign: "center", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.3 }}>
-        {fixture.venue}
+        {fixture.status === "FT" && (
+          <button onClick={() => onViewDetails?.(fixture)} style={{
+            width: "100%", padding: "6px",
+            background: "transparent", border: `1px solid ${T.navyLight}`,
+            color: T.gray, borderRadius: 7, cursor: "pointer",
+            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: 1,
+          }}>
+            VIEW DETAILS
+          </button>
+        )}
+
+        <div style={{ marginTop: 6, fontSize: 12, color: T.gray, textAlign: "center", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.3 }}>
+          {fixture.venue}
+        </div>
       </div>
     </div>
   );
 }
 
-function MatchSliderSection({ title, dot, dotColor, matches, predictions, onPredictOpen, emptyMsg }) {
+function MatchSliderSection({ title, dot, dotColor, matches, predictions, onPredictOpen, onViewDetails, emptyMsg }) {
   return (
     <div style={{ marginBottom: 28 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
@@ -1297,6 +1473,7 @@ function MatchSliderSection({ title, dot, dotColor, matches, predictions, onPred
               key={f.id} fixture={f}
               userPrediction={predictions[f.id]}
               onPredict={onPredictOpen}
+              onViewDetails={onViewDetails}
             />
           ))}
         </div>
@@ -1305,9 +1482,10 @@ function MatchSliderSection({ title, dot, dotColor, matches, predictions, onPred
   );
 }
 
-function FixturesTab({ predictions, onPredictOpen }) {
+function FixturesTab({ predictions, onPredictOpen, onViewDetails, fetchError }) {
+  const in7d   = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const live     = FIXTURES.filter(f => f.status === "Live");
-  const upcoming = FIXTURES.filter(f => f.status === "Upcoming");
+  const upcoming = FIXTURES.filter(f => f.status === "Upcoming" && f.isoDate && new Date(f.isoDate) <= in7d);
   const results  = FIXTURES.filter(f => f.status === "FT");
 
   return (
@@ -1323,13 +1501,13 @@ function FixturesTab({ predictions, onPredictOpen }) {
         emptyMsg="No matches live right now"
       />
       <MatchSliderSection
-        title="Today's Upcoming"
+        title="Upcoming"
         matches={upcoming} predictions={predictions} onPredictOpen={onPredictOpen}
-        emptyMsg="No upcoming matches today"
+        emptyMsg="No upcoming matches"
       />
       <MatchSliderSection
         title="Match Results"
-        matches={results} predictions={predictions} onPredictOpen={onPredictOpen}
+        matches={results} predictions={predictions} onPredictOpen={onPredictOpen} onViewDetails={onViewDetails}
         emptyMsg="No results yet"
       />
     </div>
@@ -1337,7 +1515,7 @@ function FixturesTab({ predictions, onPredictOpen }) {
 }
 
 // ─── TAB: TEAMS (Groups + Teams combined) ────────────────────────────────────
-function TeamsTab({ selectedTeam, onTeamOpen }) {
+function TeamsTab({ selectedTeam, onTeamOpen, dbStandings }) {
   const [subTab, setSubTab] = useState("group");
   const [expanded, setExpanded] = useState(null);
   const [search, setSearch] = useState("");
@@ -1350,12 +1528,20 @@ function TeamsTab({ selectedTeam, onTeamOpen }) {
   const filtered = allTeams.filter(t => t.toLowerCase().includes(search.toLowerCase()));
 
   const standings = (groupKey) => {
-    return GROUPS[groupKey].teams.map((name, i) => ({
+    const groupName = `Group ${groupKey}`;
+    const live = dbStandings.filter(r => r.group_name === groupName);
+    if (live.length > 0) {
+      return live.map(r => ({
+        name: r.team, ...getTeam(r.team),
+        p: r.played, w: r.wins, d: r.draws, l: r.losses,
+        gf: r.goals_for, ga: r.goals_against, gd: r.goal_diff, pts: r.points,
+      }));
+    }
+    // Fallback: all zeros before tournament starts
+    return GROUPS[groupKey].teams.map(name => ({
       name, ...getTeam(name),
-      p: 2, w: [1,1,0,0][i], d: [0,0,1,1][i], l: [1,0,1,2][i],
-      gf: [3,2,1,0][i], ga: [1,2,3,4][i],
-      gd: [2,0,-2,-4][i], pts: [3,3,1,0][i],
-    })).sort((a, b) => b.pts - a.pts || b.gd - a.gd);
+      p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0,
+    }));
   };
 
   return (
@@ -1426,8 +1612,8 @@ function TeamsTab({ selectedTeam, onTeamOpen }) {
                         {idx < 2 && <div style={{ width: 3, height: 20, background: T.gold, borderRadius: 2 }} />}
                         {idx >= 2 && <div style={{ width: 3, height: 20 }} />}
                         <span style={{ fontSize: 20 }}>{team.flag}</span>
-                        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600, fontSize: 14 }}>
-                          {team.name.length > 10 ? team.name.split(" ")[0] : team.name}
+                        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600, fontSize: 13 }}>
+                          {team.name}
                         </span>
                       </div>
                       {[team.p, team.w, team.d, team.l, team.gf, team.ga, team.gd, team.pts].map((v, i) => (
@@ -1488,12 +1674,35 @@ function TeamDetail({ name, onBack }) {
   const team = getTeam(name);
   const group = Object.entries(GROUPS).find(([, g]) => g.teams.includes(name))?.[0];
   const [showExtra, setShowExtra] = useState(false);
+  const [liveSquad, setLiveSquad] = useState(null);
+  const [squadLoading, setSquadLoading] = useState(false);
+
+  useEffect(() => {
+    const espnId = ESPN_TEAM_IDS[name];
+    if (!espnId) return;
+    setSquadLoading(true);
+    fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/${espnId}/roster`)
+      .then(r => r.json())
+      .then(data => {
+        const players = (data.athletes || []).map(a => ({
+          name: a.fullName || a.displayName || '',
+          pos: ESPN_POS[a.position?.abbreviation] || a.position?.abbreviation || '?',
+          club: '',
+          jersey: a.jersey || '',
+          xi: false,
+        }));
+        if (players.length) setLiveSquad(players);
+        setSquadLoading(false);
+      })
+      .catch(() => setSquadLoading(false));
+  }, [name]);
 
   const POS_COLORS = { GK: "#E8A838", DEF: "#3A8FE8", MID: "#2ECC71", FWD: "#E63946" };
   const POS_ORDER = ["GK", "DEF", "MID", "FWD"];
 
-  const xi = (team.squad || []).filter(p => p.xi);
-  const bench = (team.squad || []).filter(p => !p.xi);
+  const activeSquad = liveSquad || team.squad || [];
+  const xi = activeSquad.filter(p => p.xi);
+  const bench = activeSquad.filter(p => !p.xi);
 
   // Group by position
   const groupByPos = (players) => {
@@ -1534,7 +1743,7 @@ function TeamDetail({ name, onBack }) {
   const SquadSection = ({ players, label }) => {
     if (!players.length) return null;
     const grouped = groupByPos(players);
-    let counter = label === "STARTING XI" ? 1 : xi.length + 1;
+    let counter = label === "BENCH & RESERVES" ? xi.length + 1 : 1;
     return (
       <div style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
@@ -1596,7 +1805,7 @@ function TeamDetail({ name, onBack }) {
             {["GK","DEF","MID","FWD"].map(pos => (
               <div key={pos} style={{ textAlign: "center" }}>
                 <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 14, color: POS_COLORS[pos] }}>
-                  {(team.squad||[]).filter(p=>p.pos===pos).length}
+                  {activeSquad.filter(p=>p.pos===pos).length}
                 </div>
                 <div style={{ fontSize: 9, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif" }}>{pos}</div>
               </div>
@@ -1607,26 +1816,46 @@ function TeamDetail({ name, onBack }) {
 
       {/* Squad */}
       <div style={{ padding: "16px" }}>
-        <SquadSection players={xi} label="STARTING XI" />
-
-        {/* Bench toggle */}
-        <div onClick={() => setShowExtra(!showExtra)} style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "10px 14px", borderRadius: 10,
-          background: showExtra ? T.navyLight : T.navyMid,
-          border: `1px solid ${T.navyLight}`,
-          cursor: "pointer", marginBottom: showExtra ? 16 : 0,
-        }}>
-          <div>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 15, letterSpacing: 1.5, color: T.white }}>
-              BENCH & SQUAD
-            </div>
-            <div style={{ fontSize: 11, color: T.gray, marginTop: 2 }}>{bench.length} additional players</div>
+        {squadLoading && (
+          <div style={{ textAlign: "center", padding: "24px 0", color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", fontSize: 14, letterSpacing: 1 }}>
+            LOADING SQUAD...
           </div>
-          <div style={{ color: T.gold, fontSize: 18 }}>{showExtra ? "▲" : "▼"}</div>
-        </div>
+        )}
 
-        {showExtra && <SquadSection players={bench} label="BENCH & RESERVES" />}
+        {!squadLoading && liveSquad && (
+          <>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, color: T.gray, letterSpacing: 0.5 }}>
+                Live roster from ESPN · {liveSquad.length} players
+              </div>
+            </div>
+            <SquadSection players={liveSquad} label="FULL SQUAD" />
+          </>
+        )}
+
+        {!squadLoading && !liveSquad && (
+          <>
+            <SquadSection players={xi} label="STARTING XI" />
+
+            <div onClick={() => setShowExtra(!showExtra)} style={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              padding: "10px 14px", borderRadius: 10,
+              background: showExtra ? T.navyLight : T.navyMid,
+              border: `1px solid ${T.navyLight}`,
+              cursor: "pointer", marginBottom: showExtra ? 16 : 0,
+            }}>
+              <div>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 15, letterSpacing: 1.5, color: T.white }}>
+                  BENCH & SQUAD
+                </div>
+                <div style={{ fontSize: 11, color: T.gray, marginTop: 2 }}>{bench.length} additional players</div>
+              </div>
+              <div style={{ color: T.gold, fontSize: 18 }}>{showExtra ? "▲" : "▼"}</div>
+            </div>
+
+            {showExtra && <SquadSection players={bench} label="BENCH & RESERVES" />}
+          </>
+        )}
       </div>
     </div>
   );
@@ -1634,258 +1863,127 @@ function TeamDetail({ name, onBack }) {
 
 // ─── TAB: BRACKET ────────────────────────────────────────────────────────────
 
-const ALL_TEAMS = Object.keys(TEAM_DATA);
-
-// ── DATA MODEL ──
-// Each round has matches. Each match stores two team slots (A, B) and a winner (W).
-// R32: user picks any 2 teams freely (already-used teams are hidden).
-// QF:  user picks from R32 winners only.
-// SF:  user picks from QF winners only.
-// Final: user picks from SF winners only.
-// Champion: picks from Final winners only.
-// Picking a winner in match X auto-populates the correct slot in the next round.
-// Changing any pick cascades clears everything downstream.
-
-const ROUND_IDS = ["r32", "qf", "sf", "final", "champion"];
-
+// Official FIFA WC 2026 bracket — slots are LOCKED from group results
 const BRACKET_ROUNDS = [
   {
     id: "r32", label: "ROUND OF 32",
     matches: [
-      { id:"r32_1",  label:"Match 1",  nextMatch:"qf_1",  nextSlot:"A" },
-      { id:"r32_2",  label:"Match 2",  nextMatch:"qf_1",  nextSlot:"B" },
-      { id:"r32_3",  label:"Match 3",  nextMatch:"qf_2",  nextSlot:"A" },
-      { id:"r32_4",  label:"Match 4",  nextMatch:"qf_2",  nextSlot:"B" },
-      { id:"r32_5",  label:"Match 5",  nextMatch:"qf_3",  nextSlot:"A" },
-      { id:"r32_6",  label:"Match 6",  nextMatch:"qf_3",  nextSlot:"B" },
-      { id:"r32_7",  label:"Match 7",  nextMatch:"qf_4",  nextSlot:"A" },
-      { id:"r32_8",  label:"Match 8",  nextMatch:"qf_4",  nextSlot:"B" },
-      { id:"r32_9",  label:"Match 9",  nextMatch:"qf_5",  nextSlot:"A" },
-      { id:"r32_10", label:"Match 10", nextMatch:"qf_5",  nextSlot:"B" },
-      { id:"r32_11", label:"Match 11", nextMatch:"qf_6",  nextSlot:"A" },
-      { id:"r32_12", label:"Match 12", nextMatch:"qf_6",  nextSlot:"B" },
-      { id:"r32_13", label:"Match 13", nextMatch:"qf_7",  nextSlot:"A" },
-      { id:"r32_14", label:"Match 14", nextMatch:"qf_7",  nextSlot:"B" },
-      { id:"r32_15", label:"Match 15", nextMatch:"qf_8",  nextSlot:"A" },
-      { id:"r32_16", label:"Match 16", nextMatch:"qf_8",  nextSlot:"B" },
+      { id:"M73", label:"Match 73", home:{group:"A",pos:2}, away:{group:"B",pos:2},                         nextMatch:"R16_1", nextSlot:"A" },
+      { id:"M74", label:"Match 74", home:{group:"E",pos:1}, away:{group:"3rd",from:["A","B","C","D","F"]},  nextMatch:"R16_1", nextSlot:"B" },
+      { id:"M75", label:"Match 75", home:{group:"F",pos:1}, away:{group:"C",pos:2},                         nextMatch:"R16_2", nextSlot:"A" },
+      { id:"M76", label:"Match 76", home:{group:"C",pos:1}, away:{group:"F",pos:2},                         nextMatch:"R16_2", nextSlot:"B" },
+      { id:"M77", label:"Match 77", home:{group:"I",pos:1}, away:{group:"3rd",from:["C","D","F","G","H"]},  nextMatch:"R16_3", nextSlot:"A" },
+      { id:"M78", label:"Match 78", home:{group:"E",pos:2}, away:{group:"I",pos:2},                         nextMatch:"R16_3", nextSlot:"B" },
+      { id:"M79", label:"Match 79", home:{group:"A",pos:1}, away:{group:"3rd",from:["C","E","F","H","I"]},  nextMatch:"R16_4", nextSlot:"A" },
+      { id:"M80", label:"Match 80", home:{group:"L",pos:1}, away:{group:"3rd",from:["E","H","I","J","K"]},  nextMatch:"R16_4", nextSlot:"B" },
+      { id:"M81", label:"Match 81", home:{group:"D",pos:1}, away:{group:"3rd",from:["B","E","F","I","J"]},  nextMatch:"R16_5", nextSlot:"A" },
+      { id:"M82", label:"Match 82", home:{group:"G",pos:1}, away:{group:"3rd",from:["A","E","H","I","J"]},  nextMatch:"R16_5", nextSlot:"B" },
+      { id:"M83", label:"Match 83", home:{group:"K",pos:2}, away:{group:"L",pos:2},                         nextMatch:"R16_6", nextSlot:"A" },
+      { id:"M84", label:"Match 84", home:{group:"H",pos:1}, away:{group:"J",pos:2},                         nextMatch:"R16_6", nextSlot:"B" },
+      { id:"M85", label:"Match 85", home:{group:"B",pos:1}, away:{group:"3rd",from:["E","F","G","I","J"]},  nextMatch:"R16_7", nextSlot:"A" },
+      { id:"M86", label:"Match 86", home:{group:"J",pos:1}, away:{group:"H",pos:2},                         nextMatch:"R16_7", nextSlot:"B" },
+      { id:"M87", label:"Match 87", home:{group:"K",pos:1}, away:{group:"3rd",from:["A","B","C","D","G"]},  nextMatch:"R16_8", nextSlot:"A" },
+      { id:"M88", label:"Match 88", home:{group:"D",pos:2}, away:{group:"G",pos:2},                         nextMatch:"R16_8", nextSlot:"B" },
     ],
-    sourceRound: null,
+  },
+  {
+    id: "r16", label: "ROUND OF 16",
+    matches: [
+      { id:"R16_1", label:"R16 Match 1", home:{winnerOf:"M73"}, away:{winnerOf:"M74"}, nextMatch:"QF_1", nextSlot:"A" },
+      { id:"R16_2", label:"R16 Match 2", home:{winnerOf:"M75"}, away:{winnerOf:"M76"}, nextMatch:"QF_1", nextSlot:"B" },
+      { id:"R16_3", label:"R16 Match 3", home:{winnerOf:"M77"}, away:{winnerOf:"M78"}, nextMatch:"QF_2", nextSlot:"A" },
+      { id:"R16_4", label:"R16 Match 4", home:{winnerOf:"M79"}, away:{winnerOf:"M80"}, nextMatch:"QF_2", nextSlot:"B" },
+      { id:"R16_5", label:"R16 Match 5", home:{winnerOf:"M81"}, away:{winnerOf:"M82"}, nextMatch:"QF_3", nextSlot:"A" },
+      { id:"R16_6", label:"R16 Match 6", home:{winnerOf:"M83"}, away:{winnerOf:"M84"}, nextMatch:"QF_3", nextSlot:"B" },
+      { id:"R16_7", label:"R16 Match 7", home:{winnerOf:"M85"}, away:{winnerOf:"M86"}, nextMatch:"QF_4", nextSlot:"A" },
+      { id:"R16_8", label:"R16 Match 8", home:{winnerOf:"M87"}, away:{winnerOf:"M88"}, nextMatch:"QF_4", nextSlot:"B" },
+    ],
   },
   {
     id: "qf", label: "QUARTER FINALS",
     matches: [
-      { id:"qf_1", label:"QF 1", nextMatch:"sf_1", nextSlot:"A" },
-      { id:"qf_2", label:"QF 2", nextMatch:"sf_1", nextSlot:"B" },
-      { id:"qf_3", label:"QF 3", nextMatch:"sf_2", nextSlot:"A" },
-      { id:"qf_4", label:"QF 4", nextMatch:"sf_2", nextSlot:"B" },
-      { id:"qf_5", label:"QF 5", nextMatch:"sf_3", nextSlot:"A" },
-      { id:"qf_6", label:"QF 6", nextMatch:"sf_3", nextSlot:"B" },
-      { id:"qf_7", label:"QF 7", nextMatch:"sf_4", nextSlot:"A" },
-      { id:"qf_8", label:"QF 8", nextMatch:"sf_4", nextSlot:"B" },
+      { id:"QF_1", label:"QF 1", home:{winnerOf:"R16_1"}, away:{winnerOf:"R16_2"}, nextMatch:"SF_1", nextSlot:"A" },
+      { id:"QF_2", label:"QF 2", home:{winnerOf:"R16_3"}, away:{winnerOf:"R16_4"}, nextMatch:"SF_1", nextSlot:"B" },
+      { id:"QF_3", label:"QF 3", home:{winnerOf:"R16_5"}, away:{winnerOf:"R16_6"}, nextMatch:"SF_2", nextSlot:"A" },
+      { id:"QF_4", label:"QF 4", home:{winnerOf:"R16_7"}, away:{winnerOf:"R16_8"}, nextMatch:"SF_2", nextSlot:"B" },
     ],
-    sourceRound: "r32",
   },
   {
     id: "sf", label: "SEMI FINALS",
     matches: [
-      { id:"sf_1", label:"SF 1", nextMatch:"final_1", nextSlot:"A" },
-      { id:"sf_2", label:"SF 2", nextMatch:"final_1", nextSlot:"B" },
-      { id:"sf_3", label:"SF 3", nextMatch:"final_2", nextSlot:"A" },
-      { id:"sf_4", label:"SF 4", nextMatch:"final_2", nextSlot:"B" },
+      { id:"SF_1", label:"SF 1", home:{winnerOf:"QF_1"}, away:{winnerOf:"QF_2"}, nextMatch:"FINAL", nextSlot:"A" },
+      { id:"SF_2", label:"SF 2", home:{winnerOf:"QF_3"}, away:{winnerOf:"QF_4"}, nextMatch:"FINAL", nextSlot:"B" },
     ],
-    sourceRound: "qf",
   },
   {
-    id: "final", label: "FINAL",
+    id: "final", label: "THE FINAL",
     matches: [
-      { id:"final_1", label:"Final 1", nextMatch:"champion", nextSlot:"A" },
-      { id:"final_2", label:"Final 2", nextMatch:"champion", nextSlot:"B" },
+      { id:"FINAL", label:"Final", home:{winnerOf:"SF_1"}, away:{winnerOf:"SF_2"}, nextMatch:null, nextSlot:null },
     ],
-    sourceRound: "sf",
-  },
-  {
-    id: "champion", label: "CHAMPION",
-    matches: [
-      { id:"champion", label:"The Final", nextMatch: null, nextSlot: null },
-    ],
-    sourceRound: "final",
   },
 ];
 
-// ── HELPERS ──
-
-// All match objects in a flat map by id
 const MATCH_MAP = {};
-BRACKET_ROUNDS.forEach(r => r.matches.forEach(m => { MATCH_MAP[m.id] = { ...m, roundId: r.id }; }));
+BRACKET_ROUNDS.forEach(r => r.matches.forEach(m => { MATCH_MAP[m.id] = { ...m }; }));
 
-// Get round object by id
-const getRound = (id) => BRACKET_ROUNDS.find(r => r.id === id);
-
-// Get all winners from a given round (used to build the selection pool for the next round)
-const getRoundWinners = (picks, roundId) => {
-  const round = getRound(roundId);
-  if (!round) return [];
-  return round.matches
-    .map(m => picks[m.id + "_W"])
-    .filter(Boolean);
-};
-
-// Get all teams already assigned in R32 _A/_B slots (excluding current slot)
-const getR32UsedTeams = (picks, excludeKey) => {
-  const used = new Set();
-  getRound("r32").matches.forEach(m => {
-    ["A","B"].forEach(side => {
-      const key = m.id + "_" + side;
-      if (key !== excludeKey && picks[key]) used.add(picks[key]);
-    });
-  });
-  return used;
-};
-
-// Cascade-clear all picks downstream of a match winner change
 const clearDownstream = (picks, matchId) => {
   const next = { ...picks };
   const visit = (mId) => {
     const m = MATCH_MAP[mId];
     if (!m || !m.nextMatch) return;
-    const nm = m.nextMatch;
-    const ns = m.nextSlot;
-    delete next[nm + "_" + ns];
-    delete next[nm + "_W"];
-    visit(nm);
+    delete next[m.nextMatch + "_W"];
+    visit(m.nextMatch);
   };
   visit(matchId);
   return next;
 };
 
-// ── TEAM PICKER MODAL ──
-// Shows a scrollable list with search. Filters based on context:
-// - R32: all 48 teams minus already-assigned ones
-// - QF/SF/Final/Champion: only winners from the previous round
-function TeamPickerModal({ title, teams, usedInSlot, onSelect, onClose }) {
-  const [search, setSearch] = useState("");
-  const filtered = teams.filter(t => t.toLowerCase().includes(search.toLowerCase()));
-
-  return (
-    <div onClick={onClose} style={{
-      position: "absolute", inset: 0, background: "#000d", zIndex: 200,
-      display: "flex", alignItems: "flex-end", minHeight: "100%",
-    }}>
-      <div onClick={e => e.stopPropagation()} style={{
-        background: T.navyMid, width: "100%", maxWidth: 430,
-        margin: "0 auto", borderRadius: "20px 20px 0 0",
-        border: `1px solid ${T.navyLight}`, maxHeight: "72vh",
-        display: "flex", flexDirection: "column",
-      }}>
-        {/* Header */}
-        <div style={{ padding: "18px 18px 10px", flexShrink: 0 }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, marginBottom: 2 }}>{title}</div>
-          <div style={{ fontSize: 12, color: T.gold, marginBottom: 10, fontFamily: "'Barlow Condensed', sans-serif" }}>
-            {filtered.length} team{filtered.length !== 1 ? "s" : ""} available
-          </div>
-          <input
-            autoFocus
-            placeholder="Search..."
-            value={search} onChange={e => setSearch(e.target.value)}
-            style={{
-              width: "100%", padding: "9px 13px",
-              background: T.navyLight, border: `1px solid ${T.grayDark}`,
-              borderRadius: 10, color: T.white, fontSize: 14,
-              outline: "none", fontFamily: "'Barlow', sans-serif",
-            }}
-          />
-        </div>
-
-        {/* List */}
-        <div style={{ overflowY: "auto", padding: "4px 16px 24px", flex: 1 }}>
-          {/* Clear option if slot already filled */}
-          {usedInSlot && (
-            <div onClick={() => onSelect(null)} style={{
-              padding: "9px 12px", borderRadius: 8, marginBottom: 5,
-              background: T.red + "18", border: `1px solid ${T.red}44`,
-              cursor: "pointer", display: "flex", alignItems: "center", gap: 8,
-            }}>
-              <span style={{ color: T.red }}>✕</span>
-              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: T.red }}>Clear this pick</span>
-            </div>
-          )}
-
-          {filtered.length === 0 && (
-            <div style={{ textAlign: "center", padding: "32px 0", color: T.gray, fontSize: 13 }}>
-              No teams available yet — pick winners from the previous round first.
-            </div>
-          )}
-
-          {filtered.map(name => {
-            const t = getTeam(name);
-            const isCurrent = name === usedInSlot;
-            return (
-              <div key={name} onClick={() => onSelect(name)} style={{
-                padding: "10px 12px", borderRadius: 8, marginBottom: 4,
-                background: isCurrent ? T.gold + "22" : "transparent",
-                border: `1px solid ${isCurrent ? T.gold : "transparent"}`,
-                cursor: "pointer", display: "flex", alignItems: "center", gap: 12,
-                transition: "background 0.12s",
-              }}>
-                <span style={{ fontSize: 26 }}>{t.flag}</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{name}</div>
-                  <div style={{ fontSize: 11, color: T.gray }}>{t.conf} · Rank #{t.rank}</div>
-                </div>
-                {isCurrent && <span style={{ color: T.gold, fontSize: 18 }}>✓</span>}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+// Resolve a slot definition → team name (or null if TBD)
+function resolveSlot(slotDef, standings, picks) {
+  if (!slotDef) return null;
+  if (slotDef.winnerOf) return picks[slotDef.winnerOf + "_W"] || null;
+  if (slotDef.group === "3rd") {
+    const eligible = (standings || [])
+      .filter(s => parseInt(s.rank) === 3 && slotDef.from.includes((s.group_name||"").replace("Group ","")))
+      .sort((a,b) => (b.points||0)-(a.points||0) || (b.goal_diff||0)-(a.goal_diff||0));
+    return eligible[0]?.team || eligible[0]?.team_name || `3rd·${slotDef.from.join("/")}`;
+  }
+  const entry = (standings || []).find(s =>
+    (s.group_name||"").replace("Group ","") === slotDef.group && parseInt(s.rank) === slotDef.pos
   );
+  return entry?.team || entry?.team_name || `G${slotDef.group}·#${slotDef.pos}`;
 }
 
 // ── WINNER PICKER MODAL ──
-// Always exactly 2 big cards — pick which of the two teams in this match wins
-function WinnerPickerModal({ matchId, teamA, teamB, current, onSelect, onClose }) {
+function WinnerPickerModal({ teamA, teamB, current, onSelect, onClose }) {
   if (!teamA || !teamB) return null;
   return (
-    <div onClick={onClose} style={{
-      position: "absolute", inset: 0, background: "#000d", zIndex: 200,
-      display: "flex", alignItems: "flex-end", minHeight: "100%",
-    }}>
-      <div onClick={e => e.stopPropagation()} style={{
-        background: T.navyMid, width: "100%", maxWidth: 430,
-        margin: "0 auto", borderRadius: "20px 20px 0 0",
-        border: `1px solid ${T.navyLight}`, padding: "20px 18px 32px",
-      }}>
-        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, marginBottom: 4 }}>WHO WINS?</div>
-        <div style={{ fontSize: 12, color: T.gray, marginBottom: 18 }}>Tap to pick the winner</div>
-
+    <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "#000d", zIndex: 200, display: "flex", alignItems: "flex-end" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: "var(--bk-surface)", width: "100%", maxWidth: 430, margin: "0 auto", borderRadius: "20px 20px 0 0", border: "1px solid var(--bk-border-empty)", padding: "20px 18px 32px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: "var(--bk-text-primary)" }}>WHO WINS?</div>
+          <button onClick={onClose} style={{ background: "var(--bk-surface-hover)", border: "1px solid var(--bk-border-empty)", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16, color: "var(--bk-text-secondary)", flexShrink: 0 }}>✕</button>
+        </div>
+        <div style={{ fontSize: 12, color: "var(--bk-text-secondary)", marginBottom: 18 }}>Tap to pick the winner</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           {[teamA, teamB].map(name => {
             const t = getTeam(name);
             const isW = name === current;
             return (
-              <div key={name} onClick={() => onSelect(name)} style={{
-                background: isW ? T.gold + "28" : T.navyLight,
-                border: `2px solid ${isW ? T.gold : T.navyLight}`,
-                borderRadius: 14, padding: "18px 10px",
-                textAlign: "center", cursor: "pointer",
-                transition: "all 0.15s",
-              }}>
-                <div style={{ fontSize: 44, lineHeight: 1, marginBottom: 10 }}>{t.flag}</div>
-                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 15, lineHeight: 1.2 }}>{name}</div>
-                <div style={{ fontSize: 11, color: T.gray, marginTop: 4 }}>Rank #{t.rank}</div>
-                {isW && <div style={{ marginTop: 8, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 12, color: T.gold }}>✓ WINNER</div>}
+              <div key={name} onClick={() => onSelect(name)} style={{ background: isW ? "var(--bk-active-card)" : "var(--bk-surface-hover)", border: `2px solid ${isW ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, borderRadius: 14, padding: "18px 10px", textAlign: "center", cursor: "pointer" }}>
+                {t
+                  ? <div style={{ fontSize: 44, lineHeight: 1, marginBottom: 10 }}>{t.flag}</div>
+                  : <div style={{ fontSize: 32, lineHeight: 1, marginBottom: 10 }}>🏴</div>
+                }
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: t ? 15 : 12, lineHeight: 1.3, color: "var(--bk-text-primary)" }}>{name}</div>
+                {t && <div style={{ fontSize: 11, color: "var(--bk-text-secondary)", marginTop: 4 }}>Rank #{t.rank}</div>}
+                {isW && <div style={{ marginTop: 8, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 12, color: "var(--bk-accent)" }}>✓ WINNER</div>}
               </div>
             );
           })}
         </div>
-
         {current && (
-          <div onClick={() => onSelect(null)} style={{
-            marginTop: 14, padding: "10px", borderRadius: 10,
-            background: T.red + "18", border: `1px solid ${T.red}44`,
-            cursor: "pointer", textAlign: "center",
-          }}>
+          <div onClick={() => onSelect(null)} style={{ marginTop: 14, padding: "10px", borderRadius: 10, background: T.red+"18", border: `1px solid ${T.red}44`, cursor: "pointer", textAlign: "center" }}>
             <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: T.red }}>✕  Clear winner</span>
           </div>
         )}
@@ -1894,195 +1992,102 @@ function WinnerPickerModal({ matchId, teamA, teamB, current, onSelect, onClose }
   );
 }
 
-// ── MATCH CARD (List View) ──
-function BracketMatchCard({ match, round, picks, onPickTeam, onPickWinner }) {
-  const teamA = picks[match.id + "_A"] || "";
-  const teamB = picks[match.id + "_B"] || "";
-  const winner = picks[match.id + "_W"] || "";
-  const bothSet = teamA && teamB;
-  const isR32 = round.id === "r32";
-  const isChamp = round.id === "champion";
-
-  const SlotBtn = ({ side, team }) => {
+// ── TREE MATCH CARD (compact for tree view) ──
+function TreeMatchCard({ match, teamA, teamB, winner, homeDef, awayDef, onPickWinner }) {
+  const canPick = !!(teamA && teamB);
+  const TeamRow = ({ team, slotDef }) => {
     const t = team ? getTeam(team) : null;
-    const isWin = winner === team && !!team;
+    const isW = winner === team && !!team;
+    const tbd = !team && slotDef ? (
+      slotDef.group === "3rd" ? `3rd·${slotDef.from.slice(0,2).join("/")}…` :
+      slotDef.winnerOf ? `W·${slotDef.winnerOf}` :
+      `G${slotDef.group}·#${slotDef.pos}`
+    ) : "TBD";
     return (
-      <div onClick={() => onPickTeam(match, round, side, team)}
-        style={{
-          display: "flex", alignItems: "center", gap: 8,
-          padding: "8px 10px", borderRadius: 8, cursor: "pointer",
-          background: isWin ? T.gold + "28" : team ? T.navyLight : T.navy,
-          border: `1px solid ${isWin ? T.gold : team ? T.navyLight : T.grayDark + "66"}`,
-          transition: "all 0.15s",
-        }}>
-        {t
-          ? <><span style={{ fontSize: 20 }}>{t.flag}</span>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: isWin ? T.gold : T.white }}>{team}</div>
-              </div>
-              {isWin && <span style={{ fontSize: 12 }}>🏆</span>}
-            </>
-          : <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, color: T.grayDark, fontStyle: "italic" }}>
-              {isR32 ? `Tap to pick — ${side === "A" ? "Team 1" : "Team 2"}` : "Awaiting previous round..."}
-            </span>
-        }
+      <div style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 7px", minHeight: 26, background: isW ? "var(--bk-active-card)" : "transparent", borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : "transparent"}`, borderRadius: "0 4px 4px 0" }}>
+        {t ? (
+          <>
+            <span style={{ fontSize: 13, lineHeight: 1, flexShrink: 0 }}>{t.flag}</span>
+            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11, color: isW ? "var(--bk-accent)" : "var(--bk-text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{team}</span>
+            {isW && <span style={{ fontSize: 9, flexShrink: 0 }}>🏆</span>}
+          </>
+        ) : team ? (
+          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, fontWeight: 600, color: isW ? "var(--bk-accent)" : "var(--bk-text-primary)", opacity: 0.85, flex: 1 }}>{team}</span>
+        ) : (
+          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, color: "var(--bk-text-secondary)", opacity: 0.7 }}>{tbd}</span>
+        )}
       </div>
     );
   };
-
   return (
-    <div style={{
-      background: T.navyMid, borderRadius: 10,
-      border: `1px solid ${winner ? T.gold + "55" : T.navyLight}`,
-      padding: "10px 12px", marginBottom: 8,
-    }}>
-      <div style={{ fontSize: 10, color: T.grayDark, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 8 }}>
-        {match.label}
-      </div>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        <SlotBtn side="A" team={teamA} />
-        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 9, color: T.grayDark, paddingLeft: 10, letterSpacing: 1 }}>VS</div>
-        {!isChamp && <SlotBtn side="B" team={teamB} />}
-      </div>
-
-      {/* Winner row — only appears when both teams are set */}
-      {bothSet && (
-        <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${T.navyLight}`, display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 10, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, flexShrink: 0 }}>WINNER:</span>
-          {[teamA, teamB].map(name => {
-            const t = getTeam(name);
-            const isW = winner === name;
-            return (
-              <div key={name} onClick={() => onPickWinner(match, name)}
-                style={{
-                  flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-                  padding: "6px 8px", borderRadius: 8, cursor: "pointer",
-                  background: isW ? T.gold + "30" : T.navyLight,
-                  border: `1px solid ${isW ? T.gold : T.grayDark}`,
-                }}>
-                <span style={{ fontSize: 16 }}>{t.flag}</span>
-                <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, color: isW ? T.gold : T.white }}>{name}</span>
-                {isW && <span style={{ fontSize: 10 }}>🏆</span>}
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── LIST VIEW ──
-function BracketListView({ picks, onPickTeam, onPickWinner }) {
-  return (
-    <div>
-      {BRACKET_ROUNDS.map(round => (
-        <div key={round.id} style={{ marginBottom: 24 }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 15, letterSpacing: 2, color: T.gold, marginBottom: 10 }}>
-            {round.label}
-            <span style={{ color: T.gray, fontSize: 11, fontWeight: 400, marginLeft: 8 }}>
-              ({round.matches.filter(m => picks[m.id + "_W"]).length}/{round.matches.length} decided)
-            </span>
-          </div>
-          {round.matches.map((m, i) => (
-            <BracketMatchCard key={m.id} match={m} round={round} picks={picks} onPickTeam={onPickTeam} onPickWinner={onPickWinner} />
-          ))}
-        </div>
-      ))}
+    <div onClick={() => canPick && onPickWinner(match, teamA)} style={{ background: "var(--bk-surface)", border: `1px solid ${winner ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, borderRadius: 8, overflow: "hidden", cursor: canPick ? "pointer" : "default" }}>
+      <TeamRow team={teamA} slotDef={homeDef} />
+      <div style={{ height: 1, background: "var(--bk-border-empty)" }} />
+      <TeamRow team={teamB} slotDef={awayDef} />
     </div>
   );
 }
 
 // ── TREE VIEW ──
-function BracketTreeView({ picks, onPickTeam, onPickWinner }) {
-  const SLOT_H = 28; const SLOT_W = 110; const COL_GAP = 32; const LABEL_H = 24;
-  const maxMatches = 16;
-  const matchBlockH = SLOT_H * 2 + 20;
-  const totalH = maxMatches * matchBlockH + (maxMatches - 1) * 8 + LABEL_H + 20;
-  const totalW = BRACKET_ROUNDS.length * SLOT_W + (BRACKET_ROUNDS.length - 1) * COL_GAP + 32;
+function BracketTreeView({ standings, picks, onPickWinner }) {
+  const CARD_H = 53;
+  const BLOCK_H = 60;
+  const CARD_W = 152;
+  const CONN_W = 36;
+  const COL_W = CARD_W + CONN_W;
+  const LABEL_H = 28;
+  const MAX = 16;
+  const TOTAL_H = MAX * BLOCK_H + LABEL_H;
+  const TOTAL_W = BRACKET_ROUNDS.length * COL_W;
+
+  const cy = (rIdx, mIdx) => {
+    const count = BRACKET_ROUNDS[rIdx].matches.length;
+    const slotH = (MAX * BLOCK_H) / count;
+    return LABEL_H + mIdx * slotH + slotH / 2;
+  };
+
+  const connectors = [];
+  BRACKET_ROUNDS.forEach((round, rIdx) => {
+    if (rIdx >= BRACKET_ROUNDS.length - 1) return;
+    round.matches.forEach((match, mIdx) => {
+      if (!match.nextMatch) return;
+      const nextRound = BRACKET_ROUNDS[rIdx + 1];
+      const nextIdx = nextRound.matches.findIndex(m => m.id === match.nextMatch);
+      if (nextIdx < 0) return;
+      const srcX = rIdx * COL_W + CARD_W;
+      const srcY = cy(rIdx, mIdx);
+      const dstX = (rIdx + 1) * COL_W;
+      const dstY = cy(rIdx + 1, nextIdx);
+      const midX = srcX + CONN_W / 2;
+      connectors.push({ d: `M ${srcX} ${srcY} H ${midX} V ${dstY} H ${dstX}`, active: !!picks[match.id + "_W"] });
+    });
+  });
 
   return (
-    <div style={{ overflowX: "auto", paddingBottom: 8 }}>
-      <div style={{ position: "relative", width: totalW, height: totalH }}>
-        {BRACKET_ROUNDS.map((round, colIdx) => {
-          const x = 16 + colIdx * (SLOT_W + COL_GAP);
+    <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", marginBottom: 16 }}>
+      <div style={{ position: "relative", width: TOTAL_W, height: TOTAL_H }}>
+        <svg style={{ position: "absolute", top: 0, left: 0, width: TOTAL_W, height: TOTAL_H, pointerEvents: "none", overflow: "visible" }}>
+          {connectors.map((c, i) => (
+            <path key={i} d={c.d} fill="none" stroke={c.active ? "var(--bk-connector-active)" : "var(--bk-connector)"} strokeWidth="1.5" strokeLinecap="round" />
+          ))}
+        </svg>
+        {BRACKET_ROUNDS.map((round, rIdx) => {
           const count = round.matches.length;
-          const blockH = (totalH - LABEL_H) / count;
-
+          const slotH = (MAX * BLOCK_H) / count;
+          const x = rIdx * COL_W;
           return (
             <div key={round.id}>
-              {/* Round label */}
-              <div style={{ position: "absolute", left: x, top: 0, width: SLOT_W, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 9, letterSpacing: 1.5, color: T.gold, textAlign: "center" }}>
+              <div style={{ position: "absolute", left: x, top: 0, width: CARD_W, height: LABEL_H, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "var(--bk-text-secondary)", borderTop: "1px solid var(--bk-border-empty)" }}>
                 {round.label}
               </div>
-
-              {round.matches.map((match, matchIdx) => {
-                const centerY = LABEL_H + matchIdx * blockH + blockH / 2;
-                const slotAY = centerY - SLOT_H - 3;
-                const slotBY = centerY + 3;
-                const teamA = picks[match.id + "_A"] || "";
-                const teamB = picks[match.id + "_B"] || "";
-                const winner = picks[match.id + "_W"] || "";
-                const isChamp = round.id === "champion";
-
-                const MiniSlot = ({ team, side }) => {
-                  const t = team ? getTeam(team) : null;
-                  const isW = winner === team && !!team;
-                  return (
-                    <div onClick={() => onPickTeam(match, round, side, team)}
-                      style={{ height: SLOT_H, display: "flex", alignItems: "center", gap: 4, padding: "0 6px", borderRadius: 5, cursor: "pointer",
-                        background: isW ? T.gold+"28" : team ? T.navyLight : T.navy,
-                        border: `1px solid ${isW ? T.gold : team ? T.navyLight : T.grayDark+"44"}`,
-                      }}>
-                      {t ? <>
-                        <span style={{ fontSize: 13 }}>{t.flag}</span>
-                        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 10, color: isW ? T.gold : T.white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 62 }}>{team}</span>
-                        {isW && <span style={{ fontSize: 9, marginLeft: "auto" }}>🏆</span>}
-                      </> : <span style={{ fontSize: 9, color: T.grayDark, fontStyle: "italic" }}>{round.id === "r32" ? "tap" : "..."}</span>}
-                    </div>
-                  );
-                };
-
-                // Winner tap dots
-                const WinDots = () => teamA && teamB ? (
-                  <div style={{ position: "absolute", left: x - 14, top: centerY - 9 }}>
-                    {[teamA, teamB].map((tName) => (
-                      <div key={tName} onClick={() => onPickWinner(match, tName)}
-                        style={{ width: 12, height: 12, marginBottom: 2, borderRadius: 2, cursor: "pointer",
-                          background: winner === tName ? T.gold : T.grayDark + "88",
-                          display: "flex", alignItems: "center", justifyContent: "center", fontSize: 7 }}>
-                        {winner === tName ? "★" : ""}
-                      </div>
-                    ))}
-                  </div>
-                ) : null;
-
-                // Connector line to next round
-                let connPath = null;
-                if (match.nextMatch && colIdx < BRACKET_ROUNDS.length - 1) {
-                  const nextRound = BRACKET_ROUNDS[colIdx + 1];
-                  const nextMatchIdx = nextRound.matches.findIndex(m => m.id === match.nextMatch);
-                  if (nextMatchIdx >= 0) {
-                    const nextBlockH = (totalH - LABEL_H) / nextRound.matches.length;
-                    const nextCenterY = LABEL_H + nextMatchIdx * nextBlockH + nextBlockH / 2;
-                    const isFeedA = match.nextSlot === "A";
-                    const targetY = isFeedA ? nextCenterY - SLOT_H - 3 + SLOT_H/2 : nextCenterY + 3 + SLOT_H/2;
-                    const myMidY = (slotAY + slotBY + SLOT_H) / 2;
-                    connPath = `M 0 ${myMidY} H ${COL_GAP/2} V ${targetY} H ${COL_GAP+2}`;
-                  }
-                }
-
+              {round.matches.map((match, mIdx) => {
+                const topY = cy(rIdx, mIdx) - CARD_H / 2;
+                const teamA = resolveSlot(match.home, standings, picks);
+                const teamB = resolveSlot(match.away, standings, picks);
+                const winner = picks[match.id + "_W"] || null;
                 return (
-                  <div key={match.id}>
-                    <div style={{ position: "absolute", left: x, top: slotAY, width: SLOT_W }}><MiniSlot team={teamA} side="A" /></div>
-                    {!isChamp && <div style={{ position: "absolute", left: x, top: slotBY, width: SLOT_W }}><MiniSlot team={teamB} side="B" /></div>}
-                    <WinDots />
-                    {connPath && (
-                      <svg style={{ position: "absolute", left: x + SLOT_W - 2, top: 0, width: COL_GAP+4, height: totalH, pointerEvents: "none", overflow: "visible" }}>
-                        <path d={connPath} fill="none" stroke={winner ? T.gold+"88" : T.grayDark} strokeWidth={winner ? 1.5 : 1} strokeDasharray={winner ? "none" : "3,3"} />
-                      </svg>
-                    )}
+                  <div key={match.id} style={{ position: "absolute", left: x, top: topY, width: CARD_W }}>
+                    <TreeMatchCard match={match} teamA={teamA} teamB={teamB} winner={winner} homeDef={match.home} awayDef={match.away} onPickWinner={onPickWinner} />
                   </div>
                 );
               })}
@@ -2094,104 +2099,96 @@ function BracketTreeView({ picks, onPickTeam, onPickWinner }) {
   );
 }
 
+// ── LIST MATCH CARD ──
+function BracketMatchCard({ match, standings, picks, onPickWinner }) {
+  const teamA = resolveSlot(match.home, standings, picks);
+  const teamB = resolveSlot(match.away, standings, picks);
+  const winner = picks[match.id + "_W"] || null;
+  const bothReady = teamA && teamB;
+  const slotLabel = (s) => !s ? "TBD" : s.group === "3rd" ? `Best 3rd · ${s.from.join("/")}` : s.winnerOf ? `Winner of ${s.winnerOf}` : `Group ${s.group} · #${s.pos}`;
+
+  const SlotRow = ({ team, slotDef }) => {
+    const t = team ? getTeam(team) : null;
+    const isW = winner === team && !!team;
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", minHeight: 40, borderRadius: 8, marginBottom: 4, background: isW ? "var(--bk-active-card)" : "var(--bk-surface-hover)", border: `${isW ? 2 : 1}px solid ${isW ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, opacity: !team ? 0.6 : 1 }}>
+        {t ? (
+          <>
+            <span style={{ fontSize: 20 }}>{t.flag}</span>
+            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, flex: 1, color: isW ? "var(--bk-accent)" : "var(--bk-text-primary)" }}>{team}</span>
+            {isW && <span style={{ fontSize: 14 }}>🏆</span>}
+          </>
+        ) : team ? (
+          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600, fontSize: 12, flex: 1, color: isW ? "var(--bk-accent)" : "var(--bk-text-primary)" }}>{team}</span>
+        ) : (
+          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, color: "var(--bk-text-secondary)", fontStyle: "italic" }}>{slotLabel(slotDef)}</span>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ background: "var(--bk-surface)", borderRadius: 10, border: `1px solid ${winner ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, padding: "10px 12px", marginBottom: 8 }}>
+      <div style={{ fontSize: 10, color: "var(--bk-text-secondary)", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 8 }}>{match.label}</div>
+      <SlotRow team={teamA} slotDef={match.home} />
+      <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 9, color: "var(--bk-text-secondary)", paddingLeft: 12, letterSpacing: 1, marginBottom: 4 }}>VS</div>
+      <SlotRow team={teamB} slotDef={match.away} />
+      {bothReady && (
+        <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid var(--bk-border-empty)", display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ fontSize: 10, color: "var(--bk-text-secondary)", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, flexShrink: 0 }}>WINNER:</span>
+          {[teamA, teamB].map(name => {
+            const t = getTeam(name);
+            const isW = winner === name;
+            return (
+              <div key={name} onClick={() => onPickWinner(match, name)} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "6px 8px", borderRadius: 8, cursor: "pointer", background: isW ? "var(--bk-active-card)" : "transparent", border: `1px solid ${isW ? "var(--bk-border-active)" : "var(--bk-border-empty)"}` }}>
+                <span style={{ fontSize: 16 }}>{t.flag}</span>
+                <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, color: isW ? "var(--bk-accent)" : "var(--bk-text-primary)" }}>{name}</span>
+                {isW && <span style={{ fontSize: 10 }}>🏆</span>}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── BRACKET TAB ──
-function BracketTab({ user }) {
-  const [picks, setPicks] = useState(() => ls.get("bracket_v5", {}));
+function BracketTab({ user, theme }) {
+  const [picks, setPicks] = useState(() => ls.get("bracket_v6", {}));
+  const [standings, setStandings] = useState([]);
+  const [modal, setModal] = useState(null);
+  const [viewMode, setViewMode] = useState("tree");
+  const [isCapturing, setIsCapturing] = useState(false);
+  const bracketRef = useRef(null);
+
+  useEffect(() => {
+    supabase.from("standings").select("*").then(({ data }) => { if (data) setStandings(data); });
+  }, []);
 
   const saveBracket = (next) => {
-    ls.set("bracket_v5", next);
-    if (user) {
-      supabase.from("wc_brackets").upsert(
-        { user_id: user.id, picks: next, updated_at: new Date().toISOString() },
-        { onConflict: "user_id" }
-      );
-    }
-  };
-  const [viewMode, setViewMode] = useState("tree");
-  const [modal, setModal] = useState(null);
-  // modal: { type: "team"|"winner", match, round, side, current, teams }
-
-  // Build the pool of available teams for a given slot
-  const getAvailableTeams = (match, round, side) => {
-    if (round.id === "r32") {
-      // All 48 teams minus already-assigned R32 slots (excluding current slot)
-      const used = getR32UsedTeams(picks, match.id + "_" + side);
-      return ALL_TEAMS.filter(t => !used.has(t));
-    } else {
-      // Only winners from the previous round
-      return getRoundWinners(picks, round.sourceRound);
-    }
+    ls.set("bracket_v6", next);
+    if (user) supabase.from("wc_brackets").upsert({ user_id: user.id, picks: next, updated_at: new Date().toISOString() }, { onConflict: "user_id" });
   };
 
-  // Tap on a team slot
-  const handlePickTeam = (match, round, side, currentPick) => {
-    const teams = getAvailableTeams(match, round, side);
-    setModal({ type: "team", match, round, side, current: currentPick, teams });
+  const handlePickWinner = (match, _pickedTeam) => {
+    const teamA = resolveSlot(match.home, standings, picks);
+    const teamB = resolveSlot(match.away, standings, picks);
+    setModal({ match, current: picks[match.id + "_W"] || null, teamA, teamB });
   };
 
-  // Tap on winner button
-  const handlePickWinner = (match, pickedTeam) => {
-    const teamA = picks[match.id + "_A"];
-    const teamB = picks[match.id + "_B"];
-    setModal({ type: "winner", match, current: picks[match.id + "_W"], teamA, teamB });
-  };
-
-  // Confirm a team selection
-  const handleTeamSelect = (teamName) => {
-    if (!modal) return;
-    const { match, side } = modal;
-    const slotKey = match.id + "_" + side;
-    let next = { ...picks };
-
-    if (teamName === null) {
-      delete next[slotKey];
-      // Clear winner and downstream if team is removed
-      delete next[match.id + "_W"];
-      next = clearDownstream(next, match.id);
-    } else {
-      const prev = next[slotKey];
-      next[slotKey] = teamName;
-      // If changed, clear winner and downstream
-      if (prev && prev !== teamName) {
-        delete next[match.id + "_W"];
-        next = clearDownstream(next, match.id);
-      }
-    }
-
-    setPicks(next);
-    saveBracket(next);
-    setModal(null);
-  };
-
-  // Confirm winner selection
   const handleWinnerSelect = (winnerName) => {
     if (!modal) return;
     const { match } = modal;
     let next = { ...picks };
-
     if (winnerName === null) {
       delete next[match.id + "_W"];
       next = clearDownstream(next, match.id);
     } else {
       const prev = next[match.id + "_W"];
       next[match.id + "_W"] = winnerName;
-      // If winner changed, clear downstream
-      if (prev && prev !== winnerName) {
-        next = clearDownstream(next, match.id);
-      }
-      // Auto-populate the next round slot with the winner
-      if (match.nextMatch && match.nextSlot) {
-        const nextKey = match.nextMatch + "_" + match.nextSlot;
-        const prevNext = next[nextKey];
-        next[nextKey] = winnerName;
-        // If changed, clear that match's winner and its downstream too
-        if (prevNext && prevNext !== winnerName) {
-          delete next[match.nextMatch + "_W"];
-          next = clearDownstream(next, match.nextMatch);
-        }
-      }
+      if (prev && prev !== winnerName) next = clearDownstream(next, match.id);
     }
-
     setPicks(next);
     saveBracket(next);
     setModal(null);
@@ -2199,117 +2196,124 @@ function BracketTab({ user }) {
 
   const resetAll = () => { setPicks({}); saveBracket({}); };
 
-  const shareText = () => {
-    const lines = ["🏆 My 2026 World Cup Bracket", ""];
-    BRACKET_ROUNDS.forEach(round => {
-      lines.push(round.label + ":");
-      round.matches.forEach(m => {
-        const a = picks[m.id + "_A"], b = picks[m.id + "_B"], w = picks[m.id + "_W"];
-        if (w) lines.push("  " + (a||"?") + " vs " + (b||"?") + " → " + w + " 🏆");
+  const handleShare = async () => {
+    if (!bracketRef.current) return;
+    setIsCapturing(true);
+    const nav = document.querySelector(".wc-bottomnav");
+    if (nav) nav.classList.add("hide-for-capture");
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const el = bracketRef.current;
+      const canvas = await html2canvas(el, {
+        backgroundColor: theme === "dark" ? "#0d1b2a" : "#f5f7fa",
+        scale: 2,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: el.scrollWidth,
+        windowHeight: el.scrollHeight,
       });
-    });
-    if (picks["champion_W"]) lines.push("\n🥇 WORLD CHAMPION: " + picks["champion_W"]);
-    navigator.clipboard?.writeText(lines.join("\n"));
-    alert("Bracket copied! 🏆");
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+      const file = new File([blob], "kickcast-bracket.png", { type: "image/png" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ title: "My World Cup 2026 Bracket", text: "Check out my World Cup 2026 bracket predictions!", files: [file] });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = "kickcast-bracket.png"; a.click();
+        URL.revokeObjectURL(url);
+      }
+    } finally {
+      if (nav) nav.classList.remove("hide-for-capture");
+      setIsCapturing(false);
+    }
   };
 
-  const decided = BRACKET_ROUNDS.flatMap(r => r.matches).filter(m => picks[m.id + "_W"]).length;
-  const total = BRACKET_ROUNDS.flatMap(r => r.matches).length;
-  const champion = picks["champion_W"];
+  const allMatches = BRACKET_ROUNDS.flatMap(r => r.matches);
+  const decided = allMatches.filter(m => picks[m.id + "_W"]).length;
+  const champion = picks["FINAL_W"];
 
   return (
-    <div style={{ padding: "16px", paddingBottom: 80 }}>
-      {/* Header */}
+    <div ref={bracketRef} style={{ padding: "16px", paddingBottom: 80, background: "var(--bk-page)", minHeight: "100%", position: "relative" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
         <div>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: 2, color: T.gold }}>BRACKET</div>
-          <div style={{ fontSize: 13, color: T.gray }}>{decided}/{total} matches decided</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: 2, color: "var(--bk-accent)" }}>BRACKET</div>
+          <div style={{ fontSize: 13, color: "var(--bk-text-secondary)" }}>{decided}/{allMatches.length} matches decided</div>
         </div>
-        <div style={{ display: "flex", gap: 8 }}>
-          <button onClick={shareText} style={{ background: T.gold, border: "none", color: T.navy, padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 12 }}>SHARE</button>
-          <button onClick={resetAll} style={{ background: T.navyLight, border: "none", color: T.gray, padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12 }}>RESET</button>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <button onClick={handleShare} disabled={isCapturing} style={{ background: theme === "dark" ? "#c8f135" : "#1a6b4a", color: theme === "dark" ? "#0d1b2a" : "#ffffff", border: "none", padding: "6px 14px", borderRadius: 8, cursor: isCapturing ? "default" : "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, opacity: isCapturing ? 0.7 : 1, display: "flex", alignItems: "center", gap: 5 }}>
+            <span style={{ fontSize: 14 }}>↑</span>{isCapturing ? "Capturing…" : "SHARE"}
+          </button>
+          <button onClick={resetAll} style={{ background: "var(--bk-surface)", border: "1px solid var(--bk-border-empty)", color: "var(--bk-text-secondary)", padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12 }}>RESET</button>
         </div>
       </div>
 
-      {/* View toggle */}
-      <div style={{ display: "flex", marginBottom: 16, background: T.navyLight, borderRadius: 10, padding: 3 }}>
+      <div style={{ display: "flex", marginBottom: 14, background: "var(--bk-surface)", border: "1px solid var(--bk-border-empty)", borderRadius: 8, padding: 3, gap: 3 }}>
         {[["tree", "⟶  TREE VIEW"], ["list", "☰  LIST VIEW"]].map(([mode, label]) => (
-          <button key={mode} onClick={() => setViewMode(mode)} style={{
-            flex: 1, padding: "8px", border: "none", borderRadius: 8, cursor: "pointer",
-            background: viewMode === mode ? T.gold : "transparent",
-            color: viewMode === mode ? T.navy : T.gray,
-            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 13,
-            transition: "all 0.2s",
-          }}>{label}</button>
+          <button key={mode} onClick={() => setViewMode(mode)} style={{ flex: 1, padding: "7px", border: "none", borderRadius: 6, cursor: "pointer", background: viewMode === mode ? "var(--bk-border-active)" : "transparent", color: viewMode === mode ? "#ffffff" : "var(--bk-text-secondary)", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 13, transition: "all 0.15s" }}>{label}</button>
         ))}
       </div>
 
-      {/* Hint */}
-      <div style={{ background: T.navyMid, borderRadius: 8, padding: "8px 12px", marginBottom: 16, border: `1px solid ${T.navyLight}`, fontSize: 12, color: T.gray, lineHeight: 1.5 }}>
-        💡 <b style={{ color: T.white }}>R32:</b> Pick any 2 teams per match (selected teams are removed from pool). Pick a winner — they auto-advance to QF. Same flow all the way to Champion.
+      <div style={{ background: "var(--bk-surface-hover)", borderLeft: "3px solid var(--bk-accent)", borderRadius: 6, padding: "8px 12px", marginBottom: 16, fontSize: 12, color: "var(--bk-text-primary)", lineHeight: 1.5 }}>
+        💡 Teams locked from official group results. Tap a match to pick the winner — they auto-advance.
       </div>
 
-      {viewMode === "list"
-        ? <BracketListView picks={picks} onPickTeam={handlePickTeam} onPickWinner={handlePickWinner} />
-        : <BracketTreeView picks={picks} onPickTeam={handlePickTeam} onPickWinner={handlePickWinner} />
+      {viewMode === "tree"
+        ? <BracketTreeView standings={standings} picks={picks} onPickWinner={handlePickWinner} />
+        : BRACKET_ROUNDS.map(round => (
+            <div key={round.id} style={{ marginBottom: 24 }}>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 15, letterSpacing: 2, color: "var(--bk-accent)", marginBottom: 10 }}>
+                {round.label}
+                <span style={{ color: "var(--bk-text-secondary)", fontSize: 11, fontWeight: 400, marginLeft: 8 }}>({round.matches.filter(m => picks[m.id + "_W"]).length}/{round.matches.length} decided)</span>
+              </div>
+              {round.matches.map(m => (
+                <BracketMatchCard key={m.id} match={m} standings={standings} picks={picks} onPickWinner={handlePickWinner} />
+              ))}
+            </div>
+          ))
       }
 
-      {/* Champion banner */}
       {champion && (
-        <div style={{ background: T.gold+"18", border: `1px solid ${T.gold}`, borderRadius: 12, padding: "16px", textAlign: "center", marginTop: 8 }}>
+        <div style={{ background: "var(--bk-active-card)", border: "1px solid var(--bk-border-active)", borderRadius: 12, padding: "16px", textAlign: "center", marginTop: 8 }}>
           <div style={{ fontSize: 40 }}>{getTeam(champion).flag}</div>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: T.gold, marginTop: 6 }}>🏆 {champion}</div>
-          <div style={{ fontSize: 12, color: T.gray, marginTop: 2 }}>Your predicted World Champion</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: "var(--bk-accent)", marginTop: 6 }}>🏆 {champion}</div>
+          <div style={{ fontSize: 12, color: "var(--bk-text-secondary)", marginTop: 2 }}>Your predicted World Champion</div>
         </div>
       )}
 
-      {/* Team picker modal */}
-      {modal?.type === "team" && (
-        <TeamPickerModal
-          title={modal.round.id === "r32" ? "Pick a team" : "Pick from " + (getRound(modal.round.sourceRound)?.label || "previous round") + " winners"}
-          teams={modal.teams}
-          usedInSlot={modal.current}
-          onSelect={handleTeamSelect}
-          onClose={() => setModal(null)}
-        />
-      )}
-
-      {/* Winner picker modal */}
-      {modal?.type === "winner" && (
-        <WinnerPickerModal
-          matchId={modal.match.id}
-          teamA={modal.teamA}
-          teamB={modal.teamB}
-          current={modal.current}
-          onSelect={handleWinnerSelect}
-          onClose={() => setModal(null)}
-        />
+      {modal && (
+        <WinnerPickerModal teamA={modal.teamA} teamB={modal.teamB} current={modal.current} onSelect={handleWinnerSelect} onClose={() => setModal(null)} />
       )}
     </div>
   );
 }
 
 // ─── TAB: VOTE & PREDICT ─────────────────────────────────────────────────────
-const POLL_MATCH = FIXTURES.find(f => f.status === "Live") || FIXTURES[2];
 
 function VoteTab({ predictions, setPredictions, user }) {
   const [vote, setVote] = useState(() => ls.get("daily_vote", null));
-  const [baseTallies] = useState({ home: 4200, draw: 1300, away: 3100 });
+  const [dbTallies, setDbTallies] = useState({ home: 0, draw: 0, away: 0 });
   const [predictOpen, setPredictOpen] = useState(null);
   const [scoreInput, setScoreInput] = useState({ home: 0, away: 0 });
-  const [motmMatch, setMotmMatch] = useState(() => {
-    const live = FIXTURES.find(f => f.status === "Live");
-    return live ? live.id : (FIXTURES.find(f => f.status === "FT")?.id ?? null);
-  });
-  const [motmVote, setMotmVote] = useState(() => ls.get("motm_vote", null));
-  const [motmSubmitted, setMotmSubmitted] = useState(() => ls.get("motm_submitted", null));
+  const [showAllUpcoming, setShowAllUpcoming] = useState(false);
 
+  useEffect(() => {
+    supabase.rpc("get_vote_tallies").then(({ data }) => {
+      if (!data) return;
+      const t = { home: 0, draw: 0, away: 0 };
+      data.forEach(r => { if (t[r.vote] !== undefined) t[r.vote] = Number(r.cnt); });
+      setDbTallies(t);
+    });
+  }, []);
+
+  if (!POLL_MATCH) return <div style={{ padding: 40, textAlign: "center", color: T.gray }}>Loading match data…</div>;
   const homeTeam = getTeam(POLL_MATCH.home);
   const awayTeam = getTeam(POLL_MATCH.away);
 
   const castVote = (choice) => {
     setVote(choice);
     ls.set("daily_vote", choice);
+    setDbTallies(prev => ({ ...prev, [choice]: prev[choice] + 1 }));
     if (user) {
       supabase.from("wc_votes").upsert(
         { user_id: user.id, vote: choice, voted_at: new Date().toISOString() },
@@ -2318,14 +2322,9 @@ function VoteTab({ predictions, setPredictions, user }) {
     }
   };
 
-  const total = baseTallies.home + baseTallies.draw + baseTallies.away + (vote ? 1 : 0);
-  const tallies = {
-    home: baseTallies.home + (vote === "home" ? 1 : 0),
-    draw: baseTallies.draw + (vote === "draw" ? 1 : 0),
-    away: baseTallies.away + (vote === "away" ? 1 : 0),
-  };
-
-  const pct = (n) => Math.round((n / total) * 100);
+  const total = dbTallies.home + dbTallies.draw + dbTallies.away;
+  const tallies = dbTallies;
+  const pct = (n) => total === 0 ? 0 : Math.round((n / total) * 100);
 
   const openPredict = (fixture) => {
     const existing = predictions[fixture.id];
@@ -2341,6 +2340,14 @@ function VoteTab({ predictions, setPredictions, user }) {
     };
     setPredictions(next);
     ls.set("predictions", next);
+    if (user) {
+      supabase.from("wc_predictions").upsert(
+        { user_id: user.id, match_id: predictOpen.id, home_score: scoreInput.home, away_score: scoreInput.away, updated_at: new Date().toISOString() },
+        { onConflict: "user_id,match_id" }
+      ).then(({ error }) => { if (error) alert("Prediction save failed: " + error.message); });
+    } else {
+      alert("Not logged in — prediction not saved to leaderboard");
+    }
     setPredictOpen(null);
   };
 
@@ -2412,138 +2419,147 @@ function VoteTab({ predictions, setPredictions, user }) {
         🔮 SCORE PREDICTIONS
       </div>
 
-      <div className="pred-grid">
-        {FIXTURES.filter(f => f.status === "Upcoming").slice(0, 6).map(fixture => {
-          const pred = predictions[fixture.id];
-          const h = getTeam(fixture.home);
-          const a = getTeam(fixture.away);
-          return (
-          <div key={fixture.id} className="pred-card" style={{
-            background: T.navyMid, borderRadius: 12, padding: 14,
-            border: `1px solid ${pred ? T.gold + "44" : T.navyLight}`,
-          }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
-                <span style={{ fontSize: 24 }}>{h.flag}</span>
-                <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14 }}>{fixture.home}</span>
-              </div>
-              <div style={{ textAlign: "center", padding: "0 10px" }}>
-                {pred ? (
-                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: T.gold }}>
-                    {pred.homeScore} — {pred.awayScore}
-                  </span>
-                ) : (
-                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 14, color: T.gray }}>? — ?</span>
-                )}
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, justifyContent: "flex-end" }}>
-                <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14 }}>{fixture.away}</span>
-                <span style={{ fontSize: 24 }}>{a.flag}</span>
-              </div>
-            </div>
-            <button onClick={() => openPredict(fixture)} style={{
-              marginTop: 10, width: "100%", padding: "7px",
-              background: pred ? `${T.gold}22` : "transparent",
-              border: `1px solid ${pred ? T.gold : T.grayDark}`,
-              color: pred ? T.gold : T.gray,
-              borderRadius: 8, cursor: "pointer",
-              fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: 1,
-            }}>
-              {pred ? "✓ EDIT PREDICTION" : "PREDICT SCORE"}
-            </button>
-          </div>
-          );
-        })}
-      </div>
-
-      {/* Man of the Match */}
-      <div style={{ marginTop: 8, marginBottom: 8 }}>
-        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: 1, marginBottom: 12 }}>
-          ⭐ MAN OF THE MATCH
-        </div>
-
-        {/* Match selector */}
-        <div style={{ display: "flex", gap: 8, overflowX: "auto", marginBottom: 14, paddingBottom: 4, scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
-          {FIXTURES.filter(f => f.status === "FT" || f.status === "Live").map(f => (
-            <button key={f.id} onClick={() => setMotmMatch(f.id)} style={{
-              flexShrink: 0, padding: "8px 12px",
-              background: motmMatch === f.id ? T.gold + "22" : T.navyMid,
-              border: `1px solid ${motmMatch === f.id ? T.gold : T.navyLight}`,
-              borderRadius: 8, cursor: "pointer",
-              fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12,
-              color: motmMatch === f.id ? T.gold : T.gray,
-              whiteSpace: "nowrap",
-            }}>
-              {getTeam(f.home).flag} {f.home} vs {f.away} {getTeam(f.away).flag}
-            </button>
-          ))}
-        </div>
-
-        {motmMatch && (() => {
-          const match = FIXTURES.find(f => f.id === motmMatch);
-          if (!match) return null;
-          return (
-            <div style={{ background: T.navyMid, borderRadius: 12, padding: "16px", border: `1px solid ${T.navyLight}` }}>
-              <div style={{ fontSize: 12, color: T.gray, marginBottom: 14, fontFamily: "'Barlow Condensed', sans-serif" }}>
-                Pick the standout player · {match.home} vs {match.away}
-              </div>
-              {[match.home, match.away].map(teamName => {
-                const team = getTeam(teamName);
-                const starters = (team.squad || []).filter(p => p.xi);
+      {(() => {
+        const upcomingAll = FIXTURES.filter(f => f.status === "Upcoming");
+        const upcomingVisible = showAllUpcoming ? upcomingAll : upcomingAll.slice(0, 6);
+        return (
+          <>
+            <div className="pred-grid">
+              {upcomingVisible.map(fixture => {
+                const pred = predictions[fixture.id];
+                const h = getTeam(fixture.home);
+                const a = getTeam(fixture.away);
                 return (
-                  <div key={teamName} style={{ marginBottom: 16 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                      <span style={{ fontSize: 22 }}>{team.flag}</span>
-                      <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 15, color: T.white }}>{teamName}</span>
+                  <div key={fixture.id} className="pred-card" style={{
+                    background: T.navyMid, borderRadius: 12, padding: 14,
+                    border: `1px solid ${pred ? T.gold + "44" : T.navyLight}`,
+                  }}>
+                    <div style={{ fontSize: 13, color: T.gray, marginBottom: 6, fontFamily: "'Barlow Condensed', sans-serif" }}>{fixture.date} · {fixture.time}{fixture.venue ? ` · ${fixture.venue}` : ""}</div>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
+                        <span style={{ fontSize: 24 }}>{h.flag}</span>
+                        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14 }}>{fixture.home}</span>
+                      </div>
+                      <div style={{ textAlign: "center", padding: "0 10px" }}>
+                        {pred ? (
+                          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: T.gold }}>
+                            {pred.homeScore} — {pred.awayScore}
+                          </span>
+                        ) : (
+                          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 14, color: T.gray }}>? — ?</span>
+                        )}
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, justifyContent: "flex-end" }}>
+                        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14 }}>{fixture.away}</span>
+                        <span style={{ fontSize: 24 }}>{a.flag}</span>
+                      </div>
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
-                      {starters.map(p => {
-                        const key = `${motmMatch}_${p.name}`;
-                        const isSelected = motmVote === key;
-                        return (
-                          <div key={p.name} onClick={() => { setMotmVote(key); ls.set("motm_vote", key); }}
-                            style={{
-                              padding: "9px 11px", borderRadius: 8, cursor: "pointer",
-                              background: isSelected ? T.gold + "28" : T.navyLight,
-                              border: `1px solid ${isSelected ? T.gold : T.grayDark + "55"}`,
-                              display: "flex", alignItems: "center", gap: 8,
-                              transition: "all 0.15s",
-                            }}>
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: isSelected ? T.gold : T.white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
-                              <div style={{ fontSize: 10, color: T.gray }}>{p.pos}</div>
-                            </div>
-                            {isSelected && <span style={{ color: T.gold, fontSize: 14, flexShrink: 0 }}>⭐</span>}
-                          </div>
-                        );
-                      })}
+                    <button onClick={() => openPredict(fixture)} style={{
+                      marginTop: 10, width: "100%", padding: "7px",
+                      background: pred ? `${T.gold}22` : "transparent",
+                      border: `1px solid ${pred ? T.gold : T.grayDark}`,
+                      color: pred ? T.gold : T.gray,
+                      borderRadius: 8, cursor: "pointer",
+                      fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: 1,
+                    }}>
+                      {pred ? "✓ EDIT PREDICTION" : "PREDICT SCORE"}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+            {upcomingAll.length > 6 && (
+              <button onClick={() => setShowAllUpcoming(v => !v)} style={{
+                width: "100%", marginTop: 12, padding: "10px",
+                background: "transparent", border: `1px solid ${T.navyLight}`,
+                color: T.gold, borderRadius: 10, cursor: "pointer",
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: 1,
+              }}>
+                {showAllUpcoming ? "▲ SHOW LESS" : `▼ SHOW MORE (${upcomingAll.length - 6} more matches)`}
+              </button>
+            )}
+          </>
+        );
+      })()}
+
+      {/* Prediction History */}
+      {(() => {
+        const history = FIXTURES.filter(f => f.status === "FT" && predictions[f.id]);
+        if (!history.length) return null;
+        return (
+          <div style={{ marginTop: 28 }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: 1, marginBottom: 12 }}>
+              📋 MY PREDICTION HISTORY
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+              {history.map(fixture => {
+                const pred = predictions[fixture.id];
+                const h = getTeam(fixture.home);
+                const a = getTeam(fixture.away);
+                const exact = pred.homeScore === fixture.homeScore && pred.awayScore === fixture.awayScore;
+                const predHome = pred.homeScore, predAway = pred.awayScore;
+                const actHome = fixture.homeScore ?? fixture.home_score ?? 0;
+                const actAway = fixture.awayScore ?? fixture.away_score ?? 0;
+                const correctResult = (predHome > predAway && actHome > actAway) ||
+                  (predHome < predAway && actHome < actAway) ||
+                  (predHome === predAway && actHome === actAway);
+                const isExact = predHome === actHome && predAway === actAway;
+                const badge = isExact ? { label: "🎯 EXACT", color: T.gold, pts: "+3 pts" }
+                  : correctResult ? { label: "✅ CORRECT", color: "#4ade80", pts: "+1 pt" }
+                  : { label: "❌ WRONG", color: T.red, pts: "0 pts" };
+                return (
+                  <div key={fixture.id} style={{
+                    background: T.navyMid, borderRadius: 14,
+                    padding: "14px 14px 12px",
+                    border: `1px solid ${badge.color}44`,
+                  }}>
+                    {/* Top row */}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                      <span style={{ fontSize: 12, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.5 }}>
+                        GRP {fixture.group} · {fixture.date}
+                      </span>
+                      <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11, color: badge.color }}>
+                        {badge.label}
+                      </span>
+                    </div>
+
+                    {/* Teams + score */}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <div style={{ flex: 1, textAlign: "center" }}>
+                        <div style={{ fontSize: 32 }}>{h.flag}</div>
+                        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, marginTop: 3, color: T.white }}>{fixture.home}</div>
+                      </div>
+                      <div style={{ textAlign: "center", padding: "0 8px" }}>
+                        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: T.gold, letterSpacing: 2 }}>
+                          {actHome}–{actAway}
+                        </div>
+                        <div style={{ fontSize: 10, color: T.gray, marginTop: 2, fontFamily: "'Barlow Condensed', sans-serif" }}>FULL TIME</div>
+                      </div>
+                      <div style={{ flex: 1, textAlign: "center" }}>
+                        <div style={{ fontSize: 32 }}>{a.flag}</div>
+                        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, marginTop: 3, color: T.white }}>{fixture.away}</div>
+                      </div>
+                    </div>
+
+                    <div style={{ height: 1, background: "#3a4a6b", margin: "10px 0 4px" }} />
+
+                    {/* Prediction result */}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 4 }}>
+                      <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, color: T.gold }}>
+                        You: {predHome}–{predAway}
+                      </div>
+                      <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11, color: badge.color }}>
+                        {badge.pts}
+                      </div>
                     </div>
                   </div>
                 );
               })}
-              {motmVote?.startsWith(String(motmMatch) + "_") && (
-                motmSubmitted === motmVote ? (
-                  <div style={{ marginTop: 12, padding: "12px 14px", background: T.gold + "18", borderRadius: 10, border: `1px solid ${T.gold}44`, textAlign: "center" }}>
-                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 15, color: T.gold }}>⭐ SUBMITTED</div>
-                    <div style={{ fontSize: 11, color: T.gray, marginTop: 3 }}>{motmVote.replace(String(motmMatch) + "_", "")}</div>
-                  </div>
-                ) : (
-                  <div style={{ marginTop: 14 }}>
-                    <div style={{ fontSize: 11, color: T.gray, textAlign: "center", marginBottom: 8, fontFamily: "'Barlow Condensed', sans-serif" }}>
-                      Selected: <span style={{ color: T.gold, fontWeight: 700 }}>{motmVote.replace(String(motmMatch) + "_", "")}</span>
-                    </div>
-                    <button onClick={() => { setMotmSubmitted(motmVote); ls.set("motm_submitted", motmVote); }} style={{
-                      width: "100%", padding: "11px", background: T.gold, border: "none",
-                      borderRadius: 10, color: T.navy, cursor: "pointer",
-                      fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 14, letterSpacing: 0.5,
-                    }}>⭐  SUBMIT VOTE</button>
-                  </div>
-                )
-              )}
             </div>
-          );
-        })()}
-      </div>
+          </div>
+        );
+      })()}
+
 
       {/* Score input modal */}
       {predictOpen && (
@@ -2609,21 +2625,20 @@ function VoteTab({ predictions, setPredictions, user }) {
 }
 
 // ─── TAB: LEADERBOARD ────────────────────────────────────────────────────────
-const MOCK_USERS = [
-  { name: "Samsad R", flag: "🇧🇩", pts: 47, correct: 14, total: 18, acc: 78 },
-  { name: "Carlos M", flag: "🇲🇽", pts: 43, correct: 13, total: 18, acc: 72 },
-  { name: "Yuki T", flag: "🇯🇵", pts: 38, correct: 11, total: 16, acc: 69 },
-  { name: "Amira K", flag: "🇲🇦", pts: 35, correct: 10, total: 16, acc: 63 },
-  { name: "James W", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", pts: 32, correct: 9, total: 15, acc: 60 },
-  { name: "Lucas B", flag: "🇧🇷", pts: 29, correct: 8, total: 15, acc: 53 },
-  { name: "Sofia P", flag: "🇵🇹", pts: 27, correct: 8, total: 16, acc: 50 },
-  { name: "Ahmed N", flag: "🇳🇬", pts: 24, correct: 7, total: 14, acc: 50 },
-  { name: "Emma S", flag: "🇩🇪", pts: 21, correct: 6, total: 14, acc: 43 },
-  { name: "Ravi P", flag: "🇮🇳", pts: 18, correct: 5, total: 13, acc: 38 },
-];
-
 function LeaderboardTab() {
   const medals = ["🥇", "🥈", "🥉"];
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.from("leaderboard_view").select("*").limit(100)
+      .then(({ data }) => { setUsers(data || []); setLoading(false); });
+  }, []);
+
+  const getName = (u) => u.display_name?.split("@")[0] || "Player";
+  const getFlag = (u) => u.supporting_team ? getTeam(u.supporting_team).flag : "🌍";
+  const getAcc  = (u) => u.total > 0 ? Math.round((u.correct / u.total) * 100) : 0;
+
   return (
     <div style={{ padding: "16px", paddingBottom: 80 }}>
       <div style={{ marginBottom: 16 }}>
@@ -2634,8 +2649,8 @@ function LeaderboardTab() {
       {/* Scoring guide */}
       <div style={{ background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 16, border: `1px solid ${T.navyLight}` }}>
         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 13, letterSpacing: 1, marginBottom: 8, color: T.gold }}>SCORING SYSTEM</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
-          {[["Correct winner", "+3 pts"], ["Exact score", "+5 pts"], ["Correct draw", "+3 pts"], ["Draw + exact", "+5 pts"]].map(([label, pts]) => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {[["Correct result", "+1 pt"], ["Exact score", "+3 pts"]].map(([label, pts]) => (
             <div key={label} style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
               <span style={{ color: T.gray }}>{label}</span>
               <span style={{ color: T.gold, fontWeight: 700 }}>{pts}</span>
@@ -2644,33 +2659,45 @@ function LeaderboardTab() {
         </div>
       </div>
 
+      {loading && <div style={{ textAlign: "center", padding: 40, color: T.gray }}>Loading…</div>}
+
+      {!loading && users.length === 0 && (
+        <div style={{ textAlign: "center", padding: 40 }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}>🏆</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 18, color: T.white, marginBottom: 6 }}>No results yet</div>
+          <div style={{ fontSize: 13, color: T.gray }}>Leaderboard fills once matches finish and predictions are scored</div>
+        </div>
+      )}
+
       {/* Top 3 podium */}
-      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 10, marginBottom: 20 }}>
-        {[MOCK_USERS[1], MOCK_USERS[0], MOCK_USERS[2]].map((u, i) => {
-          const heights = [110, 140, 90];
-          const colors = [T.gray, T.gold, "#CD7F32"];
-          const rank = [2, 1, 3];
-          return (
-            <div key={u.name} style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 28, marginBottom: 4 }}>{u.flag}</div>
-              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13 }}>{u.name.split(" ")[0]}</div>
-              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, color: colors[i] }}>{u.pts}</div>
-              <div style={{
-                height: heights[i], width: 80,
-                background: `linear-gradient(180deg, ${colors[i]}33, ${colors[i]}11)`,
-                border: `1px solid ${colors[i]}44`,
-                borderRadius: "8px 8px 0 0", marginTop: 6,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: colors[i],
-              }}>{medals[rank[i] - 1]}</div>
-            </div>
-          );
-        })}
-      </div>
+      {users.length >= 3 && (
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 10, marginBottom: 20 }}>
+          {[users[1], users[0], users[2]].map((u, i) => {
+            const heights = [110, 140, 90];
+            const colors = [T.gray, T.gold, "#CD7F32"];
+            const rank = [2, 1, 3];
+            return (
+              <div key={u.user_id} style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 28, marginBottom: 4 }}>{getFlag(u)}</div>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13 }}>{getName(u)}</div>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, color: colors[i] }}>{u.pts}</div>
+                <div style={{
+                  height: heights[i], width: 80,
+                  background: `linear-gradient(180deg, ${colors[i]}33, ${colors[i]}11)`,
+                  border: `1px solid ${colors[i]}44`,
+                  borderRadius: "8px 8px 0 0", marginTop: 6,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: colors[i],
+                }}>{medals[rank[i] - 1]}</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Full list */}
-      {MOCK_USERS.map((u, i) => (
-        <div key={u.name} style={{
+      {users.map((u, i) => (
+        <div key={u.user_id} style={{
           background: i === 0 ? `${T.gold}15` : T.navyMid,
           border: `1px solid ${i === 0 ? T.gold + "44" : T.navyLight}`,
           borderRadius: 10, padding: "12px 14px", marginBottom: 8,
@@ -2680,10 +2707,10 @@ function LeaderboardTab() {
           <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: i < 3 ? T.gold : T.gray, width: 24, textAlign: "center" }}>
             {i < 3 ? medals[i] : `${i + 1}`}
           </div>
-          <div style={{ fontSize: 28 }}>{u.flag}</div>
+          <div style={{ fontSize: 28 }}>{getFlag(u)}</div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 16 }}>{u.name}</div>
-            <div style={{ fontSize: 11, color: T.gray }}>{u.correct}/{u.total} correct · {u.acc}% accuracy</div>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 16 }}>{getName(u)}</div>
+            <div style={{ fontSize: 11, color: T.gray }}>{u.correct}/{u.total} correct · {getAcc(u)}% accuracy</div>
           </div>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: T.gold }}>{u.pts}</div>
@@ -2700,33 +2727,10 @@ function LeaderboardTab() {
 }
 
 // ─── STATS DATA ──────────────────────────────────────────────────────────────
-const MOCK_STATS = {
-  goals: [
-    { name: "Lionel Messi",      team: "Argentina", flag: "🇦🇷", goals: 3 },
-    { name: "Kylian Mbappe",     team: "France",    flag: "🇫🇷", goals: 3 },
-    { name: "Vinicius Jr",       team: "Brazil",    flag: "🇧🇷", goals: 2 },
-    { name: "Christian Pulisic", team: "USA",       flag: "🇺🇸", goals: 2 },
-    { name: "Mohamed Salah",     team: "Egypt",     flag: "🇪🇬", goals: 2 },
-    { name: "Robert Lewandowski",team: "Poland",    flag: "🇵🇱", goals: 1 },
-    { name: "Mehdi Taremi",      team: "Iran",      flag: "🇮🇷", goals: 1 },
-    { name: "Eldor Shomurodov",  team: "Uzbekistan",flag: "🇺🇿", goals: 1 },
-  ],
-  yellowCards: [
-    { name: "Casemiro",          team: "Brazil",    flag: "🇧🇷" },
-    { name: "Leandro Paredes",   team: "Argentina", flag: "🇦🇷" },
-    { name: "Tyler Adams",       team: "USA",       flag: "🇺🇸" },
-    { name: "Rodrigo De Paul",   team: "Argentina", flag: "🇦🇷" },
-    { name: "Piotr Zielinski",   team: "Poland",    flag: "🇵🇱" },
-    { name: "Granit Xhaka",      team: "Switzerland",flag: "🇨🇭" },
-  ],
-  redCards: [
-    { name: "Casemiro",          team: "Brazil",    flag: "🇧🇷" },
-  ],
-};
 
 // ─── TAB: MORE ───────────────────────────────────────────────────────────────
-function MoreTab({ user, onSignIn }) {
-  const [section, setSection] = useState("profile");
+function MoreTab({ user, onSignIn, onChangeTeam }) {
+  const [section, setSection] = useState("stats");
   const [statTab, setStatTab] = useState("goals");
   const [showChangePwd, setShowChangePwd] = useState(false);
   const [pwdData, setPwdData] = useState({ next: "", confirm: "" });
@@ -2765,7 +2769,7 @@ function MoreTab({ user, onSignIn }) {
 
       {/* Section toggle */}
       <div style={{ display: "flex", marginBottom: 20, background: T.navyLight, borderRadius: 10, padding: 3 }}>
-        {[["profile", "👤  PROFILE"], ["stats", "📊  STATS"]].map(([id, label]) => (
+        {[["stats", "📊  STATS"], ["profile", "👤  PROFILE"]].map(([id, label]) => (
           <button key={id} onClick={() => setSection(id)} style={{
             flex: 1, padding: "8px", border: "none", borderRadius: 8, cursor: "pointer",
             background: section === id ? T.gold : "transparent",
@@ -2812,6 +2816,7 @@ function MoreTab({ user, onSignIn }) {
             {[
               { label: "Edit Profile", icon: "✏️", action: () => { setEditingName(true); setShowChangePwd(false); } },
               { label: "Change Password", icon: "🔒", action: () => { setShowChangePwd(v => !v); setEditingName(false); } },
+              { label: "Change Team", icon: "🏳️", action: () => onChangeTeam?.() },
             ].map(({ label, icon, action }) => (
               <div key={label} onClick={action} style={{
                 background: T.navyMid, borderRadius: 12, padding: "14px 16px",
@@ -2889,69 +2894,80 @@ function MoreTab({ user, onSignIn }) {
             ))}
           </div>
 
-          {/* Top Scorers */}
-          {statTab === "goals" && (
-            <div>
-              {MOCK_STATS.goals.map((p, i) => (
-                <div key={p.name} style={{
-                  background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
-                  border: `1px solid ${i === 0 ? T.gold + "55" : T.navyLight}`,
-                  display: "flex", alignItems: "center", gap: 12,
-                }}>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 16, color: i === 0 ? T.gold : T.gray, width: 22, textAlign: "center" }}>{i + 1}</div>
-                  <span style={{ fontSize: 24 }}>{p.flag}</span>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
-                    <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: T.gold }}>{p.goals}</span>
-                    <span style={{ fontSize: 16 }}>⚽</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          {(() => {
+            const ftMatches = FIXTURES.filter(f => f.status === 'FT');
 
-          {/* Yellow Cards */}
-          {statTab === "yellow" && (
-            <div>
-              {MOCK_STATS.yellowCards.map((p) => (
-                <div key={p.name} style={{
-                  background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
-                  border: `1px solid ${T.navyLight}`, display: "flex", alignItems: "center", gap: 12,
-                }}>
-                  <span style={{ fontSize: 24 }}>{p.flag}</span>
+            if (statTab === "goals") {
+              const map = {};
+              for (const m of ftMatches) {
+                for (const g of (m.goals || [])) {
+                  if (g.own) continue;
+                  if (!map[g.player]) map[g.player] = { player: g.player, team: g.team, goals: 0 };
+                  map[g.player].goals++;
+                }
+              }
+              const rows = Object.values(map).sort((a, b) => b.goals - a.goals);
+              if (!rows.length) return <div style={{ textAlign: "center", padding: "40px 20px", color: T.gray, fontSize: 13 }}>No goals scored yet</div>;
+              return rows.map((r, i) => (
+                <div key={r.player} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", background: T.navyMid, borderRadius: 10, marginBottom: 8, border: `1px solid ${T.navyLight}` }}>
+                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, color: i === 0 ? T.gold : T.gray, minWidth: 24 }}>{i + 1}</span>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
-                    <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, color: T.white }}>{r.player}</div>
+                    <div style={{ fontSize: 11, color: T.gray }}>{r.team}</div>
                   </div>
-                  <span style={{ fontSize: 20 }}>🟨</span>
+                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: T.gold }}>{r.goals} ⚽</span>
                 </div>
-              ))}
-            </div>
-          )}
+              ));
+            }
 
-          {/* Red Cards */}
-          {statTab === "red" && (
-            <div>
-              {MOCK_STATS.redCards.length === 0 ? (
-                <div style={{ color: T.gray, fontSize: 13, padding: "14px 0" }}>No red cards yet</div>
-              ) : MOCK_STATS.redCards.map((p) => (
-                <div key={p.name} style={{
-                  background: T.navyMid, borderRadius: 10, padding: "12px 14px", marginBottom: 6,
-                  border: `1px solid ${T.red}44`, display: "flex", alignItems: "center", gap: 12,
-                }}>
-                  <span style={{ fontSize: 24 }}>{p.flag}</span>
+            if (statTab === "yellow") {
+              const map = {};
+              for (const m of ftMatches) {
+                for (const y of (m.yellowCards || [])) {
+                  if (!map[y.player]) map[y.player] = { player: y.player, team: y.team, count: 0 };
+                  map[y.player].count++;
+                }
+              }
+              const rows = Object.values(map).sort((a, b) => b.count - a.count);
+              if (!rows.length) return <div style={{ textAlign: "center", padding: "40px 20px", color: T.gray, fontSize: 13 }}>No yellow cards yet</div>;
+              return rows.map((r, i) => (
+                <div key={r.player} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", background: T.navyMid, borderRadius: 10, marginBottom: 8, border: `1px solid ${T.navyLight}` }}>
+                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, color: T.gray, minWidth: 24 }}>{i + 1}</span>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>{p.name}</div>
-                    <div style={{ fontSize: 11, color: T.gray }}>{p.team}</div>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, color: T.white }}>{r.player}</div>
+                    <div style={{ fontSize: 11, color: T.gray }}>{r.team}</div>
                   </div>
-                  <span style={{ fontSize: 20 }}>🟥</span>
+                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20 }}>🟨 {r.count}</span>
                 </div>
-              ))}
-            </div>
-          )}
+              ));
+            }
+
+            if (statTab === "red") {
+              const playerMap = {};
+              for (const m of ftMatches) {
+                for (const r of (m.redCards || [])) {
+                  if (!r.player) continue;
+                  if (!playerMap[r.player]) playerMap[r.player] = { team: r.team, count: 0, incidents: [] };
+                  playerMap[r.player].count++;
+                  playerMap[r.player].incidents.push({ match: `${m.home} vs ${m.away}`, minute: r.minute });
+                }
+              }
+              const rows = Object.entries(playerMap).sort((a, b) => b[1].count - a[1].count);
+              if (!rows.length) return <div style={{ textAlign: "center", padding: "40px 20px", color: T.gray, fontSize: 13 }}>No red cards yet</div>;
+              return rows.map(([player, info], i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", background: T.navyMid, borderRadius: 10, marginBottom: 8, border: `1px solid ${T.navyLight}` }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, color: T.white }}>{player}</div>
+                    <div style={{ fontSize: 11, color: T.gray }}>{info.team}</div>
+                    {info.incidents.map((inc, j) => (
+                      <div key={j} style={{ fontSize: 11, color: T.grayDark, marginTop: 2 }}>{inc.match}{inc.minute ? ` · ${inc.minute}` : ""}</div>
+                    ))}
+                  </div>
+                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20 }}>🟥 {info.count}</span>
+                </div>
+              ));
+            }
+          })()}
         </div>
       )}
     </div>
@@ -2961,9 +2977,9 @@ function MoreTab({ user, onSignIn }) {
 // ─── BOTTOM NAV ──────────────────────────────────────────────────────────────
 const TABS = [
   { id: "fixtures", label: "Fixtures", icon: "🏟️" },
+  { id: "vote",     label: "Vote",     icon: "🗳️" },
   { id: "teams",    label: "Teams",    icon: "👕" },
   { id: "bracket",  label: "Bracket",  icon: "🔮" },
-  { id: "vote",     label: "Vote",     icon: "🗳️" },
   { id: "board",    label: "Board",    icon: "🏅" },
   { id: "more",     label: "More",     icon: "⋯" },
 ];
@@ -3098,6 +3114,157 @@ function SideDrawer({ open, onClose, theme }) {
   );
 }
 
+// ─── SUPPORT PICKER MODAL ─────────────────────────────────────────────────────
+const WC2026_TEAMS = [
+  "Algeria","Argentina","Australia","Austria","Belgium","Bosnia-Herzegovina",
+  "Brazil","Canada","Cape Verde","Colombia","Congo DR","Curaçao","Czechia",
+  "Ecuador","Egypt","England","France","Germany","Ghana","Haiti","Iran","Iraq",
+  "Ivory Coast","Japan","Jordan","Mexico","Morocco","Netherlands","New Zealand",
+  "Nigeria","Norway","Panama","Paraguay","Portugal","Qatar","Saudi Arabia",
+  "Scotland","Senegal","South Africa","South Korea","Spain","Sweden","Switzerland",
+  "Tunisia","Türkiye","United States","Uruguay","Uzbekistan",
+];
+
+function SupportPickerModal({ onSave, onClose, currentTeam, currentCountry }) {
+  const [selected, setSelected] = useState(currentTeam || null);
+  const [countryFrom, setCountryFrom] = useState(currentCountry || "");
+  const [editingCountry, setEditingCountry] = useState(false);
+  const [search, setSearch] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (currentCountry) return;
+    fetch("https://ipapi.co/json/")
+      .then(r => r.json())
+      .then(d => { if (d.country_name) setCountryFrom(d.country_name); })
+      .catch(() => {});
+  }, []);
+
+  const filtered = WC2026_TEAMS.filter(t => t.toLowerCase().includes(search.toLowerCase()));
+
+  const handleSave = async () => {
+    if (!selected) return;
+    setSaving(true);
+    await onSave(selected, countryFrom);
+    setSaving(false);
+  };
+
+  return (
+    <div style={{
+      position: "fixed", inset: 0, background: "#000d", zIndex: 500,
+      display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
+    }}>
+      <div style={{
+        background: T.navyMid, borderRadius: 20, padding: "28px 24px",
+        width: "100%", maxWidth: 480, maxHeight: "90vh", display: "flex",
+        flexDirection: "column", border: `1px solid ${T.navyLight}`,
+        boxShadow: "0 24px 64px #000a",
+      }}>
+        {/* Header */}
+        <div style={{ position: "relative", textAlign: "center", marginBottom: 20 }}>
+          {onClose && (
+            <button onClick={onClose} style={{
+              position: "absolute", top: 0, right: 0, background: "transparent",
+              border: "none", color: T.gray, fontSize: 22, cursor: "pointer",
+              lineHeight: 1, padding: 0,
+            }}>✕</button>
+          )}
+          <div style={{ fontSize: 32, marginBottom: 8 }}>🏆</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: T.white }}>
+            Who are you supporting?
+          </div>
+          <div style={{ fontSize: 13, color: T.gray, marginTop: 4 }}>
+            Pick your team for FIFA World Cup 2026
+          </div>
+        </div>
+
+        {/* Search */}
+        <input
+          placeholder="Search team..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={{
+            width: "100%", padding: "10px 14px", borderRadius: 10, fontSize: 14,
+            background: T.navy, border: `1px solid ${T.grayDark}`, color: T.white,
+            fontFamily: "'Barlow', sans-serif", outline: "none",
+            marginBottom: 12, boxSizing: "border-box",
+          }}
+        />
+
+        {/* Team grid */}
+        <div style={{ overflowY: "auto", flex: 1, marginBottom: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            {filtered.map(team => {
+              const t = getTeam(team);
+              const isSelected = selected === team;
+              return (
+                <button key={team} onClick={() => setSelected(team)} style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  padding: "10px 12px", borderRadius: 10, cursor: "pointer",
+                  background: isSelected ? T.gold + "22" : T.navy,
+                  border: `1.5px solid ${isSelected ? T.gold : T.navyLight}`,
+                  transition: "all 0.15s", textAlign: "left",
+                }}>
+                  <span style={{ fontSize: 22 }}>{t.flag}</span>
+                  <span style={{
+                    fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+                    fontSize: 13, color: isSelected ? T.gold : T.white,
+                    lineHeight: 1.2,
+                  }}>{team}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Country from */}
+        <div style={{
+          background: T.navy, borderRadius: 10, padding: "12px 14px",
+          marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <div>
+            <div style={{ fontSize: 11, color: T.gray, marginBottom: 2, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1 }}>YOUR COUNTRY</div>
+            {editingCountry ? (
+              <input
+                autoFocus
+                value={countryFrom}
+                onChange={e => setCountryFrom(e.target.value)}
+                onBlur={() => setEditingCountry(false)}
+                onKeyDown={e => e.key === "Enter" && setEditingCountry(false)}
+                style={{
+                  background: "transparent", border: "none", outline: "none",
+                  color: T.white, fontSize: 14, fontFamily: "'Barlow', sans-serif", width: 180,
+                }}
+              />
+            ) : (
+              <div style={{ fontSize: 14, color: T.white, fontFamily: "'Barlow', sans-serif" }}>
+                {countryFrom || "Detecting…"}
+              </div>
+            )}
+          </div>
+          <button onClick={() => setEditingCountry(true)} style={{
+            background: "transparent", border: `1px solid ${T.grayDark}`,
+            color: T.gray, padding: "4px 10px", borderRadius: 6, cursor: "pointer",
+            fontSize: 11, fontFamily: "'Barlow Condensed', sans-serif",
+          }}>EDIT</button>
+        </div>
+
+        {/* Save */}
+        <button onClick={handleSave} disabled={!selected || saving} style={{
+          width: "100%", padding: "14px 0", borderRadius: 10, border: "none",
+          background: selected ? T.gold : T.grayDark,
+          color: selected ? T.navy : T.gray,
+          cursor: selected ? "pointer" : "default",
+          fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900,
+          fontSize: 16, letterSpacing: 1, transition: "all 0.2s",
+        }}>
+          {saving ? "SAVING…" : selected ? `SUPPORT ${selected.toUpperCase()} ${getTeam(selected).flag}` : "SELECT A TEAM"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ─── AUTH MODAL ───────────────────────────────────────────────────────────────
 function AuthModal({ onClose }) {
   const [mode, setMode] = useState("signin");
@@ -3112,7 +3279,7 @@ function AuthModal({ onClose }) {
     setError(""); setInfo(""); setLoading(true);
     if (mode === "signin") {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) setError(error.message);
+      if (error) { setError(error.message); setPassword(""); }
       else onClose();
     } else {
       const { error } = await supabase.auth.signUp({ email, password });
@@ -3164,7 +3331,7 @@ function AuthModal({ onClose }) {
         {/* Mode tabs */}
         <div style={{ display: "flex", background: T.navy, borderRadius: 10, padding: 4, marginBottom: 24 }}>
           {[["signin","Sign In"],["signup","Sign Up"]].map(([m, label]) => (
-            <button key={m} onClick={() => { setMode(m); setError(""); setInfo(""); }}
+            <button key={m} onClick={() => { setMode(m); setError(""); setInfo(""); setEmail(""); setPassword(""); }}
               style={{
                 flex: 1, padding: "9px 0", borderRadius: 8, border: "none", cursor: "pointer",
                 fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: 0.5,
@@ -3211,13 +3378,6 @@ function AuthModal({ onClose }) {
           </button>
         </form>
 
-        {/* Skip */}
-        <button onClick={onClose} style={{
-          width: "100%", marginTop: 14, background: "none", border: "none",
-          color: T.gray, cursor: "pointer", fontSize: 13,
-        }}>
-          Continue as guest
-        </button>
       </div>
     </div>
   );
@@ -3228,24 +3388,71 @@ export default function App() {
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [predictions, setPredictions] = useState(() => ls.get("predictions", {}));
   const [predictModal, setPredictModal] = useState(null);
+  const [detailsModal, setDetailsModal] = useState(null);
   const [scoreInput, setScoreInput] = useState({ home: 0, away: 0 });
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [showAuth, setShowAuth] = useState(false);
+  const [showTeamPicker, setShowTeamPicker] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const pendingPredictRef = useRef(null);
+  const [dbStandings, setDbStandings] = useState([]);
   const [dataVersion, setDataVersion] = useState(0);
+  const [fetchError, setFetchError] = useState(null);
   const [theme, setTheme] = useState(() => ls.get("theme", "dark"));
 
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
     Object.assign(T, next === "dark" ? DARK_T : LIGHT_T);
+    document.documentElement.setAttribute("data-theme", next);
     ls.set("theme", next);
     setTheme(next);
   };
 
   // Apply saved theme on first render
   useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
     if (theme === "light") Object.assign(T, LIGHT_T);
+  }, []);
+
+  // Load live match data from Supabase + subscribe to realtime score updates
+  useEffect(() => {
+    supabase
+      .from('matches')
+      .select('*')
+      .order('date', { ascending: true })
+      .then(({ data, error }) => {
+        if (error) { setFetchError(error.message); return; }
+        if (data?.length) {
+          FIXTURES = data.map(mapMatch);
+          POLL_MATCH = FIXTURES.find(f => f.status === 'Live') || FIXTURES[0] || null;
+          setDataVersion(v => v + 1);
+        } else {
+          setFetchError('No data returned from matches table');
+        }
+      })
+      .catch(e => setFetchError(e.message));
+
+    // Fetch standings
+    supabase.from('standings').select('*').order('group_name').order('rank')
+      .then(({ data }) => { if (data?.length) setDbStandings(data); });
+
+    const channel = supabase
+      .channel('matches-live')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'matches' }, ({ new: row }) => {
+        const updated = mapMatch(row);
+        FIXTURES = FIXTURES.map(f => f.id === updated.id ? updated : f);
+        POLL_MATCH = FIXTURES.find(f => f.status === 'Live') || POLL_MATCH;
+        setDataVersion(v => v + 1);
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'standings' }, () => {
+        supabase.from('standings').select('*').order('group_name').order('rank')
+          .then(({ data }) => { if (data?.length) setDbStandings(data); });
+      })
+      .subscribe();
+
+    return () => supabase.removeChannel(channel);
   }, []);
 
   useEffect(() => {
@@ -3262,10 +3469,11 @@ export default function App() {
   }, []);
 
   const loadUserData = async (userId) => {
-    const [{ data: preds }, { data: bracket }, { data: voteRow }] = await Promise.all([
+    const [{ data: preds }, { data: bracket }, { data: voteRow }, { data: prof }] = await Promise.all([
       supabase.from("wc_predictions").select("match_id,home_score,away_score").eq("user_id", userId),
       supabase.from("wc_brackets").select("picks").eq("user_id", userId).maybeSingle(),
       supabase.from("wc_votes").select("vote").eq("user_id", userId).maybeSingle(),
+      supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
     ]);
     if (preds?.length) {
       const map = {};
@@ -3275,8 +3483,35 @@ export default function App() {
     }
     if (bracket?.picks) ls.set("bracket_v5", bracket.picks);
     if (voteRow?.vote) ls.set("daily_vote", voteRow.vote);
+    if (prof) {
+      setProfile(prof);
+    } else {
+      setShowTeamPicker(true);
+    }
+    // Flush pending prediction made before login
+    if (pendingPredictRef.current) {
+      const { matchId, homeScore, awayScore } = pendingPredictRef.current;
+      supabase.from("wc_predictions").upsert(
+        { user_id: userId, match_id: matchId, home_score: homeScore, away_score: awayScore, updated_at: new Date().toISOString() },
+        { onConflict: "user_id,match_id" }
+      );
+      const next = { ...ls.get("predictions", {}), [matchId]: { homeScore, awayScore } };
+      setPredictions(next);
+      ls.set("predictions", next);
+      pendingPredictRef.current = null;
+    }
     setDataVersion(v => v + 1);
     setShowAuth(false);
+  };
+
+  const saveProfile = async (supportingTeam, countryFrom) => {
+    const { data: { user: freshUser } } = await supabase.auth.getUser();
+    if (!freshUser) return;
+    const row = { user_id: freshUser.id, supporting_team: supportingTeam, country_from: countryFrom, updated_at: new Date().toISOString() };
+    const { error } = await supabase.from("profiles").upsert(row, { onConflict: "user_id" });
+    if (error) { alert("Save failed: " + error.message); return; }
+    setProfile(prev => ({ ...(prev || {}), ...row }));
+    setShowTeamPicker(false);
   };
 
   const openPredict = (fixture) => {
@@ -3287,18 +3522,23 @@ export default function App() {
 
   const submitPrediction = () => {
     if (!predictModal) return;
+    if (!user) {
+      // Hold prediction, prompt login — will be flushed in loadUserData after sign-in
+      pendingPredictRef.current = { matchId: predictModal.id, homeScore: scoreInput.home, awayScore: scoreInput.away };
+      setPredictModal(null);
+      setShowAuth(true);
+      return;
+    }
     const next = {
       ...predictions,
       [predictModal.id]: { homeScore: scoreInput.home, awayScore: scoreInput.away },
     };
     setPredictions(next);
     ls.set("predictions", next);
-    if (user) {
-      supabase.from("wc_predictions").upsert(
-        { user_id: user.id, match_id: predictModal.id, home_score: scoreInput.home, away_score: scoreInput.away, updated_at: new Date().toISOString() },
-        { onConflict: "user_id,match_id" }
-      );
-    }
+    supabase.from("wc_predictions").upsert(
+      { user_id: user.id, match_id: predictModal.id, home_score: scoreInput.home, away_score: scoreInput.away, updated_at: new Date().toISOString() },
+      { onConflict: "user_id,match_id" }
+    ).then(({ error }) => { if (error) alert("Prediction save failed: " + error.message); });
     setPredictModal(null);
   };
 
@@ -3317,7 +3557,7 @@ export default function App() {
         position: "sticky", top: 0, zIndex: 50,
       }}>
         {/* Left: Kickcast logo */}
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={() => setTab("fixtures")}>
           <img
             src={theme === "dark" ? "/logo-dark.png" : "/logo-light.png"}
             alt="KickCast"
@@ -3334,23 +3574,36 @@ export default function App() {
           {user ? (
             <div style={{ position: "relative" }}>
               <button onClick={() => setUserMenuOpen(o => !o)} style={{
-                width: 32, height: 32, borderRadius: "50%", background: T.gold,
+                width: 36, height: 36, borderRadius: "50%", background: T.gold,
                 border: "none", cursor: "pointer", display: "flex", alignItems: "center",
-                justifyContent: "center", fontFamily: "'Barlow Condensed', sans-serif",
-                fontWeight: 900, fontSize: 14, color: T.navy,
+                justifyContent: "center", fontSize: profile?.supporting_team ? 20 : 14,
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, color: T.navy,
               }}>
-                {(user.user_metadata?.full_name?.[0] || user.email?.[0] || "?").toUpperCase()}
+                {profile?.supporting_team ? getTeam(profile.supporting_team).flag : (user.user_metadata?.full_name?.[0] || user.email?.[0] || "?").toUpperCase()}
               </button>
               {userMenuOpen && (
                 <div style={{
-                  position: "absolute", top: 40, right: 0, background: T.navyMid,
-                  border: `1px solid ${T.navyLight}`, borderRadius: 10, padding: 8,
-                  minWidth: 160, zIndex: 200, boxShadow: "0 8px 24px #0008",
+                  position: "absolute", top: 44, right: 0, background: T.navyMid,
+                  border: `1px solid ${T.navyLight}`, borderRadius: 12, padding: 8,
+                  minWidth: 200, zIndex: 210, boxShadow: "0 8px 24px #0008",
                 }}>
-                  <div style={{ padding: "6px 10px", fontSize: 12, color: T.gray, borderBottom: `1px solid ${T.navyLight}`, marginBottom: 4 }}>
-                    {user.email}
+                  {/* Profile info */}
+                  <div style={{ padding: "8px 10px", borderBottom: `1px solid ${T.navyLight}`, marginBottom: 4 }}>
+                    <div style={{ fontSize: 12, color: T.gray, marginBottom: 6 }}>{user.email}</div>
+                    {profile?.supporting_team && (
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                        <span style={{ fontSize: 20 }}>{getTeam(profile.supporting_team).flag}</span>
+                        <div>
+                          <div style={{ fontSize: 12, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, letterSpacing: 0.5 }}>SUPPORTING</div>
+                          <div style={{ fontSize: 13, color: T.white, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700 }}>{profile.supporting_team}</div>
+                        </div>
+                      </div>
+                    )}
+                    {profile?.country_from && (
+                      <div style={{ fontSize: 12, color: T.gray }}>🌍 From: {profile.country_from}</div>
+                    )}
                   </div>
-                  <button onClick={async () => { await supabase.auth.signOut(); setUserMenuOpen(false); }} style={{
+                  <button onClick={async () => { await supabase.auth.signOut(); setProfile(null); setUserMenuOpen(false); }} style={{
                     width: "100%", padding: "8px 10px", background: "transparent", border: "none",
                     color: T.red, cursor: "pointer", textAlign: "left", borderRadius: 6,
                     fontFamily: "'Barlow', sans-serif", fontSize: 13,
@@ -3396,12 +3649,12 @@ export default function App() {
       {/* Content */}
       <div className="wc-content" style={{ overflowY: "auto", flex: 1, minHeight: 0 }}>
         <div className="wc-inner">
-          {tab === "fixtures" && <FixturesTab predictions={predictions} onPredictOpen={openPredict} />}
-          {tab === "teams" && <TeamsTab selectedTeam={selectedTeam} onTeamOpen={(name) => { setSelectedTeam(name); if (name) setTab("teams"); }} />}
-          {tab === "bracket" && <BracketTab key={`bracket-${dataVersion}`} user={user} />}
+          {tab === "fixtures" && <FixturesTab predictions={predictions} onPredictOpen={openPredict} onViewDetails={f => setDetailsModal(f)} fetchError={fetchError} />}
+          {tab === "teams" && <TeamsTab selectedTeam={selectedTeam} dbStandings={dbStandings} onTeamOpen={(name) => { setSelectedTeam(name); if (name) setTab("teams"); }} />}
+          {tab === "bracket" && <BracketTab key={`bracket-${dataVersion}`} user={user} theme={theme} />}
           {tab === "vote" && <VoteTab key={`vote-${dataVersion}`} predictions={predictions} setPredictions={setPredictions} user={user} />}
           {tab === "board" && <LeaderboardTab />}
-          {tab === "more" && <MoreTab user={user} onSignIn={() => setShowAuth(true)} />}
+          {tab === "more" && <MoreTab user={user} onSignIn={() => setShowAuth(true)} onChangeTeam={() => setShowTeamPicker(true)} />}
         </div>
       </div>
 
@@ -3449,6 +3702,14 @@ export default function App() {
       </div>
 
       {/* Global predict modal */}
+      {detailsModal && (
+        <MatchDetailsModal
+          fixture={detailsModal}
+          userPrediction={predictions[detailsModal.id]}
+          onClose={() => setDetailsModal(null)}
+        />
+      )}
+
       {predictModal && (
         <div onClick={() => setPredictModal(null)} style={{
           position: "absolute", inset: 0, background: "#000c", zIndex: 100,
@@ -3519,6 +3780,9 @@ export default function App() {
         <div onClick={() => setUserMenuOpen(false)}
           style={{ position: "fixed", inset: 0, zIndex: 190 }} />
       )}
+
+      {/* Support picker — rendered last so it's always on top */}
+      {showTeamPicker && <SupportPickerModal onSave={saveProfile} onClose={() => setShowTeamPicker(false)} currentTeam={profile?.supporting_team} currentCountry={profile?.country_from} />}
     </div>
   );
 }
