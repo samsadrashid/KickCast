@@ -1408,7 +1408,7 @@ function MatchCardSlide({ fixture, onPredict, onViewDetails, userPrediction }) {
         </div>
       </div>
 
-      <div style={{ height: 1, background: "#3a4a6b", margin: "10px 0 4px" }} />
+      <div style={{ height: 1, background: T.navyLight, margin: "10px 0 4px" }} />
 
       {userPrediction && (
         <div style={{ marginTop: 4, textAlign: "center", fontSize: 13, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif" }}>
@@ -1958,8 +1958,8 @@ function resolveSlot(slotDef, standings, picks) {
 function WinnerPickerModal({ teamA, teamB, current, onSelect, onClose }) {
   if (!teamA || !teamB) return null;
   return (
-    <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "#000d", zIndex: 200, display: "flex", alignItems: "flex-end" }}>
-      <div onClick={e => e.stopPropagation()} style={{ background: "var(--bk-surface)", width: "100%", maxWidth: 430, margin: "0 auto", borderRadius: "20px 20px 0 0", border: "1px solid var(--bk-border-empty)", padding: "20px 18px 32px" }}>
+    <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "#000d", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: "var(--bk-surface)", width: "100%", maxWidth: 400, borderRadius: 20, border: "1px solid var(--bk-border-empty)", padding: "20px 18px 24px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
           <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: "var(--bk-text-primary)" }}>WHO WINS?</div>
           <button onClick={onClose} style={{ background: "var(--bk-surface-hover)", border: "1px solid var(--bk-border-empty)", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16, color: "var(--bk-text-secondary)", flexShrink: 0 }}>✕</button>
@@ -2541,7 +2541,7 @@ function VoteTab({ predictions, setPredictions, user }) {
                       </div>
                     </div>
 
-                    <div style={{ height: 1, background: "#3a4a6b", margin: "10px 0 4px" }} />
+                    <div style={{ height: 1, background: T.navyLight, margin: "10px 0 4px" }} />
 
                     {/* Prediction result */}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 4 }}>
