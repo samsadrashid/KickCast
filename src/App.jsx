@@ -3498,7 +3498,9 @@ export default function App() {
         if (error) { setFetchError(error.message); return; }
         if (data?.length) {
           FIXTURES = data.map(mapMatch);
-          POLL_MATCH = FIXTURES.find(f => f.status === 'Live') || FIXTURES[0] || null;
+          POLL_MATCH = FIXTURES.find(f => f.status === 'Live') ||
+            FIXTURES.filter(f => f.status === 'Upcoming' && f.isoDate).sort((a,b) => new Date(a.isoDate) - new Date(b.isoDate))[0] ||
+            FIXTURES[0] || null;
           setDataVersion(v => v + 1);
         } else {
           setFetchError('No data returned from matches table');
@@ -3515,7 +3517,9 @@ export default function App() {
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'matches' }, ({ new: row }) => {
         const updated = mapMatch(row);
         FIXTURES = FIXTURES.map(f => f.id === updated.id ? updated : f);
-        POLL_MATCH = FIXTURES.find(f => f.status === 'Live') || POLL_MATCH;
+        POLL_MATCH = FIXTURES.find(f => f.status === 'Live') ||
+          FIXTURES.filter(f => f.status === 'Upcoming' && f.isoDate).sort((a,b) => new Date(a.isoDate) - new Date(b.isoDate))[0] ||
+          POLL_MATCH;
         setDataVersion(v => v + 1);
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'standings' }, () => {
