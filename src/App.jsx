@@ -1486,7 +1486,7 @@ function FixturesTab({ predictions, onPredictOpen, onViewDetails, fetchError }) 
   const in7d   = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const live     = FIXTURES.filter(f => f.status === "Live");
   const upcoming = FIXTURES.filter(f => f.status === "Upcoming" && f.isoDate && new Date(f.isoDate) <= in7d);
-  const results  = FIXTURES.filter(f => f.status === "FT");
+  const results  = FIXTURES.filter(f => f.status === "FT").sort((a, b) => new Date(b.isoDate) - new Date(a.isoDate));
 
   return (
     <div style={{ padding: "16px", paddingBottom: 80 }}>
