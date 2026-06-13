@@ -2039,16 +2039,22 @@ function TreeMatchCard({ match, teamA, teamB, winner, homeDef, awayDef, onPickWi
   const TeamRow = ({ team, slotDef, onSlotClick }) => {
     const t = team ? getTeam(team) : null;
     const isW = winner === team && !!team;
-    const pickable = !!(slotDef && !slotDef.winnerOf);
+    const isGroupSlot = !!(slotDef && !slotDef.winnerOf);
     const tbd = !team && slotDef ? (
       slotDef.group === "3rd" ? `3rd·${slotDef.from.slice(0,2).join("/")}` :
       slotDef.winnerOf ? `W·${slotDef.winnerOf}` :
       `G${slotDef.group}·#${slotDef.pos}`
     ) : "TBD";
+    const handleClick = (e) => {
+      e.stopPropagation();
+      if (canPick && team) onPickWinner(match, team);
+      else if (isGroupSlot) onSlotClick();
+    };
+    const clickable = (canPick && !!team) || isGroupSlot;
     return (
       <div
-        onClick={pickable ? (e) => { e.stopPropagation(); onSlotClick(); } : undefined}
-        style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 7px", minHeight: 26, background: isW ? "var(--bk-active-card)" : "transparent", borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : !team && pickable ? "var(--bk-accent)" : "transparent"}`, borderRadius: "0 4px 4px 0", cursor: pickable ? "pointer" : "default" }}>
+        onClick={clickable ? handleClick : undefined}
+        style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 7px", minHeight: 26, background: isW ? "var(--bk-active-card)" : "transparent", borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : !team && isGroupSlot ? "var(--bk-accent)" : "transparent"}`, borderRadius: "0 4px 4px 0", cursor: clickable ? "pointer" : "default" }}>
         {t ? (
           <>
             <span style={{ fontSize: 13, lineHeight: 1, flexShrink: 0 }}>{t.flag}</span>
@@ -2058,13 +2064,13 @@ function TreeMatchCard({ match, teamA, teamB, winner, homeDef, awayDef, onPickWi
         ) : team ? (
           <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, fontWeight: 600, color: "var(--bk-text-primary)", opacity: 0.85, flex: 1 }}>{team}</span>
         ) : (
-          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, color: pickable ? "var(--bk-accent)" : "var(--bk-text-secondary)", opacity: pickable ? 0.9 : 0.6, fontStyle: pickable ? "normal" : "normal" }}>{pickable ? `+ ${tbd}` : tbd}</span>
+          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, color: isGroupSlot ? "var(--bk-accent)" : "var(--bk-text-secondary)", opacity: isGroupSlot ? 0.9 : 0.6 }}>{isGroupSlot ? `+ ${tbd}` : tbd}</span>
         )}
       </div>
     );
   };
   return (
-    <div onClick={() => canPick && onPickWinner(match, teamA)} style={{ background: "var(--bk-surface)", border: `1px solid ${winner ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, borderRadius: 8, overflow: "hidden", cursor: canPick ? "pointer" : "default" }}>
+    <div style={{ background: "var(--bk-surface)", border: `1px solid ${winner ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, borderRadius: 8, overflow: "hidden" }}>
       <TeamRow team={teamA} slotDef={homeDef} onSlotClick={() => onPickSlot(match, homeDef)} />
       <div style={{ height: 1, background: "var(--bk-border-empty)" }} />
       <TeamRow team={teamB} slotDef={awayDef} onSlotClick={() => onPickSlot(match, awayDef)} />
@@ -2148,21 +2154,26 @@ function BracketMatchCard({ match, standings, picks, groupPosPicks, onPickWinner
   const teamA = resolveSlot(match.home, standings, picks, groupPosPicks, match.id);
   const teamB = resolveSlot(match.away, standings, picks, groupPosPicks, match.id);
   const winner = picks[match.id + "_W"] || null;
-  const bothReady = teamA && teamB;
+  const bothReady = !!(teamA && teamB);
 
   const SlotRow = ({ team, slotDef }) => {
     const t = team ? getTeam(team) : null;
     const isW = winner === team && !!team;
-    const pickable = !!(slotDef && !slotDef.winnerOf);
+    const isGroupSlot = !!(slotDef && !slotDef.winnerOf);
     const ordinal = n => n === 1 ? "1st" : n === 2 ? "2nd" : "3rd";
     const label = !slotDef ? "TBD"
       : slotDef.group === "3rd" ? `+ Pick best 3rd · ${slotDef.from.join("/")}`
       : slotDef.winnerOf ? `Winner of ${slotDef.winnerOf}`
       : `+ Pick ${ordinal(slotDef.pos)} place · Group ${slotDef.group}`;
+    const handleClick = () => {
+      if (bothReady && team) onPickWinner(match, team);
+      else if (isGroupSlot) onPickSlot(match, slotDef);
+    };
+    const clickable = (bothReady && !!team) || isGroupSlot;
     return (
       <div
-        onClick={pickable ? () => onPickSlot(match, slotDef) : undefined}
-        style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", minHeight: 40, borderRadius: 8, marginBottom: 4, background: isW ? "var(--bk-active-card)" : "var(--bk-surface-hover)", border: `${isW ? 2 : 1}px solid ${isW ? "var(--bk-border-active)" : !team && pickable ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : !team && pickable ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, cursor: pickable ? "pointer" : "default", opacity: !team && !pickable ? 0.5 : 1 }}>
+        onClick={clickable ? handleClick : undefined}
+        style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", minHeight: 40, borderRadius: 8, marginBottom: 4, background: isW ? "var(--bk-active-card)" : "var(--bk-surface-hover)", border: `${isW ? 2 : 1}px solid ${isW ? "var(--bk-border-active)" : !team && isGroupSlot ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : !team && isGroupSlot ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, cursor: clickable ? "pointer" : "default", opacity: !team && !isGroupSlot ? 0.5 : 1 }}>
         {t ? (
           <>
             <span style={{ fontSize: 20 }}>{t.flag}</span>
@@ -2172,7 +2183,7 @@ function BracketMatchCard({ match, standings, picks, groupPosPicks, onPickWinner
         ) : team ? (
           <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600, fontSize: 12, flex: 1, color: "var(--bk-text-primary)" }}>{team}</span>
         ) : (
-          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, color: pickable ? "var(--bk-accent)" : "var(--bk-text-secondary)", fontStyle: "italic" }}>{label}</span>
+          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, color: isGroupSlot ? "var(--bk-accent)" : "var(--bk-text-secondary)", fontStyle: "italic" }}>{label}</span>
         )}
       </div>
     );
@@ -2180,26 +2191,10 @@ function BracketMatchCard({ match, standings, picks, groupPosPicks, onPickWinner
 
   return (
     <div style={{ background: "var(--bk-surface)", borderRadius: 10, border: `1px solid ${winner ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, padding: "10px 12px", marginBottom: 8 }}>
-      <div style={{ fontSize: 10, color: "var(--bk-text-secondary)", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 8 }}>{match.label}</div>
+      <div style={{ fontSize: 10, color: "var(--bk-text-secondary)", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 8 }}>{match.label}{bothReady && !winner && <span style={{ color: "var(--bk-accent)", marginLeft: 6 }}>· tap a team to pick winner</span>}</div>
       <SlotRow team={teamA} slotDef={match.home} />
       <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 9, color: "var(--bk-text-secondary)", paddingLeft: 12, letterSpacing: 1, marginBottom: 4 }}>VS</div>
       <SlotRow team={teamB} slotDef={match.away} />
-      {bothReady && (
-        <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid var(--bk-border-empty)", display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 10, color: "var(--bk-text-secondary)", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, flexShrink: 0 }}>WINNER:</span>
-          {[teamA, teamB].map(name => {
-            const t = getTeam(name);
-            const isW = winner === name;
-            return (
-              <div key={name} onClick={() => onPickWinner(match, name)} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "6px 8px", borderRadius: 8, cursor: "pointer", background: isW ? "var(--bk-active-card)" : "transparent", border: `1px solid ${isW ? "var(--bk-border-active)" : "var(--bk-border-empty)"}` }}>
-                <span style={{ fontSize: 16 }}>{t.flag}</span>
-                <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, color: isW ? "var(--bk-accent)" : "var(--bk-text-primary)" }}>{name}</span>
-                {isW && <span style={{ fontSize: 10 }}>🏆</span>}
-              </div>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 }
@@ -2209,7 +2204,6 @@ function BracketTab({ user, theme }) {
   const [picks, setPicks] = useState(() => ls.get("bracket_v6", {}));
   const [groupPosPicks, setGroupPosPicks] = useState(() => ls.get("gpp_v1", {}));
   const [standings, setStandings] = useState([]);
-  const [modal, setModal] = useState(null);
   const [slotModal, setSlotModal] = useState(null);
   const [viewMode, setViewMode] = useState("tree");
   const [isCapturing, setIsCapturing] = useState(false);
@@ -2224,10 +2218,18 @@ function BracketTab({ user, theme }) {
     if (user) supabase.from("wc_brackets").upsert({ user_id: user.id, picks: next, updated_at: new Date().toISOString() }, { onConflict: "user_id" });
   };
 
-  const handlePickWinner = (match, _pickedTeam) => {
-    const teamA = resolveSlot(match.home, standings, picks, groupPosPicks, match.id);
-    const teamB = resolveSlot(match.away, standings, picks, groupPosPicks, match.id);
-    setModal({ match, current: picks[match.id + "_W"] || null, teamA, teamB });
+  const handlePickWinner = (match, teamName) => {
+    let next = { ...picks };
+    if (next[match.id + "_W"] === teamName) {
+      delete next[match.id + "_W"];
+      next = clearDownstream(next, match.id);
+    } else {
+      const prev = next[match.id + "_W"];
+      next[match.id + "_W"] = teamName;
+      if (prev && prev !== teamName) next = clearDownstream(next, match.id);
+    }
+    setPicks(next);
+    saveBracket(next);
   };
 
   const handlePickSlot = (match, slotDef) => {
@@ -2262,40 +2264,6 @@ function BracketTab({ user, theme }) {
     setPicks(nextPicks);
     saveBracket(nextPicks);
     setSlotModal(null);
-    // Auto-open WHO WINS if both slots now resolved
-    if (teamName !== null) {
-      const m = slotModal.match;
-      const tA = resolveSlot(m.home, standings, nextPicks, nextGpp, m.id);
-      const tB = resolveSlot(m.away, standings, nextPicks, nextGpp, m.id);
-      if (tA && tB) setModal({ match: m, current: nextPicks[m.id + "_W"] || null, teamA: tA, teamB: tB });
-    }
-  };
-
-  const handleWinnerSelect = (winnerName) => {
-    if (!modal) return;
-    const { match } = modal;
-    let next = { ...picks };
-    if (winnerName === null) {
-      delete next[match.id + "_W"];
-      next = clearDownstream(next, match.id);
-    } else {
-      const prev = next[match.id + "_W"];
-      next[match.id + "_W"] = winnerName;
-      if (prev && prev !== winnerName) next = clearDownstream(next, match.id);
-    }
-    setPicks(next);
-    saveBracket(next);
-    setModal(null);
-    // Auto-open next round match if both its teams are now resolved
-    if (winnerName !== null && match.nextMatch) {
-      const allMatches = BRACKET_ROUNDS.flatMap(r => r.matches);
-      const nextM = allMatches.find(m => m.id === match.nextMatch);
-      if (nextM) {
-        const tA = resolveSlot(nextM.home, standings, next, groupPosPicks, nextM.id);
-        const tB = resolveSlot(nextM.away, standings, next, groupPosPicks, nextM.id);
-        if (tA && tB) setModal({ match: nextM, current: next[nextM.id + "_W"] || null, teamA: tA, teamB: tB });
-      }
-    }
   };
 
   const resetAll = () => { setPicks({}); saveBracket({}); setGroupPosPicks({}); ls.set("gpp_v1", {}); };
@@ -2387,9 +2355,6 @@ function BracketTab({ user, theme }) {
 
       {slotModal && (
         <GroupSlotPickerModal slotDef={slotModal.slotDef} matchId={slotModal.match.id} currentPick={slotModal.current} pickKey={slotModal.key} allPicks={groupPosPicks} onPick={handleSlotSelect} onClose={() => setSlotModal(null)} />
-      )}
-      {modal && (
-        <WinnerPickerModal teamA={modal.teamA} teamB={modal.teamB} current={modal.current} onSelect={handleWinnerSelect} onClose={() => setModal(null)} />
       )}
     </div>
   );
