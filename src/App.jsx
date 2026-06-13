@@ -2039,7 +2039,7 @@ function TreeMatchCard({ match, teamA, teamB, winner, homeDef, awayDef, onPickWi
   const TeamRow = ({ team, slotDef, onSlotClick }) => {
     const t = team ? getTeam(team) : null;
     const isW = winner === team && !!team;
-    const pickable = !team && slotDef && !slotDef.winnerOf;
+    const pickable = !!(slotDef && !slotDef.winnerOf);
     const tbd = !team && slotDef ? (
       slotDef.group === "3rd" ? `3rd·${slotDef.from.slice(0,2).join("/")}` :
       slotDef.winnerOf ? `W·${slotDef.winnerOf}` :
@@ -2048,7 +2048,7 @@ function TreeMatchCard({ match, teamA, teamB, winner, homeDef, awayDef, onPickWi
     return (
       <div
         onClick={pickable ? (e) => { e.stopPropagation(); onSlotClick(); } : undefined}
-        style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 7px", minHeight: 26, background: isW ? "var(--bk-active-card)" : "transparent", borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : pickable ? "var(--bk-accent)" : "transparent"}`, borderRadius: "0 4px 4px 0", cursor: pickable ? "pointer" : "default" }}>
+        style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 7px", minHeight: 26, background: isW ? "var(--bk-active-card)" : "transparent", borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : !team && pickable ? "var(--bk-accent)" : "transparent"}`, borderRadius: "0 4px 4px 0", cursor: pickable ? "pointer" : "default" }}>
         {t ? (
           <>
             <span style={{ fontSize: 13, lineHeight: 1, flexShrink: 0 }}>{t.flag}</span>
@@ -2153,7 +2153,7 @@ function BracketMatchCard({ match, standings, picks, groupPosPicks, onPickWinner
   const SlotRow = ({ team, slotDef }) => {
     const t = team ? getTeam(team) : null;
     const isW = winner === team && !!team;
-    const pickable = !team && slotDef && !slotDef.winnerOf;
+    const pickable = !!(slotDef && !slotDef.winnerOf);
     const ordinal = n => n === 1 ? "1st" : n === 2 ? "2nd" : "3rd";
     const label = !slotDef ? "TBD"
       : slotDef.group === "3rd" ? `+ Pick best 3rd · ${slotDef.from.join("/")}`
@@ -2162,7 +2162,7 @@ function BracketMatchCard({ match, standings, picks, groupPosPicks, onPickWinner
     return (
       <div
         onClick={pickable ? () => onPickSlot(match, slotDef) : undefined}
-        style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", minHeight: 40, borderRadius: 8, marginBottom: 4, background: isW ? "var(--bk-active-card)" : "var(--bk-surface-hover)", border: `${isW ? 2 : 1}px solid ${isW ? "var(--bk-border-active)" : pickable ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : pickable ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, cursor: pickable ? "pointer" : "default", opacity: !team && !pickable ? 0.5 : 1 }}>
+        style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", minHeight: 40, borderRadius: 8, marginBottom: 4, background: isW ? "var(--bk-active-card)" : "var(--bk-surface-hover)", border: `${isW ? 2 : 1}px solid ${isW ? "var(--bk-border-active)" : !team && pickable ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : !team && pickable ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, cursor: pickable ? "pointer" : "default", opacity: !team && !pickable ? 0.5 : 1 }}>
         {t ? (
           <>
             <span style={{ fontSize: 20 }}>{t.flag}</span>
@@ -2262,6 +2262,13 @@ function BracketTab({ user, theme }) {
     setPicks(nextPicks);
     saveBracket(nextPicks);
     setSlotModal(null);
+    // Auto-open WHO WINS if both slots now resolved
+    if (teamName !== null) {
+      const m = slotModal.match;
+      const tA = resolveSlot(m.home, standings, nextPicks, nextGpp, m.id);
+      const tB = resolveSlot(m.away, standings, nextPicks, nextGpp, m.id);
+      if (tA && tB) setModal({ match: m, current: nextPicks[m.id + "_W"] || null, teamA: tA, teamB: tB });
+    }
   };
 
   const handleWinnerSelect = (winnerName) => {
