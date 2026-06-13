@@ -24,3 +24,10 @@ dist-ssr
 *.sw?
 .vercel
 .env*
+
+# Generated / session files
+.claude/
+graphify-out/
+set-gh-secrets.sh
+uv.lock
+"Logo Image/"
