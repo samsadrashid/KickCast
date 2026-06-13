@@ -1946,18 +1946,10 @@ function resolveSlot(slotDef, standings, picks, groupPosPicks, matchId) {
   if (slotDef.group === "3rd") {
     const userPick = gpp["3rd_" + matchId];
     if (userPick) return userPick;
-    const eligible = (standings || [])
-      .filter(s => parseInt(s.rank) === 3 && slotDef.from.includes((s.group_name||"").replace("Group ","")))
-      .sort((a,b) => (b.points||0)-(a.points||0) || (b.goal_diff||0)-(a.goal_diff||0));
-    if (eligible[0]) return eligible[0]?.team || eligible[0]?.team_name;
     return null;
   }
   const userPick = gpp[slotDef.group + "_" + slotDef.pos];
   if (userPick) return userPick;
-  const entry = (standings || []).find(s =>
-    (s.group_name||"").replace("Group ","") === slotDef.group && parseInt(s.rank) === slotDef.pos
-  );
-  if (entry) return entry.team || entry.team_name;
   return null;
 }
 
