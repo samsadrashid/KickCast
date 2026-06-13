@@ -1938,29 +1938,68 @@ const clearDownstream = (picks, matchId) => {
   return next;
 };
 
-// Resolve a slot definition → team name (never null for group positions — falls back to hardcoded order)
-function resolveSlot(slotDef, standings, picks) {
+// Resolve a slot → team name. groupPosPicks keys: "A_1", "A_2", "3rd_M74", etc.
+function resolveSlot(slotDef, standings, picks, groupPosPicks, matchId) {
   if (!slotDef) return null;
   if (slotDef.winnerOf) return picks[slotDef.winnerOf + "_W"] || null;
+  const gpp = groupPosPicks || {};
   if (slotDef.group === "3rd") {
+    const userPick = gpp["3rd_" + matchId];
+    if (userPick) return userPick;
     const eligible = (standings || [])
       .filter(s => parseInt(s.rank) === 3 && slotDef.from.includes((s.group_name||"").replace("Group ","")))
       .sort((a,b) => (b.points||0)-(a.points||0) || (b.goal_diff||0)-(a.goal_diff||0));
     if (eligible[0]) return eligible[0]?.team || eligible[0]?.team_name;
-    // Fallback: first available 3rd from hardcoded group list
-    for (const g of slotDef.from) {
-      const t = GROUPS[g]?.teams?.[2];
-      if (t) return t;
-    }
-    return `3rd·${slotDef.from.slice(0,3).join("/")}`;
+    return null;
   }
-  // Try live standings first
+  const userPick = gpp[slotDef.group + "_" + slotDef.pos];
+  if (userPick) return userPick;
   const entry = (standings || []).find(s =>
     (s.group_name||"").replace("Group ","") === slotDef.group && parseInt(s.rank) === slotDef.pos
   );
   if (entry) return entry.team || entry.team_name;
-  // Fallback: hardcoded group order (pos 1 = index 0, etc.)
-  return GROUPS[slotDef.group]?.teams?.[slotDef.pos - 1] || `G${slotDef.group}·#${slotDef.pos}`;
+  return null;
+}
+
+// ── GROUP SLOT PICKER MODAL ──
+function GroupSlotPickerModal({ slotDef, matchId, currentPick, onPick, onClose }) {
+  const ordinal = n => n === 1 ? "1st" : n === 2 ? "2nd" : "3rd";
+  let title, teams;
+  if (slotDef.group === "3rd") {
+    title = `Best 3rd place · Groups ${slotDef.from.join("/")}`;
+    teams = slotDef.from.flatMap(g => GROUPS[g]?.teams || []);
+  } else {
+    title = `${ordinal(slotDef.pos)} place · Group ${slotDef.group}`;
+    teams = GROUPS[slotDef.group]?.teams || [];
+  }
+  return (
+    <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "#000d", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: "var(--bk-surface)", width: "100%", maxWidth: 400, borderRadius: 20, border: "1px solid var(--bk-border-empty)", padding: "20px 18px 24px", maxHeight: "80vh", overflowY: "auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: "var(--bk-text-primary)" }}>WHO QUALIFIES?</div>
+          <button onClick={onClose} style={{ background: "var(--bk-surface-hover)", border: "1px solid var(--bk-border-empty)", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16, color: "var(--bk-text-secondary)", flexShrink: 0 }}>✕</button>
+        </div>
+        <div style={{ fontSize: 12, color: "var(--bk-text-secondary)", marginBottom: 18 }}>{title} — pick who you think makes it</div>
+        {teams.map(name => {
+          const t = getTeam(name);
+          const isSel = name === currentPick;
+          return (
+            <div key={name} onClick={() => onPick(name)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", marginBottom: 8, borderRadius: 12, background: isSel ? "var(--bk-active-card)" : "var(--bk-surface-hover)", border: `${isSel ? 2 : 1}px solid ${isSel ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, cursor: "pointer" }}>
+              <span style={{ fontSize: 26 }}>{t?.flag || "🏴"}</span>
+              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, color: isSel ? "var(--bk-accent)" : "var(--bk-text-primary)", flex: 1 }}>{name}</span>
+              {t && <span style={{ fontSize: 11, color: "var(--bk-text-secondary)" }}>#{t.rank}</span>}
+              {isSel && <span style={{ fontSize: 13, color: "var(--bk-accent)" }}>✓</span>}
+            </div>
+          );
+        })}
+        {currentPick && (
+          <div onClick={() => onPick(null)} style={{ marginTop: 6, padding: "10px", borderRadius: 10, background: T.red+"18", border: `1px solid ${T.red}44`, cursor: "pointer", textAlign: "center" }}>
+            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: T.red }}>✕  Clear pick</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 // ── WINNER PICKER MODAL ──
@@ -2002,18 +2041,21 @@ function WinnerPickerModal({ teamA, teamB, current, onSelect, onClose }) {
 }
 
 // ── TREE MATCH CARD (compact for tree view) ──
-function TreeMatchCard({ match, teamA, teamB, winner, homeDef, awayDef, onPickWinner }) {
+function TreeMatchCard({ match, teamA, teamB, winner, homeDef, awayDef, onPickWinner, onPickSlot }) {
   const canPick = !!(teamA && teamB);
-  const TeamRow = ({ team, slotDef }) => {
+  const TeamRow = ({ team, slotDef, onSlotClick }) => {
     const t = team ? getTeam(team) : null;
     const isW = winner === team && !!team;
+    const pickable = !team && slotDef && !slotDef.winnerOf;
     const tbd = !team && slotDef ? (
-      slotDef.group === "3rd" ? `3rd·${slotDef.from.slice(0,2).join("/")}…` :
+      slotDef.group === "3rd" ? `3rd·${slotDef.from.slice(0,2).join("/")}` :
       slotDef.winnerOf ? `W·${slotDef.winnerOf}` :
       `G${slotDef.group}·#${slotDef.pos}`
     ) : "TBD";
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 7px", minHeight: 26, background: isW ? "var(--bk-active-card)" : "transparent", borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : "transparent"}`, borderRadius: "0 4px 4px 0" }}>
+      <div
+        onClick={pickable ? (e) => { e.stopPropagation(); onSlotClick(); } : undefined}
+        style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 7px", minHeight: 26, background: isW ? "var(--bk-active-card)" : "transparent", borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : pickable ? "var(--bk-accent)" : "transparent"}`, borderRadius: "0 4px 4px 0", cursor: pickable ? "pointer" : "default" }}>
         {t ? (
           <>
             <span style={{ fontSize: 13, lineHeight: 1, flexShrink: 0 }}>{t.flag}</span>
@@ -2021,24 +2063,24 @@ function TreeMatchCard({ match, teamA, teamB, winner, homeDef, awayDef, onPickWi
             {isW && <span style={{ fontSize: 9, flexShrink: 0 }}>🏆</span>}
           </>
         ) : team ? (
-          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, fontWeight: 600, color: isW ? "var(--bk-accent)" : "var(--bk-text-primary)", opacity: 0.85, flex: 1 }}>{team}</span>
+          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, fontWeight: 600, color: "var(--bk-text-primary)", opacity: 0.85, flex: 1 }}>{team}</span>
         ) : (
-          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, color: "var(--bk-text-secondary)", opacity: 0.7 }}>{tbd}</span>
+          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, color: pickable ? "var(--bk-accent)" : "var(--bk-text-secondary)", opacity: pickable ? 0.9 : 0.6, fontStyle: pickable ? "normal" : "normal" }}>{pickable ? `+ ${tbd}` : tbd}</span>
         )}
       </div>
     );
   };
   return (
     <div onClick={() => canPick && onPickWinner(match, teamA)} style={{ background: "var(--bk-surface)", border: `1px solid ${winner ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, borderRadius: 8, overflow: "hidden", cursor: canPick ? "pointer" : "default" }}>
-      <TeamRow team={teamA} slotDef={homeDef} />
+      <TeamRow team={teamA} slotDef={homeDef} onSlotClick={() => onPickSlot(match, homeDef)} />
       <div style={{ height: 1, background: "var(--bk-border-empty)" }} />
-      <TeamRow team={teamB} slotDef={awayDef} />
+      <TeamRow team={teamB} slotDef={awayDef} onSlotClick={() => onPickSlot(match, awayDef)} />
     </div>
   );
 }
 
 // ── TREE VIEW ──
-function BracketTreeView({ standings, picks, onPickWinner }) {
+function BracketTreeView({ standings, picks, groupPosPicks, onPickWinner, onPickSlot }) {
   const CARD_H = 53;
   const BLOCK_H = 60;
   const CARD_W = 152;
@@ -2091,12 +2133,12 @@ function BracketTreeView({ standings, picks, onPickWinner }) {
               </div>
               {round.matches.map((match, mIdx) => {
                 const topY = cy(rIdx, mIdx) - CARD_H / 2;
-                const teamA = resolveSlot(match.home, standings, picks);
-                const teamB = resolveSlot(match.away, standings, picks);
+                const teamA = resolveSlot(match.home, standings, picks, groupPosPicks, match.id);
+                const teamB = resolveSlot(match.away, standings, picks, groupPosPicks, match.id);
                 const winner = picks[match.id + "_W"] || null;
                 return (
                   <div key={match.id} style={{ position: "absolute", left: x, top: topY, width: CARD_W }}>
-                    <TreeMatchCard match={match} teamA={teamA} teamB={teamB} winner={winner} homeDef={match.home} awayDef={match.away} onPickWinner={onPickWinner} />
+                    <TreeMatchCard match={match} teamA={teamA} teamB={teamB} winner={winner} homeDef={match.home} awayDef={match.away} onPickWinner={onPickWinner} onPickSlot={onPickSlot} />
                   </div>
                 );
               })}
@@ -2109,18 +2151,25 @@ function BracketTreeView({ standings, picks, onPickWinner }) {
 }
 
 // ── LIST MATCH CARD ──
-function BracketMatchCard({ match, standings, picks, onPickWinner }) {
-  const teamA = resolveSlot(match.home, standings, picks);
-  const teamB = resolveSlot(match.away, standings, picks);
+function BracketMatchCard({ match, standings, picks, groupPosPicks, onPickWinner, onPickSlot }) {
+  const teamA = resolveSlot(match.home, standings, picks, groupPosPicks, match.id);
+  const teamB = resolveSlot(match.away, standings, picks, groupPosPicks, match.id);
   const winner = picks[match.id + "_W"] || null;
   const bothReady = teamA && teamB;
-  const slotLabel = (s) => !s ? "TBD" : s.group === "3rd" ? `Best 3rd · ${s.from.join("/")}` : s.winnerOf ? `Winner of ${s.winnerOf}` : `Group ${s.group} · #${s.pos}`;
 
   const SlotRow = ({ team, slotDef }) => {
     const t = team ? getTeam(team) : null;
     const isW = winner === team && !!team;
+    const pickable = !team && slotDef && !slotDef.winnerOf;
+    const ordinal = n => n === 1 ? "1st" : n === 2 ? "2nd" : "3rd";
+    const label = !slotDef ? "TBD"
+      : slotDef.group === "3rd" ? `+ Pick best 3rd · ${slotDef.from.join("/")}`
+      : slotDef.winnerOf ? `Winner of ${slotDef.winnerOf}`
+      : `+ Pick ${ordinal(slotDef.pos)} place · Group ${slotDef.group}`;
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", minHeight: 40, borderRadius: 8, marginBottom: 4, background: isW ? "var(--bk-active-card)" : "var(--bk-surface-hover)", border: `${isW ? 2 : 1}px solid ${isW ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, opacity: !team ? 0.6 : 1 }}>
+      <div
+        onClick={pickable ? () => onPickSlot(match, slotDef) : undefined}
+        style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", minHeight: 40, borderRadius: 8, marginBottom: 4, background: isW ? "var(--bk-active-card)" : "var(--bk-surface-hover)", border: `${isW ? 2 : 1}px solid ${isW ? "var(--bk-border-active)" : pickable ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, borderLeft: `3px solid ${isW ? "var(--bk-border-active)" : pickable ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, cursor: pickable ? "pointer" : "default", opacity: !team && !pickable ? 0.5 : 1 }}>
         {t ? (
           <>
             <span style={{ fontSize: 20 }}>{t.flag}</span>
@@ -2128,9 +2177,9 @@ function BracketMatchCard({ match, standings, picks, onPickWinner }) {
             {isW && <span style={{ fontSize: 14 }}>🏆</span>}
           </>
         ) : team ? (
-          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600, fontSize: 12, flex: 1, color: isW ? "var(--bk-accent)" : "var(--bk-text-primary)" }}>{team}</span>
+          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600, fontSize: 12, flex: 1, color: "var(--bk-text-primary)" }}>{team}</span>
         ) : (
-          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, color: "var(--bk-text-secondary)", fontStyle: "italic" }}>{slotLabel(slotDef)}</span>
+          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, color: pickable ? "var(--bk-accent)" : "var(--bk-text-secondary)", fontStyle: "italic" }}>{label}</span>
         )}
       </div>
     );
@@ -2165,8 +2214,10 @@ function BracketMatchCard({ match, standings, picks, onPickWinner }) {
 // ── BRACKET TAB ──
 function BracketTab({ user, theme }) {
   const [picks, setPicks] = useState(() => ls.get("bracket_v6", {}));
+  const [groupPosPicks, setGroupPosPicks] = useState(() => ls.get("gpp_v1", {}));
   const [standings, setStandings] = useState([]);
   const [modal, setModal] = useState(null);
+  const [slotModal, setSlotModal] = useState(null);
   const [viewMode, setViewMode] = useState("tree");
   const [isCapturing, setIsCapturing] = useState(false);
   const bracketRef = useRef(null);
@@ -2181,9 +2232,43 @@ function BracketTab({ user, theme }) {
   };
 
   const handlePickWinner = (match, _pickedTeam) => {
-    const teamA = resolveSlot(match.home, standings, picks);
-    const teamB = resolveSlot(match.away, standings, picks);
+    const teamA = resolveSlot(match.home, standings, picks, groupPosPicks, match.id);
+    const teamB = resolveSlot(match.away, standings, picks, groupPosPicks, match.id);
     setModal({ match, current: picks[match.id + "_W"] || null, teamA, teamB });
+  };
+
+  const handlePickSlot = (match, slotDef) => {
+    const key = slotDef.group === "3rd" ? "3rd_" + match.id : slotDef.group + "_" + slotDef.pos;
+    setSlotModal({ match, slotDef, key, current: groupPosPicks[key] || null });
+  };
+
+  const handleSlotSelect = (teamName) => {
+    if (!slotModal) return;
+    const { match, slotDef, key } = slotModal;
+    const oldPick = groupPosPicks[key];
+    const nextGpp = { ...groupPosPicks };
+    if (teamName === null) { delete nextGpp[key]; } else { nextGpp[key] = teamName; }
+    // If assignment changed, clear R32 picks that depend on this slot
+    let nextPicks = { ...picks };
+    if (oldPick !== teamName) {
+      const r32 = BRACKET_ROUNDS[0].matches;
+      for (const m of r32) {
+        const usesSlot = s => s && !s.winnerOf && (
+          slotDef.group === "3rd"
+            ? s.group === "3rd" && s.from?.join(",") === slotDef.from?.join(",")
+            : s.group === slotDef.group && s.pos === slotDef.pos
+        );
+        if ((usesSlot(m.home) || usesSlot(m.away)) && nextPicks[m.id + "_W"]) {
+          delete nextPicks[m.id + "_W"];
+          nextPicks = clearDownstream(nextPicks, m.id);
+        }
+      }
+    }
+    setGroupPosPicks(nextGpp);
+    ls.set("gpp_v1", nextGpp);
+    setPicks(nextPicks);
+    saveBracket(nextPicks);
+    setSlotModal(null);
   };
 
   const handleWinnerSelect = (winnerName) => {
@@ -2203,7 +2288,7 @@ function BracketTab({ user, theme }) {
     setModal(null);
   };
 
-  const resetAll = () => { setPicks({}); saveBracket({}); };
+  const resetAll = () => { setPicks({}); saveBracket({}); setGroupPosPicks({}); ls.set("gpp_v1", {}); };
 
   const handleShare = async () => {
     if (!bracketRef.current) return;
@@ -2264,11 +2349,11 @@ function BracketTab({ user, theme }) {
       </div>
 
       <div style={{ background: "var(--bk-surface-hover)", borderLeft: "3px solid var(--bk-accent)", borderRadius: 6, padding: "8px 12px", marginBottom: 16, fontSize: 12, color: "var(--bk-text-primary)", lineHeight: 1.5 }}>
-        💡 Teams locked from official group results. Tap a match to pick the winner — they auto-advance.
+        💡 Tap a <span style={{ color: "var(--bk-accent)", fontWeight: 700 }}>+ slot</span> to predict who qualifies from each group. Once both teams are set, tap the card to pick the winner.
       </div>
 
       {viewMode === "tree"
-        ? <BracketTreeView standings={standings} picks={picks} onPickWinner={handlePickWinner} />
+        ? <BracketTreeView standings={standings} picks={picks} groupPosPicks={groupPosPicks} onPickWinner={handlePickWinner} onPickSlot={handlePickSlot} />
         : BRACKET_ROUNDS.map(round => (
             <div key={round.id} style={{ marginBottom: 24 }}>
               <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 15, letterSpacing: 2, color: "var(--bk-accent)", marginBottom: 10 }}>
@@ -2276,7 +2361,7 @@ function BracketTab({ user, theme }) {
                 <span style={{ color: "var(--bk-text-secondary)", fontSize: 11, fontWeight: 400, marginLeft: 8 }}>({round.matches.filter(m => picks[m.id + "_W"]).length}/{round.matches.length} decided)</span>
               </div>
               {round.matches.map(m => (
-                <BracketMatchCard key={m.id} match={m} standings={standings} picks={picks} onPickWinner={handlePickWinner} />
+                <BracketMatchCard key={m.id} match={m} standings={standings} picks={picks} groupPosPicks={groupPosPicks} onPickWinner={handlePickWinner} onPickSlot={handlePickSlot} />
               ))}
             </div>
           ))
@@ -2290,6 +2375,9 @@ function BracketTab({ user, theme }) {
         </div>
       )}
 
+      {slotModal && (
+        <GroupSlotPickerModal slotDef={slotModal.slotDef} matchId={slotModal.match.id} currentPick={slotModal.current} onPick={handleSlotSelect} onClose={() => setSlotModal(null)} />
+      )}
       {modal && (
         <WinnerPickerModal teamA={modal.teamA} teamB={modal.teamB} current={modal.current} onSelect={handleWinnerSelect} onClose={() => setModal(null)} />
       )}
