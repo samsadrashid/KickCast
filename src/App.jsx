@@ -2985,7 +2985,7 @@ function MoreTab({ user, onSignIn, onChangeTeam }) {
                   <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, color: i === 0 ? T.gold : T.gray, minWidth: 24 }}>{i + 1}</span>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, color: T.white }}>{r.player}</div>
-                    <div style={{ fontSize: 11, color: T.gray }}>{r.team}</div>
+                    <div style={{ fontSize: 11, color: T.gray }}>{getTeam(r.team)?.flag} {r.team}</div>
                   </div>
                   <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: T.gold }}>{r.goals} ⚽</span>
                 </div>
@@ -3007,7 +3007,7 @@ function MoreTab({ user, onSignIn, onChangeTeam }) {
                   <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, color: T.gray, minWidth: 24 }}>{i + 1}</span>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, color: T.white }}>{r.player}</div>
-                    <div style={{ fontSize: 11, color: T.gray }}>{r.team}</div>
+                    <div style={{ fontSize: 11, color: T.gray }}>{getTeam(r.team)?.flag} {r.team}</div>
                   </div>
                   <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20 }}>🟨 {r.count}</span>
                 </div>
@@ -3030,7 +3030,7 @@ function MoreTab({ user, onSignIn, onChangeTeam }) {
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", background: T.navyMid, borderRadius: 10, marginBottom: 8, border: `1px solid ${T.navyLight}` }}>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, color: T.white }}>{player}</div>
-                    <div style={{ fontSize: 11, color: T.gray }}>{info.team}</div>
+                    <div style={{ fontSize: 11, color: T.gray }}>{getTeam(info.team)?.flag} {info.team}</div>
                     {info.incidents.map((inc, j) => (
                       <div key={j} style={{ fontSize: 11, color: T.grayDark, marginTop: 2 }}>{inc.match}{inc.minute ? ` · ${inc.minute}` : ""}</div>
                     ))}
