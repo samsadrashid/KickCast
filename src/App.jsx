@@ -2631,7 +2631,7 @@ function LeaderboardTab() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.from("leaderboard_view").select("*").limit(100)
+    supabase.rpc("get_leaderboard")
       .then(({ data }) => { setUsers(data || []); setLoading(false); });
   }, []);
 
