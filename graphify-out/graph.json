@@ -1,55 +1,1087 @@
 {
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
   "nodes": [
     {
-      "id": "data_DARK_T",
-      "label": "DARK_T",
+      "label": "correction-signals.json",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals",
+      "community": 19,
+      "norm_label": "correction-signals.json"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/Projects/worldcup2026/src/App.jsx",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_src_app_jsx",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/projects/worldcup2026/src/app.jsx"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_src_app_jsx_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/Projects/worldcup2026/.env",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_env",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/projects/worldcup2026/.env"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_env_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/Projects/worldcup2026/index.html",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_index_html",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/projects/worldcup2026/index.html"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_index_html_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/API/KickCast API/src/crawlers/liveScoreCrawler.js",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_livescorecrawler_js",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/api/kickcast api/src/crawlers/livescorecrawler.js"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_livescorecrawler_js_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/API/KickCast API/src/jobs/syncLiveScores.js",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_jobs_synclivescores_js",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/api/kickcast api/src/jobs/synclivescores.js"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_jobs_synclivescores_js_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/API/KickCast API/src/jobs/syncMatchEvents.js",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_jobs_syncmatchevents_js",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/api/kickcast api/src/jobs/syncmatchevents.js"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_jobs_syncmatchevents_js_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/API/KickCast API/src/index.js",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_index_js",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/api/kickcast api/src/index.js"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_index_js_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/API/KickCast API/src/routes/index.js",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_routes_index_js",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/api/kickcast api/src/routes/index.js"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_routes_index_js_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/API/KickCast API/src/crawlers/fixturesCrawler.js",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_fixturescrawler_js",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/api/kickcast api/src/crawlers/fixturescrawler.js"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_fixturescrawler_js_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/Projects/worldcup2026/src/index.css",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_src_index_css",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/projects/worldcup2026/src/index.css"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_src_index_css_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "/Users/ony/Downloads/Avrek/API/KickCast API/src/crawlers/standingsCrawler.js",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_standingscrawler_js",
+      "community": 19,
+      "norm_label": "/users/ony/downloads/avrek/api/kickcast api/src/crawlers/standingscrawler.js"
+    },
+    {
+      "label": "ts",
+      "file_type": "code",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "id": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_standingscrawler_js_ts",
+      "community": 19,
+      "norm_label": "ts"
+    },
+    {
+      "label": "gateguard-session.json",
+      "file_type": "code",
+      "source_file": ".claude/gateguard-session.json",
+      "source_location": "L1",
+      "id": "claude_gateguard_session",
+      "community": 20,
+      "norm_label": "gateguard-session.json"
+    },
+    {
+      "label": "session-activity.json",
+      "file_type": "code",
+      "source_file": ".claude/session-activity.json",
+      "source_location": "L1",
+      "id": "claude_session_activity",
+      "community": 18,
+      "norm_label": "session-activity.json"
+    },
+    {
+      "label": "files_modified",
+      "file_type": "code",
+      "source_file": ".claude/session-activity.json",
+      "source_location": "L2",
+      "id": "claude_session_activity_files_modified",
+      "community": 18,
+      "norm_label": "files_modified"
+    },
+    {
+      "label": "tool_calls",
+      "file_type": "code",
+      "source_file": ".claude/session-activity.json",
+      "source_location": "L15",
+      "id": "claude_session_activity_tool_calls",
+      "community": 18,
+      "norm_label": "tool_calls"
+    },
+    {
+      "label": "active_agent",
+      "file_type": "code",
+      "source_file": ".claude/session-activity.json",
+      "source_location": "L16",
+      "id": "claude_session_activity_active_agent",
+      "community": 18,
+      "norm_label": "active_agent"
+    },
+    {
+      "label": "last_updated",
+      "file_type": "code",
+      "source_file": ".claude/session-activity.json",
+      "source_location": "L17",
+      "id": "claude_session_activity_last_updated",
+      "community": 18,
+      "norm_label": "last_updated"
+    },
+    {
+      "label": "eslint.config.js",
+      "file_type": "code",
+      "source_file": "eslint.config.js",
+      "source_location": "L1",
+      "id": "eslint_config",
+      "community": 16,
+      "norm_label": "eslint.config.js"
+    },
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L1",
+      "id": "package",
+      "community": 3,
+      "norm_label": "package.json"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "id": "package_name",
+      "community": 3,
+      "norm_label": "name"
+    },
+    {
+      "label": "private",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "id": "package_private",
+      "community": 3,
+      "norm_label": "private"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "id": "package_version",
+      "community": 3,
+      "norm_label": "version"
+    },
+    {
+      "label": "type",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "id": "package_type",
+      "community": 3,
+      "norm_label": "type"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "id": "package_scripts",
+      "community": 3,
+      "norm_label": "scripts"
+    },
+    {
+      "label": "dev",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "id": "package_scripts_dev",
+      "community": 3,
+      "norm_label": "dev"
+    },
+    {
+      "label": "build",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "id": "package_scripts_build",
+      "community": 3,
+      "norm_label": "build"
+    },
+    {
+      "label": "lint",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "id": "package_scripts_lint",
+      "community": 3,
+      "norm_label": "lint"
+    },
+    {
+      "label": "preview",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L10",
+      "id": "package_scripts_preview",
+      "community": 3,
+      "norm_label": "preview"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L12",
+      "id": "package_dependencies",
+      "community": 3,
+      "norm_label": "dependencies"
+    },
+    {
+      "label": "@supabase/supabase-js",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "id": "package_dependencies_supabase_supabase_js",
+      "community": 3,
+      "norm_label": "@supabase/supabase-js"
+    },
+    {
+      "label": "html2canvas",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "id": "package_dependencies_html2canvas",
+      "community": 3,
+      "norm_label": "html2canvas"
+    },
+    {
+      "label": "react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "id": "package_dependencies_react",
+      "community": 3,
+      "norm_label": "react"
+    },
+    {
+      "label": "react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "id": "package_dependencies_react_dom",
+      "community": 3,
+      "norm_label": "react-dom"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L18",
+      "id": "package_devdependencies",
+      "community": 1,
+      "norm_label": "devdependencies"
+    },
+    {
+      "label": "@eslint/js",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "id": "package_devdependencies_eslint_js",
+      "community": 1,
+      "norm_label": "@eslint/js"
+    },
+    {
+      "label": "@types/react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "id": "package_devdependencies_types_react",
+      "community": 1,
+      "norm_label": "@types/react"
+    },
+    {
+      "label": "@types/react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "id": "package_devdependencies_types_react_dom",
+      "community": 1,
+      "norm_label": "@types/react-dom"
+    },
+    {
+      "label": "@vitejs/plugin-react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "id": "package_devdependencies_vitejs_plugin_react",
+      "community": 1,
+      "norm_label": "@vitejs/plugin-react"
+    },
+    {
+      "label": "eslint",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "id": "package_devdependencies_eslint",
+      "community": 1,
+      "norm_label": "eslint"
+    },
+    {
+      "label": "eslint-plugin-react-hooks",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "id": "package_devdependencies_eslint_plugin_react_hooks",
+      "community": 1,
+      "norm_label": "eslint-plugin-react-hooks"
+    },
+    {
+      "label": "eslint-plugin-react-refresh",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "id": "package_devdependencies_eslint_plugin_react_refresh",
+      "community": 1,
+      "norm_label": "eslint-plugin-react-refresh"
+    },
+    {
+      "label": "globals",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "id": "package_devdependencies_globals",
+      "community": 1,
+      "norm_label": "globals"
+    },
+    {
+      "label": "vite",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L27",
+      "id": "package_devdependencies_vite",
+      "community": 1,
+      "norm_label": "vite"
+    },
+    {
+      "label": "App.jsx",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1",
+      "id": "src_app",
       "community": 0,
+      "norm_label": "app.jsx"
+    },
+    {
+      "label": "DARK_T",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L5",
+      "id": "src_app_dark_t",
+      "community": 0,
+      "norm_label": "dark_t"
+    },
+    {
+      "label": "LIGHT_T",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L18",
+      "id": "src_app_light_t",
+      "community": 0,
+      "norm_label": "light_t"
+    },
+    {
+      "label": "T",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L32",
+      "id": "src_app_t",
+      "community": 0,
+      "norm_label": "t"
+    },
+    {
+      "label": "makeGlobalStyle()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L34",
+      "id": "src_app_makeglobalstyle",
+      "community": 7,
+      "norm_label": "makeglobalstyle()"
+    },
+    {
+      "label": "GROUPS",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L95",
+      "id": "src_app_groups",
+      "community": 0,
+      "norm_label": "groups"
+    },
+    {
+      "label": "TEAM_DATA",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L110",
+      "id": "src_app_team_data",
+      "community": 0,
+      "norm_label": "team_data"
+    },
+    {
+      "label": "ESPN_TEAM_IDS",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1113",
+      "id": "src_app_espn_team_ids",
+      "community": 0,
+      "norm_label": "espn_team_ids"
+    },
+    {
+      "label": "ESPN_POS",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1127",
+      "id": "src_app_espn_pos",
+      "community": 0,
+      "norm_label": "espn_pos"
+    },
+    {
+      "label": "mapMatch()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1130",
+      "id": "src_app_mapmatch",
+      "community": 0,
+      "norm_label": "mapmatch()"
+    },
+    {
+      "label": "FIXTURES",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1158",
+      "id": "src_app_fixtures",
+      "community": 0,
+      "norm_label": "fixtures"
+    },
+    {
+      "label": "getTeam()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1162",
+      "id": "src_app_getteam",
+      "community": 7,
+      "norm_label": "getteam()"
+    },
+    {
+      "label": "ls",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1164",
+      "id": "src_app_ls",
+      "community": 0,
+      "norm_label": "ls"
+    },
+    {
+      "label": "StatusBadge()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1171",
+      "id": "src_app_statusbadge",
+      "community": 0,
+      "norm_label": "statusbadge()"
+    },
+    {
+      "label": "MatchCard()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1189",
+      "id": "src_app_matchcard",
+      "community": 7,
+      "norm_label": "matchcard()"
+    },
+    {
+      "label": "MatchDetailsModal()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1254",
+      "id": "src_app_matchdetailsmodal",
+      "community": 7,
+      "norm_label": "matchdetailsmodal()"
+    },
+    {
+      "label": "MatchCardSlide()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1368",
+      "id": "src_app_matchcardslide",
+      "community": 7,
+      "norm_label": "matchcardslide()"
+    },
+    {
+      "label": "MatchSliderSection()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1450",
+      "id": "src_app_matchslidersection",
+      "community": 0,
+      "norm_label": "matchslidersection()"
+    },
+    {
+      "label": "FixturesTab()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1485",
+      "id": "src_app_fixturestab",
+      "community": 0,
+      "norm_label": "fixturestab()"
+    },
+    {
+      "label": "TeamsTab()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1518",
+      "id": "src_app_teamstab",
+      "community": 0,
+      "norm_label": "teamstab()"
+    },
+    {
+      "label": "TeamDetail()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1673",
+      "id": "src_app_teamdetail",
+      "community": 7,
+      "norm_label": "teamdetail()"
+    },
+    {
+      "label": "BRACKET_ROUNDS",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1867",
+      "id": "src_app_bracket_rounds",
+      "community": 0,
+      "norm_label": "bracket_rounds"
+    },
+    {
+      "label": "MATCH_MAP",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1926",
+      "id": "src_app_match_map",
+      "community": 0,
+      "norm_label": "match_map"
+    },
+    {
+      "label": "clearDownstream()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1929",
+      "id": "src_app_cleardownstream",
+      "community": 0,
+      "norm_label": "cleardownstream()"
+    },
+    {
+      "label": "resolveSlot()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1942",
+      "id": "src_app_resolveslot",
+      "community": 6,
+      "norm_label": "resolveslot()"
+    },
+    {
+      "label": "WinnerPickerModal()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1958",
+      "id": "src_app_winnerpickermodal",
+      "community": 0,
+      "norm_label": "winnerpickermodal()"
+    },
+    {
+      "label": "TreeMatchCard()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1996",
+      "id": "src_app_treematchcard",
+      "community": 0,
+      "norm_label": "treematchcard()"
+    },
+    {
+      "label": "BracketTreeView()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2032",
+      "id": "src_app_brackettreeview",
+      "community": 0,
+      "norm_label": "brackettreeview()"
+    },
+    {
+      "label": "BracketMatchCard()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2103",
+      "id": "src_app_bracketmatchcard",
+      "community": 6,
+      "norm_label": "bracketmatchcard()"
+    },
+    {
+      "label": "BracketTab()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2157",
+      "id": "src_app_brackettab",
+      "community": 10,
+      "norm_label": "brackettab()"
+    },
+    {
+      "label": "VoteTab()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2293",
+      "id": "src_app_votetab",
+      "community": 7,
+      "norm_label": "votetab()"
+    },
+    {
+      "label": "LeaderboardTab()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2628",
+      "id": "src_app_leaderboardtab",
+      "community": 0,
+      "norm_label": "leaderboardtab()"
+    },
+    {
+      "label": "MoreTab()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2732",
+      "id": "src_app_moretab",
+      "community": 0,
+      "norm_label": "moretab()"
+    },
+    {
+      "label": "TABS",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2978",
+      "id": "src_app_tabs",
+      "community": 0,
+      "norm_label": "tabs"
+    },
+    {
+      "label": "SideDrawer()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2989",
+      "id": "src_app_sidedrawer",
+      "community": 0,
+      "norm_label": "sidedrawer()"
+    },
+    {
+      "label": "WC2026_TEAMS",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L3118",
+      "id": "src_app_wc2026_teams",
+      "community": 0,
+      "norm_label": "wc2026_teams"
+    },
+    {
+      "label": "SupportPickerModal()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L3128",
+      "id": "src_app_supportpickermodal",
+      "community": 7,
+      "norm_label": "supportpickermodal()"
+    },
+    {
+      "label": "AuthModal()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L3269",
+      "id": "src_app_authmodal",
+      "community": 0,
+      "norm_label": "authmodal()"
+    },
+    {
+      "label": "App()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L3386",
+      "id": "src_app_app",
+      "community": 7,
+      "norm_label": "app()"
+    },
+    {
+      "label": "main.jsx",
+      "file_type": "code",
+      "source_file": "src/main.jsx",
+      "source_location": "L1",
+      "id": "src_main",
+      "community": 0,
+      "norm_label": "main.jsx"
+    },
+    {
+      "label": "supabase.js",
+      "file_type": "code",
+      "source_file": "src/supabase.js",
+      "source_location": "L1",
+      "id": "src_supabase",
+      "community": 15,
+      "norm_label": "supabase.js"
+    },
+    {
+      "label": "supabase",
+      "file_type": "code",
+      "source_file": "src/supabase.js",
+      "source_location": "L3",
+      "id": "src_supabase_supabase",
+      "community": 15,
+      "norm_label": "supabase"
+    },
+    {
+      "label": "vercel.json",
+      "file_type": "code",
+      "source_file": "vercel.json",
+      "source_location": "L1",
+      "id": "vercel",
+      "community": 14,
+      "norm_label": "vercel.json"
+    },
+    {
+      "label": "buildCommand",
+      "file_type": "code",
+      "source_file": "vercel.json",
+      "source_location": "L2",
+      "id": "vercel_buildcommand",
+      "community": 14,
+      "norm_label": "buildcommand"
+    },
+    {
+      "label": "outputDirectory",
+      "file_type": "code",
+      "source_file": "vercel.json",
+      "source_location": "L3",
+      "id": "vercel_outputdirectory",
+      "community": 14,
+      "norm_label": "outputdirectory"
+    },
+    {
+      "label": "vite.config.js",
+      "file_type": "code",
+      "source_file": "vite.config.js",
+      "source_location": "L1",
+      "id": "vite_config",
+      "community": 17,
+      "norm_label": "vite.config.js"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "id": "readme",
+      "community": 9,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "React + Vite",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "id": "readme_react_vite",
+      "community": 9,
+      "norm_label": "react + vite"
+    },
+    {
+      "label": "React Compiler",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L10",
+      "id": "readme_react_compiler",
+      "community": 9,
+      "norm_label": "react compiler"
+    },
+    {
+      "label": "Expanding the ESLint configuration",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L14",
+      "id": "readme_expanding_the_eslint_configuration",
+      "community": 9,
+      "norm_label": "expanding the eslint configuration"
+    },
+    {
+      "label": "BracketListView()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2090",
+      "community": 0,
+      "norm_label": "bracketlistview()",
+      "id": "src_app_bracketlistview"
+    },
+    {
+      "label": "getRound()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1937",
+      "community": 10,
+      "norm_label": "getround()",
+      "id": "src_app_getround"
+    },
+    {
+      "label": "getRoundWinners()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1940",
+      "community": 10,
+      "norm_label": "getroundwinners()",
+      "id": "src_app_getroundwinners"
+    },
+    {
+      "label": "getR32UsedTeams()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1949",
+      "community": 10,
+      "norm_label": "getr32usedteams()",
+      "id": "src_app_getr32usedteams"
+    },
+    {
+      "label": "TeamPickerModal()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1980",
+      "community": 7,
+      "norm_label": "teampickermodal()",
+      "id": "src_app_teampickermodal"
+    },
+    {
+      "label": "ALL_TEAMS",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1866",
+      "community": 0,
+      "norm_label": "all_teams",
+      "id": "src_app_all_teams"
+    },
+    {
+      "label": "ROUND_IDS",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1878",
+      "community": 0,
+      "norm_label": "round_ids",
+      "id": "src_app_round_ids"
+    },
+    {
+      "label": "MOCK_STATS",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2749",
+      "community": 0,
+      "norm_label": "mock_stats",
+      "id": "src_app_mock_stats"
+    },
+    {
+      "label": "MOCK_USERS",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L2637",
+      "community": 0,
+      "norm_label": "mock_users",
+      "id": "src_app_mock_users"
+    },
+    {
+      "label": "DARK_T",
+      "community": 8,
       "community_label": "Theme System",
       "color": "#e23636",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "5",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "dark_t",
+      "id": "data_DARK_T"
     },
     {
-      "id": "data_LIGHT_T",
       "label": "LIGHT_T",
-      "community": 0,
+      "community": 8,
       "community_label": "Theme System",
       "color": "#e23636",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "18",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "light_t",
+      "id": "data_LIGHT_T"
     },
     {
-      "id": "data_GROUPS",
       "label": "GROUPS",
-      "community": 1,
+      "community": 2,
       "community_label": "Team & Group Data",
       "color": "#3668e2",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "75",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "groups",
+      "id": "data_GROUPS"
     },
     {
-      "id": "data_TEAM_DATA",
       "label": "TEAM_DATA",
-      "community": 1,
+      "community": 2,
       "community_label": "Team & Group Data",
       "color": "#3668e2",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "90",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "team_data",
+      "id": "data_TEAM_DATA"
     },
     {
-      "id": "data_FIXTURES",
       "label": "FIXTURES",
       "community": 2,
       "community_label": "Match & Bracket Engine",
@@ -58,94 +1090,102 @@
       "source_file": "src/App.jsx",
       "source_location": "1076",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "fixtures",
+      "id": "data_FIXTURES"
     },
     {
-      "id": "comp_StatusBadge",
       "label": "StatusBadge",
-      "community": 3,
+      "community": 2,
       "community_label": "Match Card UI",
       "color": "#e236cc",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "1105",
       "degree": 2,
-      "size": 11.0
+      "size": 11.0,
+      "norm_label": "statusbadge",
+      "id": "comp_StatusBadge"
     },
     {
-      "id": "comp_MatchCard",
       "label": "MatchCard",
-      "community": 3,
+      "community": 2,
       "community_label": "Match Card UI",
       "color": "#e236cc",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "1123",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "matchcard",
+      "id": "comp_MatchCard"
     },
     {
-      "id": "comp_MatchCardSlide",
       "label": "MatchCardSlide",
-      "community": 3,
+      "community": 2,
       "community_label": "Match Card UI",
       "color": "#e236cc",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "1188",
       "degree": 2,
-      "size": 11.0
+      "size": 11.0,
+      "norm_label": "matchcardslide",
+      "id": "comp_MatchCardSlide"
     },
     {
-      "id": "comp_MatchSliderSection",
       "label": "MatchSliderSection",
-      "community": 3,
+      "community": 2,
       "community_label": "Match Card UI",
       "color": "#e236cc",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "1254",
       "degree": 2,
-      "size": 11.0
+      "size": 11.0,
+      "norm_label": "matchslidersection",
+      "id": "comp_MatchSliderSection"
     },
     {
-      "id": "comp_FixturesTab",
       "label": "FixturesTab",
-      "community": 3,
+      "community": 2,
       "community_label": "Match Card UI",
       "color": "#e236cc",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "1288",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "fixturestab",
+      "id": "comp_FixturesTab"
     },
     {
-      "id": "comp_TeamsTab",
       "label": "TeamsTab",
-      "community": 1,
+      "community": 2,
       "community_label": "Team & Group Data",
       "color": "#3668e2",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "1320",
       "degree": 4,
-      "size": 14.0
+      "size": 14.0,
+      "norm_label": "teamstab",
+      "id": "comp_TeamsTab"
     },
     {
-      "id": "comp_TeamDetail",
       "label": "TeamDetail",
-      "community": 1,
+      "community": 2,
       "community_label": "Team & Group Data",
       "color": "#3668e2",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "1467",
       "degree": 2,
-      "size": 11.0
+      "size": 11.0,
+      "norm_label": "teamdetail",
+      "id": "comp_TeamDetail"
     },
     {
-      "id": "data_ROUND_IDS",
       "label": "ROUND_IDS",
       "community": 4,
       "community_label": "Round Data",
@@ -154,10 +1194,11 @@
       "source_file": "src/App.jsx",
       "source_location": "1629",
       "degree": 0,
-      "size": 8
+      "size": 8,
+      "norm_label": "round_ids",
+      "id": "data_ROUND_IDS"
     },
     {
-      "id": "data_BRACKET_ROUNDS",
       "label": "BRACKET_ROUNDS",
       "community": 2,
       "community_label": "Match & Bracket Engine",
@@ -166,10 +1207,11 @@
       "source_file": "src/App.jsx",
       "source_location": "1631",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "bracket_rounds",
+      "id": "data_BRACKET_ROUNDS"
     },
     {
-      "id": "data_MATCH_MAP",
       "label": "MATCH_MAP",
       "community": 5,
       "community_label": "Match Map",
@@ -178,10 +1220,11 @@
       "source_file": "src/App.jsx",
       "source_location": "1698",
       "degree": 0,
-      "size": 8
+      "size": 8,
+      "norm_label": "match_map",
+      "id": "data_MATCH_MAP"
     },
     {
-      "id": "comp_TeamPickerModal",
       "label": "TeamPickerModal",
       "community": 2,
       "community_label": "Match & Bracket Engine",
@@ -190,10 +1233,11 @@
       "source_file": "src/App.jsx",
       "source_location": "1745",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "teampickermodal",
+      "id": "comp_TeamPickerModal"
     },
     {
-      "id": "comp_WinnerPickerModal",
       "label": "WinnerPickerModal",
       "community": 2,
       "community_label": "Match & Bracket Engine",
@@ -202,10 +1246,11 @@
       "source_file": "src/App.jsx",
       "source_location": "1827",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "winnerpickermodal",
+      "id": "comp_WinnerPickerModal"
     },
     {
-      "id": "comp_BracketMatchCard",
       "label": "BracketMatchCard",
       "community": 2,
       "community_label": "Match & Bracket Engine",
@@ -214,10 +1259,11 @@
       "source_file": "src/App.jsx",
       "source_location": "1878",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "bracketmatchcard",
+      "id": "comp_BracketMatchCard"
     },
     {
-      "id": "comp_BracketListView",
       "label": "BracketListView",
       "community": 2,
       "community_label": "Match & Bracket Engine",
@@ -226,10 +1272,11 @@
       "source_file": "src/App.jsx",
       "source_location": "1957",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "bracketlistview",
+      "id": "comp_BracketListView"
     },
     {
-      "id": "comp_BracketTreeView",
       "label": "BracketTreeView",
       "community": 2,
       "community_label": "Match & Bracket Engine",
@@ -238,10 +1285,11 @@
       "source_file": "src/App.jsx",
       "source_location": "1978",
       "degree": 2,
-      "size": 11.0
+      "size": 11.0,
+      "norm_label": "brackettreeview",
+      "id": "comp_BracketTreeView"
     },
     {
-      "id": "comp_BracketTab",
       "label": "BracketTab",
       "community": 2,
       "community_label": "Match & Bracket Engine",
@@ -250,46 +1298,50 @@
       "source_file": "src/App.jsx",
       "source_location": "2078",
       "degree": 10,
-      "size": 23.0
+      "size": 23.0,
+      "norm_label": "brackettab",
+      "id": "comp_BracketTab"
     },
     {
-      "id": "comp_VoteTab",
       "label": "VoteTab",
-      "community": 6,
+      "community": 2,
       "community_label": "Voting & Local State",
       "color": "#6136e2",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "2275",
       "degree": 4,
-      "size": 14.0
+      "size": 14.0,
+      "norm_label": "votetab",
+      "id": "comp_VoteTab"
     },
     {
-      "id": "data_MOCK_USERS",
       "label": "MOCK_USERS",
-      "community": 7,
+      "community": 8,
       "community_label": "Leaderboard",
       "color": "#3de236",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "2575",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "mock_users",
+      "id": "data_MOCK_USERS"
     },
     {
-      "id": "comp_LeaderboardTab",
       "label": "LeaderboardTab",
-      "community": 7,
+      "community": 8,
       "community_label": "Leaderboard",
       "color": "#3de236",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "2588",
       "degree": 2,
-      "size": 11.0
+      "size": 11.0,
+      "norm_label": "leaderboardtab",
+      "id": "comp_LeaderboardTab"
     },
     {
-      "id": "data_MOCK_STATS",
       "label": "MOCK_STATS",
       "community": 8,
       "community_label": "App Shell & Navigation",
@@ -298,10 +1350,11 @@
       "source_file": "src/App.jsx",
       "source_location": "2666",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "mock_stats",
+      "id": "data_MOCK_STATS"
     },
     {
-      "id": "comp_MoreTab",
       "label": "MoreTab",
       "community": 8,
       "community_label": "App Shell & Navigation",
@@ -310,10 +1363,11 @@
       "source_file": "src/App.jsx",
       "source_location": "2691",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "moretab",
+      "id": "comp_MoreTab"
     },
     {
-      "id": "data_TABS",
       "label": "TABS",
       "community": 8,
       "community_label": "App Shell & Navigation",
@@ -322,10 +1376,11 @@
       "source_file": "src/App.jsx",
       "source_location": "2915",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "tabs",
+      "id": "data_TABS"
     },
     {
-      "id": "comp_SideDrawer",
       "label": "SideDrawer",
       "community": 8,
       "community_label": "App Shell & Navigation",
@@ -334,10 +1389,11 @@
       "source_file": "src/App.jsx",
       "source_location": "2926",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "sidedrawer",
+      "id": "comp_SideDrawer"
     },
     {
-      "id": "comp_AuthModal",
       "label": "AuthModal",
       "community": 8,
       "community_label": "App Shell & Navigation",
@@ -346,10 +1402,11 @@
       "source_file": "src/App.jsx",
       "source_location": "3060",
       "degree": 2,
-      "size": 11.0
+      "size": 11.0,
+      "norm_label": "authmodal",
+      "id": "comp_AuthModal"
     },
     {
-      "id": "comp_App",
       "label": "App",
       "community": 8,
       "community_label": "App Shell & Navigation",
@@ -358,34 +1415,37 @@
       "source_file": "src/App.jsx",
       "source_location": "3184",
       "degree": 16,
-      "size": 24
+      "size": 24,
+      "norm_label": "app",
+      "id": "comp_App"
     },
     {
-      "id": "ext_supabase",
       "label": "Supabase",
-      "community": 9,
+      "community": 8,
       "community_label": "Supabase Backend",
       "color": "#36a1e2",
       "file_type": "code",
       "source_file": "src/supabase.js",
       "source_location": "",
       "degree": 4,
-      "size": 14.0
+      "size": 14.0,
+      "norm_label": "supabase",
+      "id": "ext_supabase"
     },
     {
-      "id": "ext_localStorage",
       "label": "localStorage",
-      "community": 6,
+      "community": 2,
       "community_label": "Voting & Local State",
       "color": "#6136e2",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "localstorage",
+      "id": "ext_localStorage"
     },
     {
-      "id": "ext_supabase_auth",
       "label": "Supabase Auth",
       "community": 8,
       "community_label": "App Shell & Navigation",
@@ -394,82 +1454,89 @@
       "source_file": "src/supabase.js",
       "source_location": "",
       "degree": 4,
-      "size": 14.0
+      "size": 14.0,
+      "norm_label": "supabase auth",
+      "id": "ext_supabase_auth"
     },
     {
-      "id": "ext_supabase_db",
       "label": "Supabase DB",
-      "community": 9,
+      "community": 2,
       "community_label": "Supabase Backend",
       "color": "#36a1e2",
       "file_type": "code",
       "source_file": "src/supabase.js",
       "source_location": "",
       "degree": 4,
-      "size": 14.0
+      "size": 14.0,
+      "norm_label": "supabase db",
+      "id": "ext_supabase_db"
     },
     {
-      "id": "data_theme_system",
       "label": "Theme System",
-      "community": 0,
+      "community": 8,
       "community_label": "Theme System",
       "color": "#e23636",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "theme system",
+      "id": "data_theme_system"
     },
     {
-      "id": "file_main",
       "label": "main.jsx",
-      "community": 10,
+      "community": 8,
       "community_label": "React Entry & Deps",
       "color": "#d4e236",
       "file_type": "code",
       "source_file": "src/main.jsx",
       "source_location": "",
       "degree": 2,
-      "size": 11.0
+      "size": 11.0,
+      "norm_label": "main.jsx",
+      "id": "file_main"
     },
     {
-      "id": "file_supabase",
       "label": "supabase.js",
-      "community": 9,
+      "community": 8,
       "community_label": "Supabase Backend",
       "color": "#36a1e2",
       "file_type": "code",
       "source_file": "src/supabase.js",
       "source_location": "",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "supabase.js",
+      "id": "file_supabase"
     },
     {
-      "id": "file_vite",
       "label": "vite.config.js",
-      "community": 11,
+      "community": 8,
       "community_label": "Build & Deploy Config",
       "color": "#be36e2",
       "file_type": "code",
       "source_file": "vite.config.js",
       "source_location": "",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "vite.config.js",
+      "id": "file_vite"
     },
     {
-      "id": "file_pkg",
       "label": "package.json",
-      "community": 10,
+      "community": 8,
       "community_label": "React Entry & Deps",
       "color": "#d4e236",
       "file_type": "document",
       "source_file": "package.json",
       "source_location": "",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "package.json",
+      "id": "file_pkg"
     },
     {
-      "id": "file_index",
       "label": "index.html",
       "community": 12,
       "community_label": "HTML Shell",
@@ -478,10 +1545,11 @@
       "source_file": "index.html",
       "source_location": "",
       "degree": 0,
-      "size": 8
+      "size": 8,
+      "norm_label": "index.html",
+      "id": "file_index"
     },
     {
-      "id": "file_readme",
       "label": "README.md",
       "community": 13,
       "community_label": "Documentation",
@@ -490,505 +1558,1759 @@
       "source_file": "README.md",
       "source_location": "",
       "degree": 0,
-      "size": 8
+      "size": 8,
+      "norm_label": "readme.md",
+      "id": "file_readme"
     },
     {
-      "id": "file_netlify",
       "label": "netlify.toml",
-      "community": 11,
+      "community": 8,
       "community_label": "Build & Deploy Config",
       "color": "#be36e2",
       "file_type": "document",
       "source_file": "netlify.toml",
       "source_location": "",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "netlify.toml",
+      "id": "file_netlify"
     },
     {
-      "id": "file_vercel",
       "label": "vercel.json",
-      "community": 11,
+      "community": 8,
       "community_label": "Build & Deploy Config",
       "color": "#be36e2",
       "file_type": "document",
       "source_file": "vercel.json",
       "source_location": "",
       "degree": 1,
-      "size": 9.5
+      "size": 9.5,
+      "norm_label": "vercel.json",
+      "id": "file_vercel"
     },
     {
-      "id": "dep_react",
       "label": "React 19",
-      "community": 10,
+      "community": 8,
       "community_label": "React Entry & Deps",
       "color": "#d4e236",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "react 19",
+      "id": "dep_react"
     },
     {
-      "id": "dep_supabase_js",
       "label": "@supabase/supabase-js",
-      "community": 9,
+      "community": 8,
       "community_label": "Supabase Backend",
       "color": "#36a1e2",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "",
       "degree": 3,
-      "size": 12.5
+      "size": 12.5,
+      "norm_label": "@supabase/supabase-js",
+      "id": "dep_supabase_js"
     },
     {
-      "id": "dep_vite",
       "label": "Vite 8",
-      "community": 11,
+      "community": 8,
       "community_label": "Build & Deploy Config",
       "color": "#be36e2",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "",
       "degree": 4,
-      "size": 14.0
+      "size": 14.0,
+      "norm_label": "vite 8",
+      "id": "dep_vite"
     }
   ],
   "links": [
     {
-      "source": "comp_App",
-      "target": "comp_SideDrawer",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_fixturescrawler_js"
     },
     {
-      "source": "comp_App",
-      "target": "comp_AuthModal",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_livescorecrawler_js"
     },
     {
-      "source": "comp_App",
-      "target": "comp_FixturesTab",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_standingscrawler_js"
     },
     {
-      "source": "comp_App",
-      "target": "comp_TeamsTab",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_index_js"
     },
     {
-      "source": "comp_App",
-      "target": "comp_BracketTab",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_jobs_synclivescores_js"
     },
     {
-      "source": "comp_App",
-      "target": "comp_VoteTab",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_jobs_syncmatchevents_js"
     },
     {
-      "source": "comp_App",
-      "target": "comp_LeaderboardTab",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_routes_index_js"
     },
     {
-      "source": "comp_App",
-      "target": "comp_MoreTab",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_env"
     },
     {
-      "source": "comp_FixturesTab",
-      "target": "comp_MatchSliderSection",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_index_html"
     },
     {
-      "source": "comp_MatchSliderSection",
-      "target": "comp_MatchCardSlide",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_src_app_jsx"
     },
     {
-      "source": "comp_MatchCardSlide",
-      "target": "comp_StatusBadge",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_src_index_css"
     },
     {
-      "source": "comp_MatchCard",
-      "target": "comp_StatusBadge",
-      "relation": "renders",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_src_app_jsx",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_src_app_jsx_ts"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_env",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_env_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_index_html",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_index_html_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_livescorecrawler_js",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_livescorecrawler_js_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_jobs_synclivescores_js",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_jobs_synclivescores_js_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_jobs_syncmatchevents_js",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_jobs_syncmatchevents_js_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_index_js",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_index_js_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_routes_index_js",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_routes_index_js_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_fixturescrawler_js",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_fixturescrawler_js_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_src_index_css",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_projects_worldcup2026_src_index_css_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/correction-signals.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_standingscrawler_js",
+      "target": "claude_correction_signals_users_ony_downloads_avrek_api_kickcast_api_src_crawlers_standingscrawler_js_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/session-activity.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_session_activity",
+      "target": "claude_session_activity_active_agent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/session-activity.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_session_activity",
+      "target": "claude_session_activity_files_modified"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/session-activity.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_session_activity",
+      "target": "claude_session_activity_last_updated"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/session-activity.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_session_activity",
+      "target": "claude_session_activity_tool_calls"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package",
+      "target": "package_dependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package",
+      "target": "package_devdependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package",
+      "target": "package_name"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package",
+      "target": "package_private"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package",
+      "target": "package_scripts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package",
+      "target": "package_type"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package",
+      "target": "package_version"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_build"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_dev"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_lint"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_preview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_html2canvas"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react_dom"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_supabase_supabase_js"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_eslint"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_eslint_js"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_eslint_plugin_react_hooks"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_eslint_plugin_react_refresh"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_globals"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_types_react"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_types_react_dom"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_vite"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_vitejs_plugin_react"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1644",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_all_teams"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3233",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_app"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3109",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_authmodal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1658",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_bracket_rounds"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1984",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_bracketlistview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1905",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_bracketmatchcard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2105",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_brackettab"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2005",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_brackettreeview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1753",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_cleardownstream"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_dark_t"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1127",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_espn_pos"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1113",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_espn_team_ids"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1119",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_fixtures"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1315",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_fixturestab"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1741",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_getr32usedteams"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1729",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_getround"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1732",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_getroundwinners"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1123",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_getteam"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L95",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_groups"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2632",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_leaderboardtab"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_light_t"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1125",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_ls"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_makeglobalstyle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1096",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_mapmatch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1725",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_match_map"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1150",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_matchcard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1215",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_matchcardslide"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1234",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_matchdetailsmodal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1281",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_matchslidersection"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2710",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_mock_stats"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2619",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_mock_users"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2735",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_moretab"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1942",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_resolveslot"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1656",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_round_ids"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2980",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_sidedrawer"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1132",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_statusbadge"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3137",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_supportpickermodal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_t"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2969",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_tabs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L110",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_team_data"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1494",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_teamdetail"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1772",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_teampickermodal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1347",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_teamstab"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1991",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_treematchcard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2302",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_votetab"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3127",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_wc2026_teams"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1854",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_winnerpickermodal"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_supabase"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_supabase_supabase"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main",
+      "target": "src_app"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3317",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_app",
+      "target": "src_app_makeglobalstyle"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3479",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_app",
+      "target": "src_app_getteam"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2267",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_brackettab",
+      "target": "src_app_getteam"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1151",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_matchcard",
+      "target": "src_app_getteam"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1216",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_matchcardslide",
+      "target": "src_app_getteam"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1235",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_matchdetailsmodal",
+      "target": "src_app_getteam"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3262",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_supportpickermodal",
+      "target": "src_app_getteam"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1495",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_teamdetail",
+      "target": "src_app_getteam"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3262",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_teampickermodal",
+      "target": "src_app_getteam"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2314",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_votetab",
+      "target": "src_app_getteam"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1992",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_bracketmatchcard",
+      "target": "src_app_resolveslot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L2276",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_brackettab",
+      "target": "src_app_getround"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/supabase.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_supabase",
+      "target": "src_supabase_supabase"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "vercel.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "vercel",
+      "target": "vercel_buildcommand"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "vercel.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "vercel",
+      "target": "vercel_outputdirectory"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme",
+      "target": "readme_react_vite"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_react_vite",
+      "target": "readme_expanding_the_eslint_configuration"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_react_vite",
+      "target": "readme_react_compiler"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1743",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_getr32usedteams",
+      "target": "src_app_getround"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L1733",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app_getroundwinners",
+      "target": "src_app_getround"
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
+      "source": "data_theme_system",
+      "target": "data_DARK_T"
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
+      "source": "data_theme_system",
+      "target": "data_LIGHT_T"
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
       "source": "comp_TeamsTab",
-      "target": "comp_TeamDetail",
-      "relation": "renders",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
+      "target": "data_GROUPS"
     },
     {
-      "source": "comp_BracketTab",
-      "target": "comp_BracketTreeView",
-      "relation": "renders",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "comp_BracketTab",
-      "target": "comp_BracketListView",
-      "relation": "renders",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "comp_BracketTab",
-      "target": "comp_TeamPickerModal",
-      "relation": "renders",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "comp_BracketTab",
-      "target": "comp_WinnerPickerModal",
-      "relation": "renders",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "comp_BracketListView",
-      "target": "comp_BracketMatchCard",
-      "relation": "renders",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "comp_FixturesTab",
-      "target": "data_FIXTURES",
       "relation": "uses",
       "confidence": "EXTRACTED",
-      "weight": 0.8
-    },
-    {
-      "source": "comp_VoteTab",
-      "target": "data_FIXTURES",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.8
-    },
-    {
+      "weight": 0.8,
+      "confidence_score": 1.0,
       "source": "comp_BracketTab",
-      "target": "data_FIXTURES",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.8
+      "target": "data_TEAM_DATA"
     },
     {
-      "source": "comp_TeamsTab",
-      "target": "data_TEAM_DATA",
       "relation": "uses",
       "confidence": "EXTRACTED",
-      "weight": 0.8
-    },
-    {
+      "weight": 0.8,
+      "confidence_score": 1.0,
       "source": "comp_TeamDetail",
-      "target": "data_TEAM_DATA",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.8
+      "target": "data_TEAM_DATA"
     },
     {
-      "source": "comp_BracketTab",
-      "target": "data_TEAM_DATA",
       "relation": "uses",
       "confidence": "EXTRACTED",
-      "weight": 0.8
-    },
-    {
+      "weight": 0.8,
+      "confidence_score": 1.0,
       "source": "comp_TeamsTab",
-      "target": "data_GROUPS",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.8
+      "target": "data_TEAM_DATA"
     },
     {
-      "source": "data_theme_system",
-      "target": "data_DARK_T",
       "relation": "uses",
       "confidence": "EXTRACTED",
-      "weight": 0.8
-    },
-    {
-      "source": "data_theme_system",
-      "target": "data_LIGHT_T",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.8
-    },
-    {
-      "source": "comp_App",
-      "target": "data_TABS",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.8
-    },
-    {
-      "source": "comp_LeaderboardTab",
-      "target": "data_MOCK_USERS",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.8
-    },
-    {
-      "source": "comp_MoreTab",
-      "target": "data_MOCK_STATS",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.8
-    },
-    {
+      "weight": 0.8,
+      "confidence_score": 1.0,
       "source": "comp_BracketTab",
-      "target": "data_BRACKET_ROUNDS",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.8
+      "target": "data_FIXTURES"
     },
     {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
+      "source": "comp_FixturesTab",
+      "target": "data_FIXTURES"
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
+      "source": "comp_VoteTab",
+      "target": "data_FIXTURES"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_MatchCard",
+      "target": "comp_StatusBadge"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_MatchCardSlide",
+      "target": "comp_StatusBadge"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_MatchSliderSection",
+      "target": "comp_MatchCardSlide"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_FixturesTab",
+      "target": "comp_MatchSliderSection"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "comp_FixturesTab"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "comp_TeamsTab"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_TeamsTab",
+      "target": "comp_TeamDetail"
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
       "source": "comp_BracketListView",
-      "target": "data_BRACKET_ROUNDS",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.8
+      "target": "data_BRACKET_ROUNDS"
     },
     {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
+      "source": "comp_BracketTab",
+      "target": "data_BRACKET_ROUNDS"
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
       "source": "comp_BracketTreeView",
-      "target": "data_BRACKET_ROUNDS",
+      "target": "data_BRACKET_ROUNDS"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_BracketTab",
+      "target": "comp_TeamPickerModal"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_BracketTab",
+      "target": "comp_WinnerPickerModal"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_BracketListView",
+      "target": "comp_BracketMatchCard"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_BracketTab",
+      "target": "comp_BracketListView"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_BracketTab",
+      "target": "comp_BracketTreeView"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "comp_BracketTab"
+    },
+    {
       "relation": "uses",
       "confidence": "EXTRACTED",
-      "weight": 0.8
+      "weight": 0.6,
+      "confidence_score": 1.0,
+      "source": "comp_BracketTab",
+      "target": "ext_localStorage"
     },
     {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_BracketTab",
+      "target": "ext_supabase_db"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "comp_App",
-      "target": "ext_supabase_auth",
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
+      "target": "comp_VoteTab"
     },
     {
-      "source": "comp_AuthModal",
-      "target": "ext_supabase_auth",
-      "relation": "calls",
+      "relation": "uses",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "weight": 0.6,
+      "confidence_score": 1.0,
+      "source": "comp_VoteTab",
+      "target": "ext_localStorage"
     },
     {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_VoteTab",
+      "target": "ext_supabase_db"
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
+      "source": "comp_LeaderboardTab",
+      "target": "data_MOCK_USERS"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "comp_LeaderboardTab"
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
       "source": "comp_MoreTab",
-      "target": "ext_supabase_auth",
+      "target": "data_MOCK_STATS"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "comp_MoreTab"
+    },
+    {
       "relation": "calls",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_MoreTab",
+      "target": "ext_supabase_auth"
     },
     {
-      "source": "comp_VoteTab",
-      "target": "ext_supabase_db",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.8,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "data_TABS"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "comp_SideDrawer"
+    },
+    {
+      "relation": "renders",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "comp_AuthModal"
+    },
+    {
       "relation": "calls",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_AuthModal",
+      "target": "ext_supabase_auth"
     },
     {
-      "source": "comp_BracketTab",
-      "target": "ext_supabase_db",
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "comp_App",
-      "target": "ext_supabase_db",
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "ext_supabase_auth",
-      "target": "ext_supabase",
-      "relation": "implements",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "ext_supabase_db",
-      "target": "ext_supabase",
-      "relation": "implements",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "file_supabase",
-      "target": "ext_supabase",
-      "relation": "initialises",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "dep_supabase_js",
-      "target": "ext_supabase",
-      "relation": "implements",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "comp_App",
-      "target": "ext_localStorage",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.6
-    },
-    {
-      "source": "comp_BracketTab",
-      "target": "ext_localStorage",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.6
-    },
-    {
-      "source": "comp_VoteTab",
-      "target": "ext_localStorage",
-      "relation": "uses",
-      "confidence": "EXTRACTED",
-      "weight": 0.6
-    },
-    {
-      "source": "file_main",
-      "target": "comp_App",
-      "relation": "imports",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "comp_App",
-      "target": "file_supabase",
-      "relation": "imports",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "file_supabase",
-      "target": "dep_supabase_js",
-      "relation": "imports",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "file_vite",
-      "target": "dep_vite",
-      "relation": "configures",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "file_pkg",
-      "target": "dep_react",
-      "relation": "declares",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "file_pkg",
-      "target": "dep_supabase_js",
-      "relation": "declares",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "file_pkg",
-      "target": "dep_vite",
-      "relation": "declares",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "file_netlify",
-      "target": "dep_vite",
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "weight": 0.5
-    },
-    {
-      "source": "file_vercel",
-      "target": "dep_vite",
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "weight": 0.5
-    },
-    {
-      "source": "comp_App",
-      "target": "data_theme_system",
       "relation": "controls",
       "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "data_theme_system",
-      "target": "data_DARK_T",
-      "relation": "reads",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
-      "source": "data_theme_system",
-      "target": "data_LIGHT_T",
-      "relation": "reads",
-      "confidence": "EXTRACTED",
-      "weight": 1.0
-    },
-    {
+      "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "comp_App",
-      "target": "dep_react",
+      "target": "data_theme_system"
+    },
+    {
       "relation": "uses",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "dep_react"
     },
     {
-      "source": "file_main",
-      "target": "dep_react",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "weight": 0.6,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "ext_localStorage"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "ext_supabase_auth"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "ext_supabase_db"
+    },
+    {
       "relation": "imports",
       "confidence": "EXTRACTED",
-      "weight": 1.0
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "comp_App",
+      "target": "file_supabase"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "file_main",
+      "target": "comp_App"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "dep_supabase_js",
+      "target": "ext_supabase"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ext_supabase_auth",
+      "target": "ext_supabase"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ext_supabase_db",
+      "target": "ext_supabase"
+    },
+    {
+      "relation": "initialises",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "file_supabase",
+      "target": "ext_supabase"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "file_main",
+      "target": "dep_react"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "file_supabase",
+      "target": "dep_supabase_js"
+    },
+    {
+      "relation": "configures",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "file_vite",
+      "target": "dep_vite"
+    },
+    {
+      "relation": "declares",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "file_pkg",
+      "target": "dep_react"
+    },
+    {
+      "relation": "declares",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "file_pkg",
+      "target": "dep_supabase_js"
+    },
+    {
+      "relation": "declares",
+      "confidence": "EXTRACTED",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "file_pkg",
+      "target": "dep_vite"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "weight": 0.5,
+      "confidence_score": 0.5,
+      "source": "file_netlify",
+      "target": "dep_vite"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "weight": 0.5,
+      "confidence_score": 0.5,
+      "source": "file_vercel",
+      "target": "dep_vite"
     }
   ],
-  "communities": {
-    "0": "Theme System",
-    "1": "Team & Group Data",
-    "2": "Match & Bracket Engine",
-    "3": "Match Card UI",
-    "4": "Round Data",
-    "5": "Match Map",
-    "6": "Voting & Local State",
-    "7": "Leaderboard",
-    "8": "App Shell & Navigation",
-    "9": "Supabase Backend",
-    "10": "React Entry & Deps",
-    "11": "Build & Deploy Config",
-    "12": "HTML Shell",
-    "13": "Documentation"
-  }
+  "hyperedges": [],
+  "built_at_commit": "a6974839f64150b92315ad7f842af45529301f86"
 }

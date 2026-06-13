@@ -1,117 +1,124 @@
-# worldcup2026 — Knowledge Graph Report
-*Generated: 2026-06-02 17:30 · Path: .*
+# Graph Report - worldcup2026  (2026-06-12)
 
----
+## Corpus Check
+- 11 files · ~101,834 words
+- Verdict: corpus is large enough that graph structure adds value.
 
-## Overview
+## Summary
+- 160 nodes · 178 edges · 20 communities (15 shown, 5 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.5)
+- Token cost: 0 input · 0 output
 
-| Metric | Value |
-|--------|-------|
-| Total nodes | 46 |
-| Total edges | 60 |
-| Communities | 14 |
-| EXTRACTED edges | 58 |
-| INFERRED edges | 2 |
-| Source files scanned | 25 |
-| Code files | 7 (.jsx × 3, .js × 3, .html × 1) |
-| Config/docs | 6 |
+## Graph Freshness
+- Built from commit: `a6974839`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
----
+## Community Hubs (Navigation)
+- [[_COMMUNITY_Community 0|Community 0]]
+- [[_COMMUNITY_Community 1|Community 1]]
+- [[_COMMUNITY_Community 2|Community 2]]
+- [[_COMMUNITY_Community 3|Community 3]]
+- [[_COMMUNITY_Community 4|Community 4]]
+- [[_COMMUNITY_Community 5|Community 5]]
+- [[_COMMUNITY_Community 6|Community 6]]
+- [[_COMMUNITY_Community 7|Community 7]]
+- [[_COMMUNITY_Community 8|Community 8]]
+- [[_COMMUNITY_Community 9|Community 9]]
+- [[_COMMUNITY_Community 10|Community 10]]
+- [[_COMMUNITY_Community 14|Community 14]]
+- [[_COMMUNITY_Community 15|Community 15]]
+- [[_COMMUNITY_Community 18|Community 18]]
+- [[_COMMUNITY_Community 19|Community 19]]
 
-## Communities
+## God Nodes (most connected - your core abstractions)
+1. `App` - 16 edges
+2. `getTeam()` - 10 edges
+3. `BracketTab` - 10 edges
+4. `scripts` - 5 edges
+5. `getRound()` - 4 edges
+6. `TeamsTab` - 4 edges
+7. `VoteTab` - 4 edges
+8. `Supabase` - 4 edges
+9. `Supabase Auth` - 4 edges
+10. `Supabase DB` - 4 edges
 
-### Match & Bracket Engine (8 nodes)
-Nodes: FIXTURES, BRACKET_ROUNDS, TeamPickerModal, WinnerPickerModal, BracketMatchCard, BracketListView, BracketTreeView, BracketTab
+## Surprising Connections (you probably didn't know these)
+- `App` --uses--> `React 19`  [EXTRACTED]
+  src/App.jsx → package.json
+- `@supabase/supabase-js` --implements--> `Supabase`  [EXTRACTED]
+  package.json → src/supabase.js
+- `App` --calls--> `Supabase DB`  [EXTRACTED]
+  src/App.jsx → src/supabase.js
+- `BracketTab` --calls--> `Supabase DB`  [EXTRACTED]
+  src/App.jsx → src/supabase.js
+- `VoteTab` --calls--> `Supabase DB`  [EXTRACTED]
+  src/App.jsx → src/supabase.js
 
-### App Shell & Navigation (7 nodes)
-Nodes: MOCK_STATS, MoreTab, TABS, SideDrawer, AuthModal, App, Supabase Auth
+## Import Cycles
+- None detected.
 
-### Match Card UI (5 nodes)
-Nodes: StatusBadge, MatchCard, MatchCardSlide, MatchSliderSection, FixturesTab
+## Communities (20 total, 5 thin omitted)
 
-### Team & Group Data (4 nodes)
-Nodes: GROUPS, TEAM_DATA, TeamsTab, TeamDetail
+### Community 0 - "Community 0"
+Cohesion: 0.06
+Nodes (17): ALL_TEAMS, BRACKET_ROUNDS, DARK_T, ESPN_POS, ESPN_TEAM_IDS, FIXTURES, GROUPS, LIGHT_T (+9 more)
 
-### Supabase Backend (4 nodes)
-Nodes: Supabase, Supabase DB, supabase.js, @supabase/supabase-js
+### Community 1 - "Community 1"
+Cohesion: 0.20
+Nodes (10): devDependencies, eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals, @types/react, @types/react-dom (+2 more)
 
-### Build & Deploy Config (4 nodes)
-Nodes: vite.config.js, netlify.toml, vercel.json, Vite 8
+### Community 2 - "Community 2"
+Cohesion: 0.13
+Nodes (20): BracketListView, BracketMatchCard, BracketTab, BracketTreeView, FixturesTab, MatchCard, MatchCardSlide, MatchSliderSection (+12 more)
 
-### Theme System (3 nodes)
-Nodes: DARK_T, LIGHT_T, Theme System
+### Community 3 - "Community 3"
+Cohesion: 0.13
+Nodes (14): dependencies, html2canvas, react, react-dom, @supabase/supabase-js, name, private, scripts (+6 more)
 
-### React Entry & Deps (3 nodes)
-Nodes: main.jsx, package.json, React 19
+### Community 7 - "Community 7"
+Cohesion: 0.20
+Nodes (10): App(), getTeam(), makeGlobalStyle(), MatchCard(), MatchCardSlide(), MatchDetailsModal(), SupportPickerModal(), TeamDetail() (+2 more)
 
-### Voting & Local State (2 nodes)
-Nodes: VoteTab, localStorage
+### Community 8 - "Community 8"
+Cohesion: 0.12
+Nodes (16): App, AuthModal, LeaderboardTab, MoreTab, SideDrawer, DARK_T, LIGHT_T, MOCK_STATS (+8 more)
 
-### Leaderboard (2 nodes)
-Nodes: MOCK_USERS, LeaderboardTab
+### Community 9 - "Community 9"
+Cohesion: 0.50
+Nodes (3): Expanding the ESLint configuration, React Compiler, React + Vite
 
-### Round Data (1 nodes)
-Nodes: ROUND_IDS
+### Community 10 - "Community 10"
+Cohesion: 0.50
+Nodes (4): BracketTab(), getR32UsedTeams(), getRound(), getRoundWinners()
 
-### Match Map (1 nodes)
-Nodes: MATCH_MAP
+### Community 18 - "Community 18"
+Cohesion: 0.40
+Nodes (4): active_agent, files_modified, last_updated, tool_calls
 
-### HTML Shell (1 nodes)
-Nodes: index.html
+### Community 19 - "Community 19"
+Cohesion: 0.09
+Nodes (22): /Users/ony/Downloads/Avrek/API/KickCast API/src/crawlers/fixturesCrawler.js, ts, /Users/ony/Downloads/Avrek/API/KickCast API/src/crawlers/liveScoreCrawler.js, ts, /Users/ony/Downloads/Avrek/API/KickCast API/src/crawlers/standingsCrawler.js, ts, /Users/ony/Downloads/Avrek/API/KickCast API/src/index.js, ts (+14 more)
 
-### Documentation (1 nodes)
-Nodes: README.md
-
----
-
-## God Nodes
-
-Highest-degree nodes — structural hubs connecting multiple communities:
-
-- **App** — degree 16 · App Shell & Navigation · `src/App.jsx:3184`
-- **BracketTab** — degree 10 · Match & Bracket Engine · `src/App.jsx:2078`
-- **TeamsTab** — degree 4 · Team & Group Data · `src/App.jsx:1320`
-- **VoteTab** — degree 4 · Voting & Local State · `src/App.jsx:2275`
-- **Supabase Auth** — degree 4 · App Shell & Navigation · `src/supabase.js:`
-
----
-
-## Surprising Connections
-
-Cross-community edges that reveal unexpected coupling:
-
-- **App** `renders` **FixturesTab** — bridges *App Shell & Navigation* → *Match Card UI*
-- **App** `renders` **TeamsTab** — bridges *App Shell & Navigation* → *Team & Group Data*
-- **App** `renders` **BracketTab** — bridges *App Shell & Navigation* → *Match & Bracket Engine*
-- **App** `renders` **VoteTab** — bridges *App Shell & Navigation* → *Voting & Local State*
-- **App** `renders` **LeaderboardTab** — bridges *App Shell & Navigation* → *Leaderboard*
-- **FixturesTab** `uses` **FIXTURES** — bridges *Match Card UI* → *Match & Bracket Engine*
-- **VoteTab** `uses` **FIXTURES** — bridges *Voting & Local State* → *Match & Bracket Engine*
-- **BracketTab** `uses` **TEAM_DATA** — bridges *Match & Bracket Engine* → *Team & Group Data*
-
----
+## Knowledge Gaps
+- **70 isolated node(s):** `ts`, `ts`, `ts`, `ts`, `ts` (+65 more)
+  These have ≤1 connection - possible missing edges or undocumented components.
+- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
+_Questions this graph is uniquely positioned to answer:_
 
-1. **How does the theme system propagate to every component?** — Traces `T` mutation from `App` → all tab components. Follow the `data_T → comp_*` edges.
-
-2. **What happens end-to-end when a user submits a score prediction?** — `VoteTab` → `supabase.from('wc_predictions').upsert` → `Supabase DB` → `Supabase`. Crosses 3 communities.
-
-3. **Which component has the most render dependencies?** — `App` (degree 16) renders 8 child tabs + SideDrawer + AuthModal. Central god node.
-
-4. **How is localStorage used as an offline sync layer?** — `BracketTab`, `VoteTab`, `App` all write to `localStorage` as cache before Supabase upsert. Reveals the offline-first pattern.
-
-5. **What's the deployment target ambiguity?** — Both `netlify.toml` and `vercel.json` exist in the same project. Cross-community edge: both depend on `Vite 8` for build. Only one should be the target.
-
----
-
-## Audit Trail
-
-All edges tagged:
-- **EXTRACTED** — relationship found explicitly in source (import, JSX usage, function call, `.from()` call)
-- **INFERRED** — reasonable dependency implied by co-location or shared config (marked clearly)
-- **AMBIGUOUS** — none found in this corpus
-
-Input tokens (LLM): 0 (AST-only extraction — no LLM calls needed for this code corpus)
-
----
+- **Why does `App` connect `Community 8` to `Community 2`?**
+  _High betweenness centrality (0.049) - this node is a cross-community bridge._
+- **Why does `BracketTab` connect `Community 2` to `Community 8`?**
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `devDependencies` connect `Community 1` to `Community 3`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+- **What connects `ts`, `ts`, `ts` to the rest of the system?**
+  _70 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
+- **Should `Community 2` be split into smaller, more focused modules?**
+  _Cohesion score 0.12631578947368421 - nodes in this community are weakly interconnected._
+- **Should `Community 3` be split into smaller, more focused modules?**
+  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._

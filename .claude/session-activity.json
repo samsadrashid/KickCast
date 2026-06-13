@@ -1,0 +1,20 @@
+{
+  "files_modified": [
+    "/Users/ony/Downloads/Avrek/Projects/worldcup2026/src/App.jsx",
+    "/Users/ony/Downloads/Avrek/Projects/worldcup2026/.env",
+    "/Users/ony/Downloads/Avrek/Projects/worldcup2026/index.html",
+    "/Users/ony/Downloads/Avrek/API/KickCast API/src/crawlers/liveScoreCrawler.js",
+    "/Users/ony/Downloads/Avrek/API/KickCast API/src/jobs/syncLiveScores.js",
+    "/Users/ony/Downloads/Avrek/API/KickCast API/src/jobs/syncMatchEvents.js",
+    "/Users/ony/Downloads/Avrek/API/KickCast API/src/index.js",
+    "/Users/ony/Downloads/Avrek/API/KickCast API/src/routes/index.js",
+    "/Users/ony/Downloads/Avrek/API/KickCast API/src/crawlers/fixturesCrawler.js",
+    "/Users/ony/Downloads/Avrek/Projects/worldcup2026/src/index.css",
+    "/Users/ony/Downloads/Avrek/API/KickCast API/src/crawlers/standingsCrawler.js",
+    "/Users/ony/Downloads/Avrek/Projects/worldcup2026/.github/workflows/deploy.yml",
+    "/Users/ony/Downloads/Avrek/Projects/worldcup2026/set-gh-secrets.sh"
+  ],
+  "tool_calls": 135,
+  "active_agent": "mew-chief",
+  "last_updated": "2026-06-13T06:28:36.711Z"
+}
