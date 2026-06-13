@@ -1954,15 +1954,16 @@ function resolveSlot(slotDef, standings, picks, groupPosPicks, matchId) {
 }
 
 // ── GROUP SLOT PICKER MODAL ──
-function GroupSlotPickerModal({ slotDef, matchId, currentPick, onPick, onClose }) {
+function GroupSlotPickerModal({ slotDef, matchId, currentPick, pickKey, allPicks, onPick, onClose }) {
   const ordinal = n => n === 1 ? "1st" : n === 2 ? "2nd" : "3rd";
+  const taken = new Set(Object.entries(allPicks || {}).filter(([k]) => k !== pickKey).map(([, v]) => v));
   let title, teams;
   if (slotDef.group === "3rd") {
     title = `Best 3rd place · Groups ${slotDef.from.join("/")}`;
-    teams = slotDef.from.flatMap(g => GROUPS[g]?.teams || []);
+    teams = slotDef.from.flatMap(g => GROUPS[g]?.teams || []).filter(n => !taken.has(n));
   } else {
     title = `${ordinal(slotDef.pos)} place · Group ${slotDef.group}`;
-    teams = GROUPS[slotDef.group]?.teams || [];
+    teams = (GROUPS[slotDef.group]?.teams || []).filter(n => !taken.has(n));
   }
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "#000d", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
@@ -2368,7 +2369,7 @@ function BracketTab({ user, theme }) {
       )}
 
       {slotModal && (
-        <GroupSlotPickerModal slotDef={slotModal.slotDef} matchId={slotModal.match.id} currentPick={slotModal.current} onPick={handleSlotSelect} onClose={() => setSlotModal(null)} />
+        <GroupSlotPickerModal slotDef={slotModal.slotDef} matchId={slotModal.match.id} currentPick={slotModal.current} pickKey={slotModal.key} allPicks={groupPosPicks} onPick={handleSlotSelect} onClose={() => setSlotModal(null)} />
       )}
       {modal && (
         <WinnerPickerModal teamA={modal.teamA} teamB={modal.teamB} current={modal.current} onSelect={handleWinnerSelect} onClose={() => setModal(null)} />
