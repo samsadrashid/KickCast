@@ -1938,7 +1938,7 @@ const clearDownstream = (picks, matchId) => {
   return next;
 };
 
-// Resolve a slot definition → team name (or null if TBD)
+// Resolve a slot definition → team name (never null for group positions — falls back to hardcoded order)
 function resolveSlot(slotDef, standings, picks) {
   if (!slotDef) return null;
   if (slotDef.winnerOf) return picks[slotDef.winnerOf + "_W"] || null;
@@ -1946,12 +1946,21 @@ function resolveSlot(slotDef, standings, picks) {
     const eligible = (standings || [])
       .filter(s => parseInt(s.rank) === 3 && slotDef.from.includes((s.group_name||"").replace("Group ","")))
       .sort((a,b) => (b.points||0)-(a.points||0) || (b.goal_diff||0)-(a.goal_diff||0));
-    return eligible[0]?.team || eligible[0]?.team_name || `3rd·${slotDef.from.join("/")}`;
+    if (eligible[0]) return eligible[0]?.team || eligible[0]?.team_name;
+    // Fallback: first available 3rd from hardcoded group list
+    for (const g of slotDef.from) {
+      const t = GROUPS[g]?.teams?.[2];
+      if (t) return t;
+    }
+    return `3rd·${slotDef.from.slice(0,3).join("/")}`;
   }
+  // Try live standings first
   const entry = (standings || []).find(s =>
     (s.group_name||"").replace("Group ","") === slotDef.group && parseInt(s.rank) === slotDef.pos
   );
-  return entry?.team || entry?.team_name || `G${slotDef.group}·#${slotDef.pos}`;
+  if (entry) return entry.team || entry.team_name;
+  // Fallback: hardcoded group order (pos 1 = index 0, etc.)
+  return GROUPS[slotDef.group]?.teams?.[slotDef.pos - 1] || `G${slotDef.group}·#${slotDef.pos}`;
 }
 
 // ── WINNER PICKER MODAL ──
