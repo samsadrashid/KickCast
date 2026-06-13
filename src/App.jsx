@@ -93,18 +93,18 @@ const makeGlobalStyle = (t) => `
 
 // ─── 2026 WORLD CUP DATA ──────────────────────────────────────────────────────
 const GROUPS = {
-  A: ['Mexico', 'South Korea', 'South Africa', 'Czech Republic'],
-  B: ['Canada', 'Bosnia & Herzegovina', 'Qatar', 'Switzerland'],
-  C: ['Brazil', 'Morocco', 'Scotland', 'Haiti'],
-  D: ['USA', 'Paraguay', 'Australia', 'Romania'],
-  E: ['Germany', 'Ecuador', 'Ivory Coast', 'Curacao'],
-  F: ['Netherlands', 'Japan', 'Tunisia', 'Ukraine'],
-  G: ['Belgium', 'Iran', 'Egypt', 'New Zealand'],
-  H: ['Spain', 'Uruguay', 'Saudi Arabia', 'Cabo Verde'],
-  I: ['France', 'Senegal', 'Norway', 'Iraq'],
-  J: ['Argentina', 'Austria', 'Algeria', 'Jordan'],
-  K: ['Portugal', 'Colombia', 'Uzbekistan', 'Jamaica'],
-  L: ['England', 'Croatia', 'Panama', 'Ghana'],
+  A: { teams: ["Mexico", "South Africa", "South Korea", "Czechia"] },
+  B: { teams: ["Canada", "Bosnia-Herzegovina", "Qatar", "Switzerland"] },
+  C: { teams: ["Brazil", "Morocco", "Haiti", "Scotland"] },
+  D: { teams: ["United States", "Paraguay", "Australia", "Türkiye"] },
+  E: { teams: ["Germany", "Curaçao", "Ivory Coast", "Ecuador"] },
+  F: { teams: ["Netherlands", "Japan", "Sweden", "Tunisia"] },
+  G: { teams: ["Belgium", "Iran", "Egypt", "New Zealand"] },
+  H: { teams: ["Spain", "Saudi Arabia", "Uruguay", "Cape Verde"] },
+  I: { teams: ["France", "Senegal", "Iraq", "Norway"] },
+  J: { teams: ["Argentina", "Algeria", "Austria", "Jordan"] },
+  K: { teams: ["Portugal", "Congo DR", "Uzbekistan", "Colombia"] },
+  L: { teams: ["England", "Croatia", "Ghana", "Panama"] },
 };
 
 const TEAM_DATA = {
@@ -1159,23 +1159,7 @@ let FIXTURES = [];
 let POLL_MATCH = null;
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────
-const TEAM_FLAGS = {
-  'South Africa': '🇿🇦', 'Czech Republic': '🇨🇿', 'Canada': '🇨🇦',
-  'Bosnia & Herzegovina': '🇧🇦', 'Qatar': '🇶🇦', 'Switzerland': '🇨🇭',
-  'Scotland': '🏴󠁧󠁢󠁳󠁣󠁴󠁿', 'Haiti': '🇭🇹', 'Paraguay': '🇵🇾',
-  'Australia': '🇦🇺', 'Romania': '🇷🇴', 'Ecuador': '🇪🇨',
-  'Ivory Coast': '🇨🇮', 'Curacao': '🇨🇼', 'Tunisia': '🇹🇳',
-  'Ukraine': '🇺🇦', 'Iran': '🇮🇷', 'Egypt': '🇪🇬',
-  'New Zealand': '🇳🇿', 'Saudi Arabia': '🇸🇦', 'Cabo Verde': '🇨🇻',
-  'Norway': '🇳🇴', 'Iraq': '🇮🇶', 'Austria': '🇦🇹',
-  'Algeria': '🇩🇿', 'Jordan': '🇯🇴', 'Uzbekistan': '🇺🇿',
-  'Jamaica': '🇯🇲', 'Panama': '🇵🇦', 'Ghana': '🇬🇭',
-};
-const getTeam = (name) => {
-  if (TEAM_DATA[name]) return TEAM_DATA[name];
-  if (TEAM_FLAGS[name]) return { flag: TEAM_FLAGS[name], kit: ["#888","#aaa"], rank: 99, conf: "—", squad: [] };
-  return { flag: "🏳️", kit: ["#888","#aaa"], rank: 99, conf: "—", squad: [] };
-};
+const getTeam = (name) => TEAM_DATA[name] || { flag: "🏳️", kit: ["#888","#aaa"], rank: 99, conf: "—", squad: [] };
 
 const ls = {
   get: (k, def) => { try { const v = localStorage.getItem(k); return v !== null ? JSON.parse(v) : def; } catch { return def; } },
@@ -1954,39 +1938,20 @@ const clearDownstream = (picks, matchId) => {
   return next;
 };
 
-// from3rd slot → R32 match assignment (greedy, group order)
-const FROM3RD_SLOTS = [
-  { matchId: 'M74', from: ['A','B','C','D','F'] },
-  { matchId: 'M77', from: ['C','D','F','G','H'] },
-  { matchId: 'M79', from: ['C','E','F','H','I'] },
-  { matchId: 'M80', from: ['E','H','I','J','K'] },
-  { matchId: 'M81', from: ['B','E','F','I','J'] },
-  { matchId: 'M82', from: ['A','E','H','I','J'] },
-  { matchId: 'M85', from: ['E','F','G','I','J'] },
-  { matchId: 'M87', from: ['A','B','C','D','G'] },
-];
-
-function assignBest8Thirds(groupPreds) {
-  const all3rds = Object.entries(groupPreds)
-    .map(([g, pos]) => ({ team: pos[3], fromGroup: g }))
-    .filter(t => t.team);
-  const used = new Set();
-  const result = {};
-  for (const slot of FROM3RD_SLOTS) {
-    const candidate = all3rds.find(t => slot.from.includes(t.fromGroup) && !used.has(t.fromGroup));
-    if (candidate) { used.add(candidate.fromGroup); result[slot.matchId] = candidate.team; }
-  }
-  return result;
-}
-
 // Resolve a slot definition → team name (or null if TBD)
-// groupPredictions: { A: {1: team, 2: team, 3: team, 4: team}, ... }
-// best8Thirds: { M74: team, M77: team, ... }
-function resolveSlot(slotDef, matchId, groupPreds, best8Thirds, picks) {
+function resolveSlot(slotDef, standings, picks) {
   if (!slotDef) return null;
   if (slotDef.winnerOf) return picks[slotDef.winnerOf + "_W"] || null;
-  if (slotDef.group === "3rd") return best8Thirds[matchId] || null;
-  return groupPreds[slotDef.group]?.[slotDef.pos] || null;
+  if (slotDef.group === "3rd") {
+    const eligible = (standings || [])
+      .filter(s => parseInt(s.rank) === 3 && slotDef.from.includes((s.group_name||"").replace("Group ","")))
+      .sort((a,b) => (b.points||0)-(a.points||0) || (b.goal_diff||0)-(a.goal_diff||0));
+    return eligible[0]?.team || eligible[0]?.team_name || `3rd·${slotDef.from.join("/")}`;
+  }
+  const entry = (standings || []).find(s =>
+    (s.group_name||"").replace("Group ","") === slotDef.group && parseInt(s.rank) === slotDef.pos
+  );
+  return entry?.team || entry?.team_name || `G${slotDef.group}·#${slotDef.pos}`;
 }
 
 // ── WINNER PICKER MODAL ──
@@ -2064,7 +2029,7 @@ function TreeMatchCard({ match, teamA, teamB, winner, homeDef, awayDef, onPickWi
 }
 
 // ── TREE VIEW ──
-function BracketTreeView({ groupPreds, best8Thirds, picks, onPickWinner }) {
+function BracketTreeView({ standings, picks, onPickWinner }) {
   const CARD_H = 53;
   const BLOCK_H = 60;
   const CARD_W = 152;
@@ -2117,8 +2082,8 @@ function BracketTreeView({ groupPreds, best8Thirds, picks, onPickWinner }) {
               </div>
               {round.matches.map((match, mIdx) => {
                 const topY = cy(rIdx, mIdx) - CARD_H / 2;
-                const teamA = resolveSlot(match.home, match.id, groupPreds, best8Thirds, picks);
-                const teamB = resolveSlot(match.away, match.id, groupPreds, best8Thirds, picks);
+                const teamA = resolveSlot(match.home, standings, picks);
+                const teamB = resolveSlot(match.away, standings, picks);
                 const winner = picks[match.id + "_W"] || null;
                 return (
                   <div key={match.id} style={{ position: "absolute", left: x, top: topY, width: CARD_W }}>
@@ -2135,9 +2100,9 @@ function BracketTreeView({ groupPreds, best8Thirds, picks, onPickWinner }) {
 }
 
 // ── LIST MATCH CARD ──
-function BracketMatchCard({ match, groupPreds, best8Thirds, picks, onPickWinner }) {
-  const teamA = resolveSlot(match.home, match.id, groupPreds, best8Thirds, picks);
-  const teamB = resolveSlot(match.away, match.id, groupPreds, best8Thirds, picks);
+function BracketMatchCard({ match, standings, picks, onPickWinner }) {
+  const teamA = resolveSlot(match.home, standings, picks);
+  const teamB = resolveSlot(match.away, standings, picks);
   const winner = picks[match.id + "_W"] || null;
   const bothReady = teamA && teamB;
   const slotLabel = (s) => !s ? "TBD" : s.group === "3rd" ? `Best 3rd · ${s.from.join("/")}` : s.winnerOf ? `Winner of ${s.winnerOf}` : `Group ${s.group} · #${s.pos}`;
@@ -2189,25 +2154,26 @@ function BracketMatchCard({ match, groupPreds, best8Thirds, picks, onPickWinner 
 }
 
 // ── BRACKET TAB ──
-function BracketTab({ user, theme, groupPreds, bracketPicks, onPicksChange, onGoToGroups }) {
-  const picks = bracketPicks;
-  const best8Thirds = assignBest8Thirds(groupPreds);
+function BracketTab({ user, theme }) {
+  const [picks, setPicks] = useState(() => ls.get("bracket_v6", {}));
+  const [standings, setStandings] = useState([]);
   const [modal, setModal] = useState(null);
   const [viewMode, setViewMode] = useState("tree");
   const [isCapturing, setIsCapturing] = useState(false);
-  const [showEditWarning, setShowEditWarning] = useState(false);
   const bracketRef = useRef(null);
 
+  useEffect(() => {
+    supabase.from("standings").select("*").then(({ data }) => { if (data) setStandings(data); });
+  }, []);
+
   const saveBracket = (next) => {
-    onPicksChange(next);
-    ls.set("bracket_v7", next);
+    ls.set("bracket_v6", next);
     if (user) supabase.from("wc_brackets").upsert({ user_id: user.id, picks: next, updated_at: new Date().toISOString() }, { onConflict: "user_id" });
   };
 
-  const handlePickWinner = (match) => {
-    const teamA = resolveSlot(match.home, match.id, groupPreds, best8Thirds, picks);
-    const teamB = resolveSlot(match.away, match.id, groupPreds, best8Thirds, picks);
-    if (!teamA || !teamB) return;
+  const handlePickWinner = (match, _pickedTeam) => {
+    const teamA = resolveSlot(match.home, standings, picks);
+    const teamB = resolveSlot(match.away, standings, picks);
     setModal({ match, current: picks[match.id + "_W"] || null, teamA, teamB });
   };
 
@@ -2228,7 +2194,7 @@ function BracketTab({ user, theme, groupPreds, bracketPicks, onPicksChange, onGo
     setModal(null);
   };
 
-  const resetAll = () => { saveBracket({}); };
+  const resetAll = () => { setPicks({}); saveBracket({}); };
 
   const handleShare = async () => {
     if (!bracketRef.current) return;
@@ -2282,10 +2248,6 @@ function BracketTab({ user, theme, groupPreds, bracketPicks, onPicksChange, onGo
         </div>
       </div>
 
-      <button onClick={() => setShowEditWarning(true)} style={{ marginBottom: 14, background: "transparent", border: "1px solid var(--bk-border-empty)", color: "var(--bk-text-secondary)", padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11 }}>
-        ← EDIT GROUP PREDICTIONS
-      </button>
-
       <div style={{ display: "flex", marginBottom: 14, background: "var(--bk-surface)", border: "1px solid var(--bk-border-empty)", borderRadius: 8, padding: 3, gap: 3 }}>
         {[["tree", "⟶  TREE VIEW"], ["list", "☰  LIST VIEW"]].map(([mode, label]) => (
           <button key={mode} onClick={() => setViewMode(mode)} style={{ flex: 1, padding: "7px", border: "none", borderRadius: 6, cursor: "pointer", background: viewMode === mode ? "var(--bk-border-active)" : "transparent", color: viewMode === mode ? "#ffffff" : "var(--bk-text-secondary)", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 13, transition: "all 0.15s" }}>{label}</button>
@@ -2293,11 +2255,11 @@ function BracketTab({ user, theme, groupPreds, bracketPicks, onPicksChange, onGo
       </div>
 
       <div style={{ background: "var(--bk-surface-hover)", borderLeft: "3px solid var(--bk-accent)", borderRadius: 6, padding: "8px 12px", marginBottom: 16, fontSize: 12, color: "var(--bk-text-primary)", lineHeight: 1.5 }}>
-        💡 Teams set from your group predictions. Tap a match to pick the winner — they auto-advance.
+        💡 Teams locked from official group results. Tap a match to pick the winner — they auto-advance.
       </div>
 
       {viewMode === "tree"
-        ? <BracketTreeView groupPreds={groupPreds} best8Thirds={best8Thirds} picks={picks} onPickWinner={handlePickWinner} />
+        ? <BracketTreeView standings={standings} picks={picks} onPickWinner={handlePickWinner} />
         : BRACKET_ROUNDS.map(round => (
             <div key={round.id} style={{ marginBottom: 24 }}>
               <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 15, letterSpacing: 2, color: "var(--bk-accent)", marginBottom: 10 }}>
@@ -2305,7 +2267,7 @@ function BracketTab({ user, theme, groupPreds, bracketPicks, onPicksChange, onGo
                 <span style={{ color: "var(--bk-text-secondary)", fontSize: 11, fontWeight: 400, marginLeft: 8 }}>({round.matches.filter(m => picks[m.id + "_W"]).length}/{round.matches.length} decided)</span>
               </div>
               {round.matches.map(m => (
-                <BracketMatchCard key={m.id} match={m} groupPreds={groupPreds} best8Thirds={best8Thirds} picks={picks} onPickWinner={handlePickWinner} />
+                <BracketMatchCard key={m.id} match={m} standings={standings} picks={picks} onPickWinner={handlePickWinner} />
               ))}
             </div>
           ))
@@ -2321,19 +2283,6 @@ function BracketTab({ user, theme, groupPreds, bracketPicks, onPicksChange, onGo
 
       {modal && (
         <WinnerPickerModal teamA={modal.teamA} teamB={modal.teamB} current={modal.current} onSelect={handleWinnerSelect} onClose={() => setModal(null)} />
-      )}
-
-      {showEditWarning && (
-        <div onClick={() => setShowEditWarning(false)} style={{ position: "fixed", inset: 0, background: "#000d", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: "var(--bk-surface)", width: "100%", maxWidth: 360, borderRadius: 20, border: "1px solid var(--bk-border-empty)", padding: "24px 20px" }}>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: "var(--bk-text-primary)", marginBottom: 8 }}>EDIT GROUP PREDICTIONS?</div>
-            <div style={{ fontSize: 13, color: "var(--bk-text-secondary)", marginBottom: 20, lineHeight: 1.5 }}>Editing groups will reset all your bracket picks. This cannot be undone.</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-              <button onClick={() => setShowEditWarning(false)} style={{ padding: 12, background: "var(--bk-surface-hover)", border: "1px solid var(--bk-border-empty)", color: "var(--bk-text-secondary)", borderRadius: 10, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14 }}>CANCEL</button>
-              <button onClick={() => { setShowEditWarning(false); onGoToGroups(); }} style={{ padding: 12, background: T.red+"22", border: `1px solid ${T.red}`, color: T.red, borderRadius: 10, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14 }}>EDIT GROUPS</button>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );
@@ -3025,164 +2974,11 @@ function MoreTab({ user, onSignIn, onChangeTeam }) {
   );
 }
 
-// ─── GROUP STAGE TAB ─────────────────────────────────────────────────────────
-function GroupStageTab({ groupPreds, setGroupPreds, onContinueToBracket, onResetGroups }) {
-  const [activeGroup, setActiveGroup] = useState(null);
-  const [slotPicker, setSlotPicker] = useState(null);
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
-
-  const groupsCompleted = Object.keys(GROUPS).filter(g => groupPreds[g]?.[1] && groupPreds[g]?.[2]).length;
-  const allComplete = groupsCompleted === 12;
-
-  const assignTeam = (group, pos, team) => {
-    const cur = groupPreds[group] || { 1: null, 2: null, 3: null, 4: null };
-    const next = { ...cur };
-    // Clear team from any existing slot
-    Object.keys(next).forEach(p => { if (next[p] === team) next[p] = null; });
-    next[pos] = team;
-    const updated = { ...groupPreds, [group]: next };
-    setGroupPreds(updated);
-    ls.set("group_predictions_v1", updated);
-    setSlotPicker(null);
-  };
-
-  const POS_LABEL = { 1: '1ST', 2: '2ND', 3: '3RD', 4: '4TH' };
-  const POS_COLOR = { 1: '#22c55e', 2: '#3b82f6', 3: '#f59e0b', 4: '#ef4444' };
-
-  return (
-    <div style={{ padding: "16px", paddingBottom: 100 }}>
-      {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
-        <div>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: 2, color: "var(--bk-accent)" }}>GROUP STAGE</div>
-          <div style={{ fontSize: 13, color: "var(--bk-text-secondary)" }}>{groupsCompleted}/12 groups predicted</div>
-        </div>
-        <button onClick={() => setShowResetConfirm(true)} style={{ background: "var(--bk-surface)", border: "1px solid var(--bk-border-empty)", color: "var(--bk-text-secondary)", padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12 }}>
-          RESET GROUPS
-        </button>
-      </div>
-
-      {/* Progress bar */}
-      <div style={{ height: 4, background: "var(--bk-border-empty)", borderRadius: 2, marginBottom: 16, overflow: "hidden" }}>
-        <div style={{ height: "100%", background: "var(--bk-accent)", borderRadius: 2, width: `${(groupsCompleted / 12) * 100}%`, transition: "width 0.4s ease" }} />
-      </div>
-
-      {/* Continue button */}
-      <button onClick={() => allComplete && onContinueToBracket()} disabled={!allComplete} style={{ width: "100%", marginBottom: 20, padding: "14px", background: allComplete ? "var(--bk-accent)" : "var(--bk-surface)", border: `1px solid ${allComplete ? "var(--bk-accent)" : "var(--bk-border-empty)"}`, color: allComplete ? T.navy : "var(--bk-text-secondary)", borderRadius: 12, cursor: allComplete ? "pointer" : "default", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 15, letterSpacing: 1, opacity: allComplete ? 1 : 0.65 }}>
-        {allComplete ? "BUILD YOUR BRACKET →" : `COMPLETE ALL 12 GROUPS  (${12 - groupsCompleted} remaining)`}
-      </button>
-
-      {/* Group cards */}
-      {Object.entries(GROUPS).map(([group, teams]) => {
-        const preds = groupPreds[group] || {};
-        const filled = [1,2,3,4].filter(p => preds[p]).length;
-        const done = preds[1] && preds[2];
-        return (
-          <div key={group} style={{ background: "var(--bk-surface)", borderRadius: 12, border: `1px solid ${done ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, marginBottom: 10, overflow: "hidden" }}>
-            {/* Header row */}
-            <div onClick={() => setActiveGroup(activeGroup === group ? null : group)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", cursor: "pointer", background: done ? "var(--bk-active-card)" : "transparent" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: "var(--bk-accent)", minWidth: 24 }}>{group}</div>
-                <div style={{ fontSize: 11, color: "var(--bk-text-secondary)", fontFamily: "'Barlow Condensed', sans-serif" }}>
-                  {filled === 4 ? "COMPLETE" : filled > 0 ? `${filled}/4 ranked` : teams.slice(0,2).join(" · ")}
-                </div>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                {done && <span style={{ fontSize: 12, color: "var(--bk-accent)" }}>✓</span>}
-                <span style={{ color: "var(--bk-text-secondary)", fontSize: 11 }}>{activeGroup === group ? "▲" : "▼"}</span>
-              </div>
-            </div>
-            {/* Expanded slots */}
-            {activeGroup === group && (
-              <div style={{ borderTop: "1px solid var(--bk-border-empty)", padding: "12px 14px" }}>
-                {[1,2,3,4].map(pos => {
-                  const team = preds[pos];
-                  const t = team ? getTeam(team) : null;
-                  return (
-                    <div key={pos} onClick={() => setSlotPicker({ group, pos })} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", marginBottom: 6, background: team ? "var(--bk-surface-hover)" : "var(--bk-surface)", border: `1px solid ${team ? "var(--bk-border-active)" : "var(--bk-border-empty)"}`, borderRadius: 8, cursor: "pointer" }}>
-                      <div style={{ minWidth: 36, height: 22, borderRadius: 5, background: POS_COLOR[pos]+"22", border: `1px solid ${POS_COLOR[pos]}55`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 10, color: POS_COLOR[pos] }}>
-                        {POS_LABEL[pos]}
-                      </div>
-                      {team ? (
-                        <>
-                          <span style={{ fontSize: 18 }}>{t?.flag || "🏳️"}</span>
-                          <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, flex: 1, color: "var(--bk-text-primary)" }}>{team}</span>
-                          <span style={{ fontSize: 11, color: "var(--bk-text-secondary)" }}>✏️</span>
-                        </>
-                      ) : (
-                        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 12, color: "var(--bk-text-secondary)", flex: 1 }}>Tap to pick team</span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        );
-      })}
-
-      {/* Slot picker modal */}
-      {slotPicker && (() => {
-        const { group, pos } = slotPicker;
-        const preds = groupPreds[group] || {};
-        const taken = [1,2,3,4].filter(p => p !== pos).map(p => preds[p]).filter(Boolean);
-        const available = GROUPS[group].filter(t => !taken.includes(t));
-        return (
-          <div onClick={() => setSlotPicker(null)} style={{ position: "fixed", inset: 0, background: "#000d", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
-            <div onClick={e => e.stopPropagation()} style={{ background: "var(--bk-surface)", width: "100%", maxWidth: 400, borderRadius: 20, border: "1px solid var(--bk-border-empty)", padding: "20px 18px 24px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                <div>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, color: "var(--bk-text-primary)" }}>GROUP {group} — {POS_LABEL[pos]}</div>
-                  <div style={{ fontSize: 12, color: "var(--bk-text-secondary)" }}>Pick who finishes {pos === 1 ? "1st" : pos === 2 ? "2nd" : pos === 3 ? "3rd" : "4th"}</div>
-                </div>
-                <button onClick={() => setSlotPicker(null)} style={{ background: "var(--bk-surface-hover)", border: "1px solid var(--bk-border-empty)", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16, color: "var(--bk-text-secondary)" }}>✕</button>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {available.map(team => {
-                  const t = getTeam(team);
-                  const isCur = preds[pos] === team;
-                  return (
-                    <div key={team} onClick={() => assignTeam(group, pos, team)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 10, cursor: "pointer", background: isCur ? "var(--bk-active-card)" : "var(--bk-surface-hover)", border: `1px solid ${isCur ? "var(--bk-border-active)" : "var(--bk-border-empty)"}` }}>
-                      <span style={{ fontSize: 26 }}>{t?.flag || "🏳️"}</span>
-                      <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 16, flex: 1, color: "var(--bk-text-primary)" }}>{team}</span>
-                      {isCur && <span style={{ color: "var(--bk-accent)", fontSize: 11, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800 }}>CURRENT</span>}
-                    </div>
-                  );
-                })}
-                {preds[pos] && (
-                  <div onClick={() => assignTeam(group, pos, null)} style={{ marginTop: 4, padding: "10px", borderRadius: 10, background: T.red+"18", border: `1px solid ${T.red}44`, cursor: "pointer", textAlign: "center" }}>
-                    <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: T.red }}>✕ Clear this slot</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* Reset confirm */}
-      {showResetConfirm && (
-        <div onClick={() => setShowResetConfirm(false)} style={{ position: "fixed", inset: 0, background: "#000d", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: "var(--bk-surface)", width: "100%", maxWidth: 360, borderRadius: 20, border: "1px solid var(--bk-border-empty)", padding: "24px 20px" }}>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: "var(--bk-text-primary)", marginBottom: 8 }}>RESET GROUPS?</div>
-            <div style={{ fontSize: 13, color: "var(--bk-text-secondary)", marginBottom: 20, lineHeight: 1.5 }}>Clears all group predictions and bracket picks.</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-              <button onClick={() => setShowResetConfirm(false)} style={{ padding: 12, background: "var(--bk-surface-hover)", border: "1px solid var(--bk-border-empty)", color: "var(--bk-text-secondary)", borderRadius: 10, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14 }}>CANCEL</button>
-              <button onClick={() => { onResetGroups(); setShowResetConfirm(false); }} style={{ padding: 12, background: T.red+"22", border: `1px solid ${T.red}`, color: T.red, borderRadius: 10, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14 }}>RESET</button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
 // ─── BOTTOM NAV ──────────────────────────────────────────────────────────────
 const TABS = [
   { id: "fixtures", label: "Fixtures", icon: "🏟️" },
   { id: "vote",     label: "Vote",     icon: "🗳️" },
   { id: "teams",    label: "Teams",    icon: "👕" },
-  { id: "groups",   label: "Groups",   icon: "🗂️" },
   { id: "bracket",  label: "Bracket",  icon: "🔮" },
   { id: "board",    label: "Board",    icon: "🏅" },
   { id: "more",     label: "More",     icon: "⋯" },
@@ -3606,27 +3402,6 @@ export default function App() {
   const [fetchError, setFetchError] = useState(null);
   const [theme, setTheme] = useState(() => ls.get("theme", "dark"));
 
-  const EMPTY_GROUP_PREDS = Object.fromEntries(Object.keys(GROUPS).map(g => [g, { 1: null, 2: null, 3: null, 4: null }]));
-  const [groupPreds, setGroupPredsState] = useState(() => ls.get("group_predictions_v1", EMPTY_GROUP_PREDS));
-  const [bracketPicks, setBracketPicksState] = useState(() => ls.get("bracket_v7", {}));
-
-  const bracketUnlocked = Object.keys(GROUPS).every(g => groupPreds[g]?.[1] && groupPreds[g]?.[2]);
-
-  const handleGroupPredsChange = (next) => {
-    setGroupPredsState(next);
-    ls.set("group_predictions_v1", next);
-  };
-
-  const handleBracketPicksChange = (next) => {
-    setBracketPicksState(next);
-    ls.set("bracket_v7", next);
-  };
-
-  const handleResetGroups = () => {
-    handleGroupPredsChange(EMPTY_GROUP_PREDS);
-    handleBracketPicksChange({});
-  };
-
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
     Object.assign(T, next === "dark" ? DARK_T : LIGHT_T);
@@ -3876,16 +3651,7 @@ export default function App() {
         <div className="wc-inner">
           {tab === "fixtures" && <FixturesTab predictions={predictions} onPredictOpen={openPredict} onViewDetails={f => setDetailsModal(f)} fetchError={fetchError} />}
           {tab === "teams" && <TeamsTab selectedTeam={selectedTeam} dbStandings={dbStandings} onTeamOpen={(name) => { setSelectedTeam(name); if (name) setTab("teams"); }} />}
-          {tab === "groups" && <GroupStageTab groupPreds={groupPreds} setGroupPreds={handleGroupPredsChange} onContinueToBracket={() => setTab("bracket")} onResetGroups={handleResetGroups} />}
-          {tab === "bracket" && bracketUnlocked && <BracketTab key={`bracket-${dataVersion}`} user={user} theme={theme} groupPreds={groupPreds} bracketPicks={bracketPicks} onPicksChange={handleBracketPicksChange} onGoToGroups={() => { handleBracketPicksChange({}); setTab("groups"); }} />}
-          {tab === "bracket" && !bracketUnlocked && (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "60vh", padding: 32, textAlign: "center" }}>
-              <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
-              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 24, color: "var(--bk-accent)", marginBottom: 8 }}>BRACKET LOCKED</div>
-              <div style={{ fontSize: 14, color: "var(--bk-text-secondary)", marginBottom: 24, lineHeight: 1.6 }}>Complete group predictions for all 12 groups first (1st and 2nd place required).</div>
-              <button onClick={() => setTab("groups")} style={{ background: "var(--bk-accent)", border: "none", color: T.navy, padding: "12px 24px", borderRadius: 10, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 16 }}>GO TO GROUP STAGE →</button>
-            </div>
-          )}
+          {tab === "bracket" && <BracketTab key={`bracket-${dataVersion}`} user={user} theme={theme} />}
           {tab === "vote" && <VoteTab key={`vote-${dataVersion}`} predictions={predictions} setPredictions={setPredictions} user={user} />}
           {tab === "board" && <LeaderboardTab />}
           {tab === "more" && <MoreTab user={user} onSignIn={() => setShowAuth(true)} onChangeTeam={() => setShowTeamPicker(true)} />}
@@ -3897,17 +3663,13 @@ export default function App() {
         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 13, letterSpacing: 2, color: T.gold, padding: "4px 14px 12px", borderBottom: `1px solid ${T.navyLight}`, marginBottom: 4 }}>
           NAVIGATION
         </div>
-        {TABS.map(t => {
-          const locked = t.id === "bracket" && !bracketUnlocked;
-          return (
-            <button key={t.id} className={"wc-sidebar-btn" + (tab === t.id ? " active" : "")}
-              onClick={() => { setTab(t.id); if (t.id !== "teams") setSelectedTeam(null); }}
-              title={locked ? "Complete group predictions first" : undefined}>
-              <span style={{ fontSize: 20, opacity: locked ? 0.5 : 1 }}>{locked ? "🔒" : t.icon}</span>
-              <span style={{ opacity: locked ? 0.5 : 1 }}>{t.label}</span>
-            </button>
-          );
-        })}
+        {TABS.map(t => (
+          <button key={t.id} className={"wc-sidebar-btn" + (tab === t.id ? " active" : "")}
+            onClick={() => { setTab(t.id); if (t.id !== "teams") setSelectedTeam(null); }}>
+            <span style={{ fontSize: 20 }}>{t.icon}</span>
+            <span>{t.label}</span>
+          </button>
+        ))}
         <div style={{ flex: 1 }} />
         <div style={{ padding: "12px 14px", borderTop: `1px solid ${T.navyLight}`, fontSize: 11, color: T.grayDark, fontFamily: "'Barlow Condensed', sans-serif" }}>
           FIFA World Cup 2026™
@@ -3920,23 +3682,23 @@ export default function App() {
         border: `1px solid ${T.navyLight}`,
         display: "flex", zIndex: 50, padding: "6px 12px", gap: 4,
       }}>
-        {TABS.map(t => {
-          const locked = t.id === "bracket" && !bracketUnlocked;
-          return (
-            <button key={t.id} onClick={() => { setTab(t.id); if (t.id !== "teams") setSelectedTeam(null); }}
-              title={locked ? "Complete group predictions first" : undefined}
-              style={{
-                flex: 1, minWidth: 44, padding: "8px 6px 6px",
-                background: tab === t.id ? T.gold + "22" : "transparent",
-                border: "none", borderRadius: 10,
-                cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
-                transition: "all 0.2s", opacity: locked ? 0.5 : 1, position: "relative",
-              }}>
-              <span style={{ fontSize: 18, color: tab === t.id ? T.gold : T.white }}>{locked ? "🔒" : t.icon}</span>
-              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: 0.5, color: tab === t.id ? T.gold : T.gray }}>{t.label.toUpperCase()}</span>
-            </button>
-          );
-        })}
+        {TABS.map(t => (
+          <button key={t.id} onClick={() => { setTab(t.id); if (t.id !== "teams") setSelectedTeam(null); }}
+            style={{
+              flex: 1, minWidth: 54, padding: "8px 10px 6px",
+              background: tab === t.id ? T.gold + "22" : "transparent",
+              border: "none", borderRadius: 10,
+              cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+              transition: "all 0.2s",
+            }}>
+            <span style={{ fontSize: 18, color: tab === t.id ? T.gold : T.white }}>{t.icon}</span>
+            <span style={{
+              fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+              fontSize: 9, letterSpacing: 0.5,
+              color: tab === t.id ? T.gold : T.gray,
+            }}>{t.label.toUpperCase()}</span>
+          </button>
+        ))}
       </div>
 
       {/* Global predict modal */}
