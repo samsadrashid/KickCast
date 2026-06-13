@@ -2286,6 +2286,16 @@ function BracketTab({ user, theme }) {
     setPicks(next);
     saveBracket(next);
     setModal(null);
+    // Auto-open next round match if both its teams are now resolved
+    if (winnerName !== null && match.nextMatch) {
+      const allMatches = BRACKET_ROUNDS.flatMap(r => r.matches);
+      const nextM = allMatches.find(m => m.id === match.nextMatch);
+      if (nextM) {
+        const tA = resolveSlot(nextM.home, standings, next, groupPosPicks, nextM.id);
+        const tB = resolveSlot(nextM.away, standings, next, groupPosPicks, nextM.id);
+        if (tA && tB) setModal({ match: nextM, current: next[nextM.id + "_W"] || null, teamA: tA, teamB: tB });
+      }
+    }
   };
 
   const resetAll = () => { setPicks({}); saveBracket({}); setGroupPosPicks({}); ls.set("gpp_v1", {}); };
