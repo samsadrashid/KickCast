@@ -3730,7 +3730,7 @@ export default function App() {
           {tab === "bracket" && <BracketTab key={`bracket-${dataVersion}`} user={user} theme={theme} />}
           {tab === "vote" && <VoteTab key={`vote-${dataVersion}`} predictions={predictions} setPredictions={setPredictions} user={user} />}
           {tab === "board" && <LeaderboardTab />}
-          {tab === "more" && <MoreTab user={user} onSignIn={() => setShowAuth(true)} onChangeTeam={() => setShowTeamPicker(true)} />}
+          {tab === "more" && <MoreTab key={`more-${dataVersion}`} user={user} onSignIn={() => setShowAuth(true)} onChangeTeam={() => setShowTeamPicker(true)} />}
         </div>
       </div>
 
