@@ -1736,10 +1736,13 @@ function MatchDetailsModal({ fixture, userPrediction, onClose }) {
   let predLabel = null;
   if (userPrediction != null) {
     const pH = userPrediction.homeScore, pA = userPrediction.awayScore;
-    const predWinner = pH > pA ? "home" : pA > pH ? "away" : userPrediction.penWinner || "draw";
-    const actualWinner = fixture.homeScore > fixture.awayScore ? "home" : fixture.awayScore > fixture.homeScore ? "away" : penWinner || "draw";
+    const isKO = !!(fixture.stage && fixture.stage !== "group-stage");
+    const actualWinner = fixture.homeScore > fixture.awayScore ? "home" : fixture.awayScore > fixture.homeScore ? "away"
+      : penWinner ? penWinner : (isKO ? null : "draw");
+    const predWinnerCalc = pH > pA ? "home" : pA > pH ? "away"
+      : isKO ? (userPrediction.penWinner || null) : "draw";
     const exact = pH === fixture.homeScore && pA === fixture.awayScore && (!isPen || userPrediction.penWinner === penWinner);
-    const correctResult = predWinner === actualWinner;
+    const correctResult = actualWinner !== null && predWinnerCalc !== null && predWinnerCalc === actualWinner;
     predLabel = exact ? "✅ Exact!" : correctResult ? "🎯 Correct result" : "❌ Wrong";
   }
 
@@ -3721,12 +3724,17 @@ function VoteTab({ predictions, setPredictions, user }) {
                 const actHome = fixture.homeScore ?? 0;
                 const actAway = fixture.awayScore ?? 0;
                 const actPen = fixture.penWinner || null;
-                const isKnockout = fixture.stage && fixture.stage !== "group-stage";
-                const actualWinner = actHome > actAway ? "home" : actAway > actHome ? "away" : actPen || null;
+                const isKnockout = !!(fixture.stage && fixture.stage !== "group-stage");
+                // actualWinner: group draws = "draw", knockout always has a winner via pens
+                const actualWinner = actHome > actAway ? "home" : actAway > actHome ? "away"
+                  : actPen ? actPen : (isKnockout ? null : "draw");
+                // predWinner: knockout draw with no pen pick = null (incomplete, always wrong)
                 const predWinner = predHome > predAway ? "home" : predAway > predHome ? "away"
-                  : isKnockout && pred.penWinner ? pred.penWinner : "draw";
-                const correctResult = actualWinner !== null && predWinner === actualWinner;
-                const isExact = predHome === actHome && predAway === actAway && (!actPen || pred.penWinner === actPen);
+                  : isKnockout ? (pred.penWinner || null) : "draw";
+                const correctResult = actualWinner !== null && predWinner !== null && predWinner === actualWinner;
+                // Exact: score matches + pen winner matches if match went to pens
+                const isExact = predHome === actHome && predAway === actAway
+                  && (!actPen || pred.penWinner === actPen);
                 const badge = isExact ? { label: "🎯 EXACT", color: T.gold, pts: "+3 pts" }
                   : correctResult ? { label: "✅ CORRECT", color: "#4ade80", pts: "+1 pt" }
                   : { label: "❌ WRONG", color: T.red, pts: "0 pts" };
