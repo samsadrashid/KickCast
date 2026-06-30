@@ -2188,6 +2188,225 @@ function KnockoutTreeView({ fixtures, onTeamOpen }) {
   );
 }
 
+// ── LIVE CIRCLE BRACKET (read-only, real data) ────────────────────────────────
+const LIVE_STAGE_ROUND = {
+  "round-of-32": 0, "round-of-16": 1,
+  "quarterfinals": 2, "semifinals": 3, "final": 4,
+};
+
+function LiveCircleBracket({ fixtures, onTeamOpen }) {
+  const containerRef = useRef(null);
+  const [sz, setSz] = useState(480);
+  const [tooltip, setTooltip] = useState(null);
+
+  useEffect(() => {
+    const update = () => {
+      if (containerRef.current) setSz(Math.min(containerRef.current.clientWidth, 580));
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const cx = sz / 2, cy = sz / 2;
+  const rr = [cx * 0.93, cx * 0.73, cx * 0.53, cx * 0.34, cx * 0.20];
+  const SLOT_SZ = Math.max(26, Math.floor(sz * 0.062));
+  const half = SLOT_SZ / 2;
+  const fl = Math.max(13, Math.floor(sz * 0.038));
+
+  // Group and sort fixtures by round
+  const rounds = [[], [], [], [], []];
+  fixtures.forEach(f => {
+    const rIdx = LIVE_STAGE_ROUND[f.stage];
+    if (rIdx !== undefined) rounds[rIdx].push(f);
+  });
+  rounds.forEach(r => r.sort((a, b) => new Date(a.isoDate) - new Date(b.isoDate)));
+
+  const getWinner = (f) => {
+    if (!f || f.homeScore === null) return null;
+    if (f.homeScore > f.awayScore) return f.home;
+    if (f.awayScore > f.homeScore) return f.away;
+    if (f.penWinner === "home") return f.home;
+    if (f.penWinner === "away") return f.away;
+    return null;
+  };
+
+  const scoreLabel = (f) => {
+    if (!f || f.homeScore === null) return null;
+    let s = `${f.homeScore}–${f.awayScore}`;
+    if (f.penWinner) s += ` (${f.homePens ?? "?"}–${f.awayPens ?? "?"} pens)`;
+    return s;
+  };
+
+  // Connector lines
+  const lines = [];
+  [0, 1, 2, 3].forEach(rIdx => {
+    rounds[rIdx].forEach((match, mIdx) => {
+      const r = rr[rIdx];
+      const homeAng = slotAngleDeg(rIdx, mIdx, "home");
+      const awayAng = slotAngleDeg(rIdx, mIdx, "away");
+      const midAng  = slotAngleDeg(rIdx, mIdx, "mid");
+      const homeP = toXY(cx, cy, r, homeAng);
+      const awayP = toXY(cx, cy, r, awayAng);
+      const midP  = toXY(cx, cy, r, midAng);
+      const active = !!getWinner(match);
+
+      lines.push({ x1: homeP.x, y1: homeP.y, x2: midP.x, y2: midP.y, active });
+      lines.push({ x1: awayP.x, y1: awayP.y, x2: midP.x, y2: midP.y, active });
+
+      // Connect mid → winner's slot in next round
+      const nextRound = rounds[rIdx + 1];
+      if (nextRound && nextRound.length > 0) {
+        const nextMatchIdx = Math.floor(mIdx / 2);
+        if (nextMatchIdx < nextRound.length) {
+          const nextSlotKey = mIdx % 2 === 0 ? "home" : "away";
+          const nextAng = slotAngleDeg(rIdx + 1, nextMatchIdx, nextSlotKey);
+          const innerP = toXY(cx, cy, rr[rIdx + 1], nextAng);
+          lines.push({ x1: midP.x, y1: midP.y, x2: innerP.x, y2: innerP.y, active });
+        }
+      }
+      if (rIdx === 3) {
+        const innerP = toXY(cx, cy, rr[4], midAng);
+        lines.push({ x1: midP.x, y1: midP.y, x2: innerP.x, y2: innerP.y, active });
+      }
+    });
+  });
+
+  // Final → center
+  const finalMatch = rounds[4][0];
+  rounds[3].forEach((_, sfIdx) => {
+    const sfMidAng = slotAngleDeg(3, sfIdx, "mid");
+    const finalSlotP = toXY(cx, cy, rr[4], sfMidAng);
+    lines.push({ x1: finalSlotP.x, y1: finalSlotP.y, x2: cx, y2: cy, active: !!getWinner(finalMatch) });
+  });
+
+  // Slot circles
+  const slots = [];
+  [0, 1, 2, 3].forEach(rIdx => {
+    rounds[rIdx].forEach((match, mIdx) => {
+      const winner = getWinner(match);
+      const sc = scoreLabel(match);
+      ["home", "away"].forEach(slotKey => {
+        const team = slotKey === "home" ? match.home : match.away;
+        const t = team ? getTeam(team) : null;
+        const ang = slotAngleDeg(rIdx, mIdx, slotKey);
+        const { x, y } = toXY(cx, cy, rr[rIdx], ang);
+        const isW = !!winner && winner === team;
+        const isL = !!winner && winner !== team;
+        slots.push({ key: `${match.id}_${slotKey}`, x: x - half, y: y - half, team, t, isW, isL, sc });
+      });
+    });
+  });
+
+  // Final slots at SF mid angles
+  rounds[3].forEach((_, sfIdx) => {
+    const sfMidAng = slotAngleDeg(3, sfIdx, "mid");
+    const { x, y } = toXY(cx, cy, rr[4], sfMidAng);
+    const team = finalMatch ? (sfIdx === 0 ? finalMatch.home : finalMatch.away) : null;
+    const t = team ? getTeam(team) : null;
+    const winner = getWinner(finalMatch);
+    const isW = !!winner && winner === team;
+    const isL = !!winner && winner !== team;
+    slots.push({ key: `FINAL_${sfIdx}`, x: x - half, y: y - half, team, t, isW, isL, sc: scoreLabel(finalMatch) });
+  });
+
+  const champion = getWinner(finalMatch);
+  const championTeam = champion ? getTeam(champion) : null;
+
+  if (rounds.every(r => r.length === 0)) return (
+    <div style={{ textAlign: "center", padding: "48px 16px" }}>
+      <div style={{ fontSize: 36, marginBottom: 12 }}>⏳</div>
+      <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 18, color: T.white, marginBottom: 6 }}>Knockout stage pending</div>
+      <div style={{ fontSize: 13, color: T.gray, lineHeight: 1.6 }}>Matches will appear once the group stage completes</div>
+    </div>
+  );
+
+  return (
+    <div ref={containerRef} style={{ width: "100%" }}>
+      <div style={{ position: "relative", width: sz, height: sz, margin: "0 auto" }}>
+        {/* Dashed rings */}
+        {rr.slice(0, 4).map((r, i) => (
+          <div key={i} style={{ position: "absolute", left: cx - r, top: cy - r, width: r * 2, height: r * 2, borderRadius: "50%", border: `1px dashed ${T.grayDark}55`, pointerEvents: "none" }} />
+        ))}
+
+        {/* SVG connectors */}
+        <svg style={{ position: "absolute", top: 0, left: 0, width: sz, height: sz, pointerEvents: "none", overflow: "visible" }}>
+          {lines.map((l, i) => (
+            <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
+              stroke={l.active ? T.gold + "cc" : T.grayDark + "99"}
+              strokeWidth={l.active ? 1.8 : 1.1} strokeLinecap="round"
+            />
+          ))}
+        </svg>
+
+        {/* Slot circles */}
+        {slots.map(s => (
+          <div key={s.key}
+            onMouseEnter={s.sc ? (e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const wrap = containerRef.current.getBoundingClientRect();
+              setTooltip({ key: s.key, x: s.x + SLOT_SZ + 4, y: s.y - 4, label: s.sc });
+            } : undefined}
+            onMouseLeave={() => setTooltip(null)}
+            onClick={s.team && onTeamOpen ? () => onTeamOpen(s.team) : undefined}
+            style={{
+              position: "absolute", left: s.x, top: s.y,
+              width: SLOT_SZ, height: SLOT_SZ, borderRadius: "50%",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: fl, lineHeight: 1,
+              cursor: s.team && onTeamOpen ? "pointer" : "default",
+              background: s.isW ? T.gold + "33" : T.navyLight,
+              border: `${s.isW ? 2 : 1.5}px solid ${s.isW ? T.gold : T.grayDark + "99"}`,
+              opacity: s.isL ? 0.35 : 1,
+              boxSizing: "border-box", zIndex: 2,
+              transition: "opacity 0.2s, transform 0.1s",
+            }}
+            onMouseOver={s.team && onTeamOpen ? e => { if (!s.isL) e.currentTarget.style.transform = "scale(1.15)"; } : undefined}
+            onMouseOut={e => { e.currentTarget.style.transform = "scale(1)"; }}
+          >
+            {s.t ? s.t.flag : <span style={{ fontSize: fl * 0.55, color: T.grayDark }}>?</span>}
+          </div>
+        ))}
+
+        {/* Score tooltip */}
+        {tooltip && (
+          <div style={{
+            position: "absolute", left: tooltip.x, top: tooltip.y,
+            background: T.navyMid, border: `1px solid ${T.gold}55`,
+            borderRadius: 7, padding: "3px 8px", zIndex: 10, pointerEvents: "none",
+            fontSize: 11, color: T.white, fontFamily: "'Barlow Condensed', sans-serif",
+            whiteSpace: "nowrap", letterSpacing: 0.5,
+          }}>
+            {tooltip.label}
+          </div>
+        )}
+
+        {/* Center champion */}
+        <div style={{
+          position: "absolute", left: cx - rr[4], top: cy - rr[4],
+          width: rr[4] * 2, height: rr[4] * 2, borderRadius: "50%",
+          background: championTeam ? T.gold + "22" : T.navyMid,
+          border: `2px solid ${championTeam ? T.gold + "bb" : T.grayDark + "55"}`,
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          zIndex: 3, pointerEvents: "none",
+        }}>
+          {championTeam ? (
+            <><div style={{ fontSize: rr[4] * 0.52, lineHeight: 1 }}>{championTeam.flag}</div><div style={{ fontSize: 9, marginTop: 2 }}>🏆</div></>
+          ) : (
+            <div style={{ fontSize: 9, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.5 }}>?</div>
+          )}
+        </div>
+
+        {/* Round labels */}
+        {[["R32", rr[0]], ["R16", rr[1]], ["QF", rr[2]], ["SF", rr[3]]].map(([label, r]) => {
+          const p = toXY(cx, cy, r, -90);
+          return <div key={label} style={{ position: "absolute", left: p.x - 16, top: p.y - 18, width: 32, textAlign: "center", fontSize: 8, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, color: T.gray, opacity: 0.65, pointerEvents: "none" }}>{label}</div>;
+        })}
+      </div>
+    </div>
+  );
+}
+
 function TeamsTab({ selectedTeam, onTeamOpen, dbStandings, dataVersion: _dv }) {
   const [subTab, setSubTab] = useState("knockout");
   const [expanded, setExpanded] = useState(null);
@@ -2241,7 +2460,7 @@ function TeamsTab({ selectedTeam, onTeamOpen, dbStandings, dataVersion: _dv }) {
 
       {/* Knockout sub-tab */}
       {subTab === "knockout" && (
-        <KnockoutTreeView fixtures={knockoutFixtures} onTeamOpen={onTeamOpen} />
+        <LiveCircleBracket fixtures={knockoutFixtures} onTeamOpen={onTeamOpen} />
       )}
 
       {/* Groups sub-tab */}
