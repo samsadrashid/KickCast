@@ -1619,6 +1619,7 @@ function mapMatch(row) {
     penWinner: row.pen_winner || null,
     homePens: row.home_pens ?? null,
     awayPens: row.away_pens ?? null,
+    shootout: row.shootout || null,
     goals: row.goals || [],
     yellowCards: row.yellow_cards || [],
     redCards: row.red_cards || [],
@@ -1825,6 +1826,37 @@ function MatchDetailsModal({ fixture, userPrediction, onClose }) {
           </div>
         )}
 
+        {/* Penalty Shootout */}
+        {fixture.shootout && (fixture.shootout.home?.length > 0 || fixture.shootout.away?.length > 0) && (
+          <div style={{ background: T.navy, borderRadius: 12, padding: "12px 16px", marginBottom: 10 }}>
+            <div style={{ fontSize: 11, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 10 }}>PENALTY SHOOTOUT</div>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+              {/* Home side */}
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 10, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.5, marginBottom: 6 }}>{fixture.home.toUpperCase()}</div>
+                {(fixture.shootout.home || []).map((s, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 4 }}>
+                    <span style={{ fontSize: 13 }}>{s.didScore ? "✅" : "❌"}</span>
+                    <span style={{ fontSize: 11, color: s.didScore ? T.white : T.gray, fontFamily: "'Barlow Condensed', sans-serif" }}>{s.player}</span>
+                  </div>
+                ))}
+              </div>
+              {/* Divider */}
+              <div style={{ width: 1, background: T.navyLight }} />
+              {/* Away side */}
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 10, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.5, marginBottom: 6, textAlign: "right" }}>{fixture.away.toUpperCase()}</div>
+                {(fixture.shootout.away || []).map((s, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 5, marginBottom: 4 }}>
+                    <span style={{ fontSize: 11, color: s.didScore ? T.white : T.gray, fontFamily: "'Barlow Condensed', sans-serif" }}>{s.player}</span>
+                    <span style={{ fontSize: 13 }}>{s.didScore ? "✅" : "❌"}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* User prediction */}
         {userPrediction != null && (
           <div style={{ background: T.navy, borderRadius: 12, padding: "12px 16px", textAlign: "center" }}>
@@ -1870,9 +1902,16 @@ function MatchCardSlide({ fixture, onPredict, onViewDetails, userPrediction }) {
         </div>
         <div style={{ textAlign: "center", padding: "0 8px" }}>
           {isFT || isLive ? (
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: T.gold, letterSpacing: 2 }}>
-              {fixture.homeScore}–{fixture.awayScore}
-            </div>
+            <>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: T.gold, letterSpacing: 2 }}>
+                {fixture.homeScore}–{fixture.awayScore}
+              </div>
+              {fixture.penWinner && (
+                <div style={{ fontSize: 10, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.5 }}>
+                  {fixture.homePens ?? "?"}–{fixture.awayPens ?? "?"} pens
+                </div>
+              )}
+            </>
           ) : (
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 20, color: T.gray }}>VS</div>
           )}
