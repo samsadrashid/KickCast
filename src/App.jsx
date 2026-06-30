@@ -2214,14 +2214,41 @@ function LiveCircleBracket({ fixtures, onTeamOpen }) {
   const half = SLOT_SZ / 2;
   const fl = Math.max(13, Math.floor(sz * 0.038));
 
-  // Group and sort fixtures by round
+  // Group fixtures by round
   const rounds = [[], [], [], [], []];
   (fixtures || []).forEach(f => {
     if (!f || !f.stage) return;
     const rIdx = LIVE_STAGE_ROUND[f.stage];
     if (rIdx !== undefined) rounds[rIdx].push(f);
   });
-  rounds.forEach(r => r.sort((a, b) => new Date(a.isoDate) - new Date(b.isoDate)));
+  // R32: sort by date to get base positions
+  rounds[0].sort((a, b) => new Date(a.isoDate) - new Date(b.isoDate));
+
+  // Reorder each subsequent round so winners flow inward on the same radial line.
+  // Build team→matchIdx map from the previous round, then sort current round
+  // so that floor(prevIdx/2) gives each match its bracket-aligned position.
+  const buildTeamPosMap = (roundMatches) => {
+    const map = {};
+    roundMatches.forEach((m, idx) => {
+      if (m.home) map[m.home] = idx;
+      if (m.away) map[m.away] = idx;
+    });
+    return map;
+  };
+  const reorderByPrev = (matches, prevMap) => {
+    return [...matches].sort((a, b) => {
+      const posA = Math.floor(Math.min(prevMap[a.home] ?? 999, prevMap[a.away] ?? 999) / 2);
+      const posB = Math.floor(Math.min(prevMap[b.home] ?? 999, prevMap[b.away] ?? 999) / 2);
+      return posA - posB;
+    });
+  };
+  let prevMap = buildTeamPosMap(rounds[0]);
+  rounds[1] = reorderByPrev(rounds[1], prevMap);
+  prevMap = buildTeamPosMap(rounds[1]);
+  rounds[2] = reorderByPrev(rounds[2], prevMap);
+  prevMap = buildTeamPosMap(rounds[2]);
+  rounds[3] = reorderByPrev(rounds[3], prevMap);
+  rounds[4].sort((a, b) => new Date(a.isoDate) - new Date(b.isoDate));
 
   const getWinner = (f) => {
     if (!f || f.homeScore === null) return null;
