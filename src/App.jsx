@@ -1,5 +1,23 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Component } from "react";
 import { supabase } from "./supabase";
+
+class ErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(error) { return { error }; }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ padding: 24, background: "#1a0000", color: "#ff8080", fontFamily: "monospace", fontSize: 13, borderRadius: 12, margin: 16, border: "1px solid #ff4444" }}>
+          <div style={{ fontWeight: 700, marginBottom: 8, color: "#ff4444" }}>Render error (open Console for full stack):</div>
+          <div>{this.state.error.message}</div>
+          <div style={{ marginTop: 12, fontSize: 11, color: "#ff6666" }}>{this.state.error.stack?.split("\n").slice(0,5).join("\n")}</div>
+          <button onClick={() => this.setState({ error: null })} style={{ marginTop: 12, padding: "6px 14px", background: "#ff4444", color: "#fff", border: "none", borderRadius: 6, cursor: "pointer" }}>Retry</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 // ─── THEME ───────────────────────────────────────────────────────────────────
 const DARK_T = {
@@ -1109,6 +1127,455 @@ const TEAM_DATA = {
   Curaçao: { flag: "🇨🇼", kit: ["#002B7F","#F9E814"], rank: 85, conf: "CONCACAF", squad: [] },
 };
 
+const FORMATION_SLOTS = {
+  "4-2-3-1": [
+    [{pos:"GK", label:"GK"}],
+    [{pos:"DEF",label:"LB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"RB"}],
+    [{pos:"MID",label:"CM"},{pos:"MID",label:"CM"}],
+    [{pos:"MID",label:"LW"},{pos:"MID",label:"CAM"},{pos:"MID",label:"RW"}],
+    [{pos:"FWD",label:"ST"}],
+  ],
+  "4-3-3": [
+    [{pos:"GK", label:"GK"}],
+    [{pos:"DEF",label:"LB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"RB"}],
+    [{pos:"MID",label:"CM"},{pos:"MID",label:"CM"},{pos:"MID",label:"CM"}],
+    [{pos:"FWD",label:"LW"},{pos:"FWD",label:"ST"},{pos:"FWD",label:"RW"}],
+  ],
+  "4-4-2": [
+    [{pos:"GK", label:"GK"}],
+    [{pos:"DEF",label:"LB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"RB"}],
+    [{pos:"MID",label:"LM"},{pos:"MID",label:"CM"},{pos:"MID",label:"CM"},{pos:"MID",label:"RM"}],
+    [{pos:"FWD",label:"ST"},{pos:"FWD",label:"ST"}],
+  ],
+  "3-5-2": [
+    [{pos:"GK", label:"GK"}],
+    [{pos:"DEF",label:"CB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"CB"}],
+    [{pos:"MID",label:"LWB"},{pos:"MID",label:"CM"},{pos:"MID",label:"CM"},{pos:"MID",label:"CM"},{pos:"MID",label:"RWB"}],
+    [{pos:"FWD",label:"ST"},{pos:"FWD",label:"ST"}],
+  ],
+  "5-3-2": [
+    [{pos:"GK", label:"GK"}],
+    [{pos:"DEF",label:"LWB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"RWB"}],
+    [{pos:"MID",label:"CM"},{pos:"MID",label:"CM"},{pos:"MID",label:"CM"}],
+    [{pos:"FWD",label:"ST"},{pos:"FWD",label:"ST"}],
+  ],
+  "4-1-4-1": [
+    [{pos:"GK", label:"GK"}],
+    [{pos:"DEF",label:"LB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"CB"},{pos:"DEF",label:"RB"}],
+    [{pos:"MID",label:"DM"}],
+    [{pos:"MID",label:"LM"},{pos:"MID",label:"CM"},{pos:"MID",label:"CM"},{pos:"MID",label:"RM"}],
+    [{pos:"FWD",label:"ST"}],
+  ],
+};
+
+const ALL_PLAYERS = Object.entries(TEAM_DATA).flatMap(([team, data]) =>
+  data.squad.filter(p => p.name).map(p => ({ ...p, team, flag: data.flag }))
+);
+
+const WC_APPS = {
+  Brazil: 22, Germany: 20, Italy: 18, Argentina: 18, Mexico: 17,
+  France: 16, England: 16, Spain: 15, Belgium: 14, Uruguay: 14,
+  Sweden: 12, Switzerland: 12, Netherlands: 11, "South Korea": 11,
+  USA: 11, Poland: 9, Paraguay: 9, Portugal: 8, Czechia: 9,
+  Japan: 7, Nigeria: 7, Colombia: 7, Croatia: 7, Chile: 9,
+  Morocco: 6, "Saudi Arabia": 6, Iran: 6, Australia: 6, Tunisia: 6,
+  Cameroon: 8, Denmark: 5, Algeria: 4, Ecuador: 4, "Türkiye": 2,
+  Senegal: 3, Ghana: 4, "Ivory Coast": 3, Egypt: 3, "South Africa": 3,
+  Haiti: 1, Panama: 2, Qatar: 1, Iraq: 1, "New Zealand": 2,
+  "Congo DR": 1, Scotland: 8, Norway: 3, "Bosnia-Herzegovina": 1,
+  Jordan: 0, "Cape Verde": 0, Uzbekistan: 0, "Curaçao": 0,
+};
+
+const HISTORICAL_SQUADS = {
+  Brazil: [
+    {name:"Pelé",pos:"FWD",year:1958,rating:99},{name:"Ronaldo",pos:"FWD",year:2002,rating:97},
+    {name:"Ronaldinho",pos:"MID",year:2002,rating:96},{name:"Zico",pos:"MID",year:1982,rating:95},
+    {name:"Garrincha",pos:"FWD",year:1962,rating:94},{name:"Rivaldo",pos:"FWD",year:1998,rating:93},
+    {name:"Roberto Carlos",pos:"DEF",year:1998,rating:93},{name:"Cafu",pos:"DEF",year:2002,rating:92},
+    {name:"Roberto Rivelino",pos:"MID",year:1970,rating:91},{name:"Romário",pos:"FWD",year:1994,rating:95},
+    {name:"Falcão",pos:"MID",year:1982,rating:90},{name:"Taffarel",pos:"GK",year:1994,rating:90},
+    {name:"Bebeto",pos:"FWD",year:1994,rating:89},{name:"Jairzinho",pos:"FWD",year:1970,rating:89},
+    {name:"Dani Alves",pos:"DEF",year:2010,rating:89},{name:"Sócrates",pos:"MID",year:1982,rating:88},
+    {name:"Thiago Silva",pos:"DEF",year:2014,rating:88},{name:"Gilmar",pos:"GK",year:1962,rating:87},
+    {name:"Lúcio",pos:"DEF",year:2002,rating:87},{name:"Aldair",pos:"DEF",year:1994,rating:85},
+    {name:"Dida",pos:"GK",year:2002,rating:84},{name:"Cássio",pos:"GK",year:2018,rating:82},
+  ],
+  Germany: [
+    {name:"Gerd Müller",pos:"FWD",year:1970,rating:97},{name:"Franz Beckenbauer",pos:"DEF",year:1974,rating:96},
+    {name:"Lothar Matthäus",pos:"MID",year:1990,rating:96},{name:"Manuel Neuer",pos:"GK",year:2014,rating:95},
+    {name:"Karl-Heinz Rummenigge",pos:"FWD",year:1982,rating:93},{name:"Philipp Lahm",pos:"DEF",year:2014,rating:93},
+    {name:"Michael Ballack",pos:"MID",year:2002,rating:92},{name:"Oliver Kahn",pos:"GK",year:2002,rating:92},
+    {name:"Thomas Müller",pos:"FWD",year:2014,rating:91},{name:"Sepp Maier",pos:"GK",year:1974,rating:91},
+    {name:"Bastian Schweinsteiger",pos:"MID",year:2014,rating:91},{name:"Mesut Özil",pos:"MID",year:2014,rating:90},
+    {name:"Miroslav Klose",pos:"FWD",year:2014,rating:91},{name:"Mats Hummels",pos:"DEF",year:2014,rating:89},
+    {name:"Uwe Seeler",pos:"FWD",year:1966,rating:89},{name:"Wolfgang Overath",pos:"MID",year:1970,rating:88},
+    {name:"Paul Breitner",pos:"DEF",year:1974,rating:87},{name:"Berti Vogts",pos:"DEF",year:1974,rating:86},
+  ],
+  Argentina: [
+    {name:"Diego Maradona",pos:"MID",year:1986,rating:99},{name:"Lionel Messi",pos:"FWD",year:2014,rating:99},
+    {name:"Alfredo Di Stéfano",pos:"FWD",year:1958,rating:95},{name:"Gabriel Batistuta",pos:"FWD",year:1998,rating:94},
+    {name:"Mario Kempes",pos:"FWD",year:1978,rating:93},{name:"Ángel Di María",pos:"MID",year:2014,rating:90},
+    {name:"Néstor Redondo",pos:"MID",year:1994,rating:90},{name:"Sergio Agüero",pos:"FWD",year:2010,rating:90},
+    {name:"Javier Zanetti",pos:"DEF",year:1998,rating:90},{name:"Javier Mascherano",pos:"MID",year:2014,rating:89},
+    {name:"Claudio Caniggia",pos:"FWD",year:1990,rating:91},{name:"Oscar Ruggeri",pos:"DEF",year:1986,rating:88},
+    {name:"Ubaldo Fillol",pos:"GK",year:1978,rating:88},{name:"Gonzalo Higuaín",pos:"FWD",year:2014,rating:88},
+    {name:"Juan Verón",pos:"MID",year:2002,rating:88},{name:"Roberto Ayala",pos:"DEF",year:2002,rating:87},
+    {name:"Nery Pumpido",pos:"GK",year:1986,rating:87},{name:"Sergio Romero",pos:"GK",year:2014,rating:85},
+  ],
+  France: [
+    {name:"Zinedine Zidane",pos:"MID",year:1998,rating:98},{name:"Kylian Mbappé",pos:"FWD",year:2018,rating:97},
+    {name:"Michel Platini",pos:"MID",year:1982,rating:95},{name:"Thierry Henry",pos:"FWD",year:1998,rating:95},
+    {name:"Patrick Vieira",pos:"MID",year:1998,rating:91},{name:"Claude Makélélé",pos:"MID",year:2002,rating:90},
+    {name:"Fabien Barthez",pos:"GK",year:1998,rating:91},{name:"Hugo Lloris",pos:"GK",year:2018,rating:90},
+    {name:"Antoine Griezmann",pos:"MID",year:2018,rating:90},{name:"Marcel Desailly",pos:"DEF",year:1998,rating:91},
+    {name:"Raphaël Varane",pos:"DEF",year:2018,rating:90},{name:"Lilian Thuram",pos:"DEF",year:1998,rating:90},
+    {name:"Karim Benzema",pos:"FWD",year:2014,rating:89},{name:"Just Fontaine",pos:"FWD",year:1958,rating:91},
+    {name:"Didier Deschamps",pos:"MID",year:1998,rating:87},{name:"Bixente Lizarazu",pos:"DEF",year:1998,rating:88},
+    {name:"David Trezeguet",pos:"FWD",year:1998,rating:88},
+  ],
+  Italy: [
+    {name:"Roberto Baggio",pos:"FWD",year:1994,rating:96},{name:"Franco Baresi",pos:"DEF",year:1990,rating:96},
+    {name:"Paolo Maldini",pos:"DEF",year:1994,rating:96},{name:"Gianluigi Buffon",pos:"GK",year:2006,rating:95},
+    {name:"Fabio Cannavaro",pos:"DEF",year:2006,rating:93},{name:"Paolo Rossi",pos:"FWD",year:1982,rating:93},
+    {name:"Andrea Pirlo",pos:"MID",year:2006,rating:93},{name:"Dino Zoff",pos:"GK",year:1982,rating:94},
+    {name:"Alessandro Del Piero",pos:"FWD",year:2006,rating:91},{name:"Francesco Totti",pos:"MID",year:2006,rating:91},
+    {name:"Gianni Rivera",pos:"MID",year:1970,rating:90},{name:"Gaetano Scirea",pos:"DEF",year:1982,rating:91},
+    {name:"Salvatore Schillaci",pos:"FWD",year:1990,rating:88},{name:"Sandro Mazzola",pos:"MID",year:1970,rating:89},
+    {name:"Giacinto Facchetti",pos:"DEF",year:1970,rating:87},{name:"Walter Zenga",pos:"GK",year:1990,rating:88},
+  ],
+  Spain: [
+    {name:"Andrés Iniesta",pos:"MID",year:2010,rating:97},{name:"Xavi",pos:"MID",year:2010,rating:96},
+    {name:"Iker Casillas",pos:"GK",year:2010,rating:94},{name:"Sergio Ramos",pos:"DEF",year:2010,rating:93},
+    {name:"Carles Puyol",pos:"DEF",year:2010,rating:92},{name:"Xabi Alonso",pos:"MID",year:2010,rating:91},
+    {name:"Fernando Torres",pos:"FWD",year:2010,rating:91},{name:"David Villa",pos:"FWD",year:2010,rating:91},
+    {name:"David Silva",pos:"MID",year:2010,rating:90},{name:"Raúl",pos:"FWD",year:2002,rating:90},
+    {name:"Sergio Busquets",pos:"MID",year:2010,rating:89},{name:"Gerard Piqué",pos:"DEF",year:2010,rating:88},
+    {name:"Cesc Fàbregas",pos:"MID",year:2010,rating:88},{name:"Emilio Butragueño",pos:"FWD",year:1986,rating:87},
+    {name:"Joan Capdevila",pos:"DEF",year:2010,rating:85},
+  ],
+  England: [
+    {name:"Bobby Moore",pos:"DEF",year:1966,rating:95},{name:"Bobby Charlton",pos:"MID",year:1966,rating:95},
+    {name:"Gordon Banks",pos:"GK",year:1966,rating:93},{name:"Paul Gascoigne",pos:"MID",year:1990,rating:91},
+    {name:"Gary Lineker",pos:"FWD",year:1990,rating:91},{name:"Steven Gerrard",pos:"MID",year:2006,rating:90},
+    {name:"David Beckham",pos:"MID",year:1998,rating:90},{name:"Peter Shilton",pos:"GK",year:1990,rating:90},
+    {name:"Rio Ferdinand",pos:"DEF",year:2006,rating:89},{name:"Ashley Cole",pos:"DEF",year:2006,rating:89},
+    {name:"Frank Lampard",pos:"MID",year:2010,rating:89},{name:"John Terry",pos:"DEF",year:2006,rating:88},
+    {name:"Wayne Rooney",pos:"FWD",year:2006,rating:88},{name:"Geoff Hurst",pos:"FWD",year:1966,rating:89},
+    {name:"Alan Shearer",pos:"FWD",year:1998,rating:88},{name:"Jimmy Greaves",pos:"FWD",year:1966,rating:88},
+  ],
+  Netherlands: [
+    {name:"Johan Cruyff",pos:"FWD",year:1974,rating:99},{name:"Marco van Basten",pos:"FWD",year:1990,rating:96},
+    {name:"Ruud Gullit",pos:"MID",year:1990,rating:95},{name:"Dennis Bergkamp",pos:"FWD",year:1994,rating:92},
+    {name:"Arjen Robben",pos:"FWD",year:2010,rating:92},{name:"Wesley Sneijder",pos:"MID",year:2010,rating:92},
+    {name:"Frank Rijkaard",pos:"MID",year:1990,rating:91},{name:"Johan Neeskens",pos:"MID",year:1974,rating:91},
+    {name:"Virgil van Dijk",pos:"DEF",year:2022,rating:91},{name:"Edwin van der Sar",pos:"GK",year:1998,rating:90},
+    {name:"Clarence Seedorf",pos:"MID",year:1998,rating:90},{name:"Patrick Kluivert",pos:"FWD",year:1998,rating:90},
+    {name:"Frank de Boer",pos:"DEF",year:1998,rating:89},{name:"Ruud Krol",pos:"DEF",year:1974,rating:87},
+  ],
+  Portugal: [
+    {name:"Eusébio",pos:"FWD",year:1966,rating:97},{name:"Cristiano Ronaldo",pos:"FWD",year:2006,rating:98},
+    {name:"Luís Figo",pos:"MID",year:2002,rating:94},{name:"Rui Costa",pos:"MID",year:2002,rating:91},
+    {name:"Bruno Fernandes",pos:"MID",year:2022,rating:89},{name:"Vítor Baía",pos:"GK",year:2002,rating:89},
+    {name:"Pepe",pos:"DEF",year:2010,rating:88},{name:"Ricardo Carvalho",pos:"DEF",year:2006,rating:88},
+    {name:"João Moutinho",pos:"MID",year:2014,rating:87},{name:"Ricardo",pos:"GK",year:2006,rating:87},
+    {name:"Fernando Couto",pos:"DEF",year:2002,rating:86},{name:"Nani",pos:"MID",year:2010,rating:86},
+    {name:"Hélder Postiga",pos:"FWD",year:2006,rating:82},{name:"Hugo Almeida",pos:"FWD",year:2010,rating:81},
+  ],
+  Uruguay: [
+    {name:"Luis Suárez",pos:"FWD",year:2010,rating:93},{name:"Diego Godín",pos:"DEF",year:2014,rating:90},
+    {name:"Obdulio Varela",pos:"MID",year:1950,rating:90},{name:"Edinson Cavani",pos:"FWD",year:2014,rating:90},
+    {name:"Diego Forlán",pos:"FWD",year:2010,rating:91},{name:"Alcides Ghiggia",pos:"FWD",year:1950,rating:91},
+    {name:"José Nasazzi",pos:"DEF",year:1930,rating:89},{name:"Ladislao Mazurkiewicz",pos:"GK",year:1970,rating:89},
+    {name:"Fernando Muslera",pos:"GK",year:2010,rating:87},{name:"Diego Lugano",pos:"DEF",year:2010,rating:85},
+    {name:"Carlos Sánchez",pos:"MID",year:2014,rating:83},{name:"Hugo de León",pos:"DEF",year:1986,rating:83},
+  ],
+  Mexico: [
+    {name:"Hugo Sánchez",pos:"FWD",year:1986,rating:93},{name:"Guillermo Ochoa",pos:"GK",year:2014,rating:88},
+    {name:"Rafael Márquez",pos:"DEF",year:2006,rating:88},{name:"Cuauhtémoc Blanco",pos:"MID",year:1998,rating:87},
+    {name:"Hirving Lozano",pos:"FWD",year:2018,rating:86},{name:"Jorge Campos",pos:"GK",year:1994,rating:87},
+    {name:"Andrés Guardado",pos:"MID",year:2014,rating:86},{name:"Jared Borgetti",pos:"FWD",year:2002,rating:85},
+    {name:"Carlos Hermosillo",pos:"FWD",year:1994,rating:82},{name:"Adolfo Ríos",pos:"GK",year:1986,rating:84},
+    {name:"Pavel Pardo",pos:"MID",year:2006,rating:82},{name:"Miguel Layún",pos:"DEF",year:2018,rating:82},
+    {name:"Alberto García Aspe",pos:"MID",year:1994,rating:83},{name:"Claudio Suárez",pos:"DEF",year:1994,rating:84},
+  ],
+  Belgium: [
+    {name:"Kevin De Bruyne",pos:"MID",year:2018,rating:96},{name:"Eden Hazard",pos:"MID",year:2018,rating:93},
+    {name:"Jean-Marie Pfaff",pos:"GK",year:1986,rating:91},{name:"Thibaut Courtois",pos:"GK",year:2018,rating:91},
+    {name:"Vincent Kompany",pos:"DEF",year:2014,rating:90},{name:"Romelu Lukaku",pos:"FWD",year:2018,rating:90},
+    {name:"Jan Ceulemans",pos:"MID",year:1986,rating:88},{name:"Jan Vertonghen",pos:"DEF",year:2018,rating:88},
+    {name:"Enzo Scifo",pos:"MID",year:1990,rating:87},{name:"Toby Alderweireld",pos:"DEF",year:2018,rating:87},
+    {name:"Dries Mertens",pos:"FWD",year:2018,rating:87},{name:"Axel Witsel",pos:"MID",year:2018,rating:87},
+    {name:"Marouane Fellaini",pos:"MID",year:2014,rating:84},
+  ],
+  Sweden: [
+    {name:"Zlatan Ibrahimović",pos:"FWD",year:2006,rating:95},{name:"Gunnar Nordahl",pos:"FWD",year:1950,rating:91},
+    {name:"Henrik Larsson",pos:"FWD",year:2006,rating:88},{name:"Thomas Ravelli",pos:"GK",year:1994,rating:88},
+    {name:"Freddie Ljungberg",pos:"MID",year:2002,rating:87},{name:"Marcus Allbäck",pos:"FWD",year:2002,rating:82},
+    {name:"Andreas Isaksson",pos:"GK",year:2006,rating:84},{name:"Olof Mellberg",pos:"DEF",year:2002,rating:84},
+    {name:"Niclas Alexandersson",pos:"MID",year:2002,rating:83},{name:"Tobias Linderoth",pos:"MID",year:2002,rating:82},
+  ],
+  Switzerland: [
+    {name:"Xherdan Shaqiri",pos:"MID",year:2014,rating:87},{name:"Yann Sommer",pos:"GK",year:2022,rating:88},
+    {name:"Granit Xhaka",pos:"MID",year:2018,rating:86},{name:"Stéphane Chapuisat",pos:"FWD",year:1994,rating:86},
+    {name:"Fabian Schär",pos:"DEF",year:2018,rating:85},{name:"Stephan Lichtsteiner",pos:"DEF",year:2014,rating:85},
+    {name:"Ricardo Rodríguez",pos:"DEF",year:2018,rating:83},{name:"Blerim Džemaili",pos:"MID",year:2014,rating:82},
+    {name:"Johan Vonlanthen",pos:"FWD",year:2006,rating:81},
+  ],
+  Japan: [
+    {name:"Hidetoshi Nakata",pos:"MID",year:1998,rating:89},{name:"Shunsuke Nakamura",pos:"MID",year:2006,rating:87},
+    {name:"Shinji Kagawa",pos:"MID",year:2014,rating:87},{name:"Keisuke Honda",pos:"MID",year:2014,rating:87},
+    {name:"Son Heung-min",pos:"FWD",year:2018,rating:91},{name:"Kunishige Kamamoto",pos:"FWD",year:1968,rating:87},
+    {name:"Seigo Narazaki",pos:"GK",year:2002,rating:85},{name:"Maya Yoshida",pos:"DEF",year:2018,rating:84},
+    {name:"Kazu Miura",pos:"FWD",year:1998,rating:84},{name:"Shinji Okazaki",pos:"FWD",year:2014,rating:83},
+    {name:"Yoshikatsu Kawaguchi",pos:"GK",year:1998,rating:84},{name:"Marcus Tanaka",pos:"DEF",year:2010,rating:82},
+  ],
+  "South Korea": [
+    {name:"Son Heung-min",pos:"FWD",year:2018,rating:91},{name:"Cha Bum-kun",pos:"MID",year:1986,rating:90},
+    {name:"Hong Myung-bo",pos:"DEF",year:2002,rating:89},{name:"Park Ji-sung",pos:"MID",year:2006,rating:88},
+    {name:"Lee Woon-jae",pos:"GK",year:2002,rating:85},{name:"Hwang Sun-hong",pos:"FWD",year:2002,rating:84},
+    {name:"Seol Ki-hyeon",pos:"MID",year:2002,rating:83},{name:"Yoo Sang-chul",pos:"MID",year:2002,rating:83},
+    {name:"Kim Byung-ji",pos:"GK",year:2006,rating:83},{name:"Kim Nam-il",pos:"MID",year:2006,rating:82},
+    {name:"Lee Kang-in",pos:"MID",year:2022,rating:83},
+  ],
+  USA: [
+    {name:"Landon Donovan",pos:"MID",year:2010,rating:87},{name:"Christian Pulisic",pos:"MID",year:2022,rating:87},
+    {name:"Tim Howard",pos:"GK",year:2014,rating:88},{name:"Clint Dempsey",pos:"MID",year:2014,rating:86},
+    {name:"Kasey Keller",pos:"GK",year:2002,rating:85},{name:"Michael Bradley",pos:"MID",year:2010,rating:84},
+    {name:"Claudio Reyna",pos:"MID",year:2002,rating:83},{name:"DaMarcus Beasley",pos:"DEF",year:2006,rating:83},
+    {name:"Carlos Bocanegra",pos:"DEF",year:2010,rating:83},{name:"Brian McBride",pos:"FWD",year:2006,rating:83},
+    {name:"Cobi Jones",pos:"MID",year:1998,rating:82},{name:"Alexi Lalas",pos:"DEF",year:1994,rating:82},
+  ],
+  Poland: [
+    {name:"Robert Lewandowski",pos:"FWD",year:2014,rating:96},{name:"Zbigniew Boniek",pos:"MID",year:1982,rating:92},
+    {name:"Grzegorz Lato",pos:"FWD",year:1974,rating:91},{name:"Kazimierz Deyna",pos:"MID",year:1974,rating:89},
+    {name:"Jan Tomaszewski",pos:"GK",year:1974,rating:89},{name:"Andrzej Szarmach",pos:"FWD",year:1974,rating:87},
+    {name:"Piotr Zieliński",pos:"MID",year:2022,rating:87},{name:"Wojciech Szczęsny",pos:"GK",year:2022,rating:87},
+    {name:"Jerzy Dudek",pos:"GK",year:2002,rating:86},{name:"Tomasz Hajto",pos:"DEF",year:2002,rating:82},
+  ],
+  Croatia: [
+    {name:"Luka Modrić",pos:"MID",year:2018,rating:97},{name:"Davor Šuker",pos:"FWD",year:1998,rating:92},
+    {name:"Zvonimir Boban",pos:"MID",year:1998,rating:91},{name:"Ivan Rakitić",pos:"MID",year:2018,rating:90},
+    {name:"Mario Mandžukić",pos:"FWD",year:2018,rating:88},{name:"Ivan Perišić",pos:"MID",year:2018,rating:88},
+    {name:"Marcelo Brozović",pos:"MID",year:2018,rating:88},{name:"Danijel Subašić",pos:"GK",year:2018,rating:88},
+    {name:"Dejan Lovren",pos:"DEF",year:2018,rating:85},{name:"Robert Kovač",pos:"DEF",year:1998,rating:85},
+    {name:"Stipe Pletikosa",pos:"GK",year:2006,rating:85},{name:"Dario Šimić",pos:"DEF",year:1998,rating:84},
+  ],
+  Colombia: [
+    {name:"Carlos Valderrama",pos:"MID",year:1990,rating:92},{name:"James Rodríguez",pos:"MID",year:2014,rating:91},
+    {name:"Falcao",pos:"FWD",year:2014,rating:90},{name:"Faustino Asprilla",pos:"FWD",year:1994,rating:88},
+    {name:"Freddy Rincón",pos:"MID",year:1990,rating:89},{name:"Arnoldo Iguarán",pos:"FWD",year:1990,rating:85},
+    {name:"René Higuita",pos:"GK",year:1990,rating:86},{name:"Óscar Córdoba",pos:"GK",year:2002,rating:85},
+    {name:"Carlos Bacca",pos:"FWD",year:2014,rating:84},{name:"Iván Córdoba",pos:"DEF",year:1998,rating:84},
+    {name:"Mario Yepes",pos:"DEF",year:2014,rating:84},{name:"Edwin Cardona",pos:"MID",year:2018,rating:83},
+  ],
+  Morocco: [
+    {name:"Hakim Ziyech",pos:"MID",year:2022,rating:86},{name:"Achraf Hakimi",pos:"DEF",year:2022,rating:88},
+    {name:"Yassine Bounou",pos:"GK",year:2022,rating:88},{name:"Mehdi Benatia",pos:"DEF",year:2018,rating:85},
+    {name:"Youssef En-Nesyri",pos:"FWD",year:2022,rating:84},{name:"Mostafa Hadji",pos:"MID",year:1998,rating:85},
+    {name:"Azzedine Ounahi",pos:"MID",year:2022,rating:83},{name:"Romain Saïss",pos:"DEF",year:2022,rating:84},
+    {name:"Sofiane Boufal",pos:"MID",year:2022,rating:82},{name:"Noureddine Naybet",pos:"DEF",year:1998,rating:82},
+    {name:"Abdelhamid Sabiri",pos:"MID",year:2022,rating:82},
+  ],
+  Senegal: [
+    {name:"Sadio Mané",pos:"FWD",year:2018,rating:92},{name:"Kalidou Koulibaly",pos:"DEF",year:2022,rating:88},
+    {name:"Édouard Mendy",pos:"GK",year:2022,rating:87},{name:"El Hadji Diouf",pos:"FWD",year:2002,rating:87},
+    {name:"Idrissa Gueye",pos:"MID",year:2018,rating:85},{name:"Khalilou Fadiga",pos:"MID",year:2002,rating:84},
+    {name:"Henri Camara",pos:"FWD",year:2002,rating:84},{name:"Tony Sylva",pos:"GK",year:2002,rating:83},
+    {name:"Ferdinand Coly",pos:"DEF",year:2002,rating:82},{name:"Pape Bouba Diop",pos:"MID",year:2002,rating:82},
+  ],
+  Ghana: [
+    {name:"Abedi Pelé",pos:"MID",year:1994,rating:90},{name:"Michael Essien",pos:"MID",year:2006,rating:89},
+    {name:"Asamoah Gyan",pos:"FWD",year:2010,rating:87},{name:"Tony Yeboah",pos:"FWD",year:1994,rating:86},
+    {name:"Kwadwo Asamoah",pos:"MID",year:2014,rating:84},{name:"Richard Kingson",pos:"GK",year:2010,rating:83},
+    {name:"John Mensah",pos:"DEF",year:2010,rating:83},{name:"Sulley Muntari",pos:"MID",year:2010,rating:84},
+    {name:"John Pantsil",pos:"DEF",year:2006,rating:82},
+  ],
+  "Ivory Coast": [
+    {name:"Didier Drogba",pos:"FWD",year:2006,rating:90},{name:"Yaya Touré",pos:"MID",year:2010,rating:91},
+    {name:"Kolo Touré",pos:"DEF",year:2006,rating:85},{name:"Wilfried Bony",pos:"FWD",year:2014,rating:83},
+    {name:"Gervinho",pos:"FWD",year:2010,rating:83},{name:"Salomon Kalou",pos:"FWD",year:2010,rating:82},
+    {name:"Didier Zokora",pos:"MID",year:2006,rating:82},{name:"Cheick Tioté",pos:"MID",year:2010,rating:82},
+    {name:"Boubacar Barry",pos:"GK",year:2010,rating:81},{name:"Arthur Boka",pos:"DEF",year:2006,rating:82},
+  ],
+  Cameroon: [
+    {name:"Samuel Eto'o",pos:"FWD",year:2010,rating:93},{name:"Roger Milla",pos:"FWD",year:1990,rating:90},
+    {name:"Thomas N'Kono",pos:"GK",year:1982,rating:89},{name:"Patrick Mboma",pos:"FWD",year:1998,rating:87},
+    {name:"Marc-Vivien Foé",pos:"MID",year:2002,rating:86},{name:"Joseph-Antoine Bell",pos:"GK",year:1990,rating:86},
+    {name:"Rigobert Song",pos:"DEF",year:1998,rating:85},{name:"Geremi",pos:"MID",year:2002,rating:83},
+    {name:"Lauren",pos:"DEF",year:2002,rating:84},{name:"Benoît Assou-Ekotto",pos:"DEF",year:2010,rating:81},
+  ],
+  Denmark: [
+    {name:"Peter Schmeichel",pos:"GK",year:1998,rating:94},{name:"Michael Laudrup",pos:"MID",year:1986,rating:94},
+    {name:"Brian Laudrup",pos:"MID",year:1998,rating:91},{name:"Preben Elkjær",pos:"FWD",year:1986,rating:89},
+    {name:"Christian Eriksen",pos:"MID",year:2018,rating:89},{name:"Kasper Schmeichel",pos:"GK",year:2018,rating:87},
+    {name:"Jon Dahl Tomasson",pos:"FWD",year:1998,rating:86},{name:"Morten Olsen",pos:"DEF",year:1986,rating:86},
+    {name:"Thomas Helveg",pos:"DEF",year:1998,rating:84},{name:"Jesper Grønkjær",pos:"MID",year:2002,rating:83},
+  ],
+  Australia: [
+    {name:"Tim Cahill",pos:"MID",year:2006,rating:87},{name:"Harry Kewell",pos:"MID",year:2006,rating:86},
+    {name:"Mark Schwarzer",pos:"GK",year:2006,rating:85},{name:"Mark Viduka",pos:"FWD",year:2006,rating:85},
+    {name:"Mile Jedinak",pos:"MID",year:2014,rating:83},{name:"Matt Ryan",pos:"GK",year:2018,rating:83},
+    {name:"Mathew Leckie",pos:"MID",year:2022,rating:82},{name:"Brett Emerton",pos:"MID",year:2006,rating:82},
+    {name:"Lucas Neill",pos:"DEF",year:2006,rating:82},{name:"Craig Moore",pos:"DEF",year:2006,rating:82},
+  ],
+  Iran: [
+    {name:"Ali Daei",pos:"FWD",year:1998,rating:88},{name:"Ali Karimi",pos:"MID",year:2006,rating:87},
+    {name:"Mehdi Taremi",pos:"FWD",year:2022,rating:86},{name:"Ahmad Reza Abedzadeh",pos:"GK",year:1998,rating:84},
+    {name:"Sardar Azmoun",pos:"FWD",year:2018,rating:85},{name:"Mehdi Mahdavikia",pos:"MID",year:1998,rating:83},
+    {name:"Alireza Beiranvand",pos:"GK",year:2018,rating:83},{name:"Javad Nekounam",pos:"MID",year:2006,rating:83},
+    {name:"Ehsan Hajsafi",pos:"DEF",year:2014,rating:82},{name:"Masoud Shojaei",pos:"MID",year:2014,rating:82},
+  ],
+  Nigeria: [
+    {name:"Jay-Jay Okocha",pos:"MID",year:1994,rating:90},{name:"Rashidi Yekini",pos:"FWD",year:1994,rating:88},
+    {name:"Nwankwo Kanu",pos:"FWD",year:1998,rating:87},{name:"Finidi George",pos:"MID",year:1994,rating:86},
+    {name:"Vincent Enyeama",pos:"GK",year:2014,rating:86},{name:"Daniel Amokachi",pos:"FWD",year:1994,rating:84},
+    {name:"Emmanuel Amuneke",pos:"FWD",year:1994,rating:84},{name:"Peter Rufai",pos:"GK",year:1994,rating:84},
+    {name:"Taribo West",pos:"DEF",year:1998,rating:84},{name:"Joseph Yobo",pos:"DEF",year:2010,rating:83},
+  ],
+  Scotland: [
+    {name:"Kenny Dalglish",pos:"FWD",year:1974,rating:92},{name:"Denis Law",pos:"FWD",year:1966,rating:92},
+    {name:"Graeme Souness",pos:"MID",year:1982,rating:89},{name:"Jimmy Johnstone",pos:"MID",year:1974,rating:89},
+    {name:"Billy Bremner",pos:"MID",year:1974,rating:88},{name:"Alan Hansen",pos:"DEF",year:1982,rating:88},
+    {name:"Archie Gemmill",pos:"MID",year:1978,rating:87},{name:"Andy Goram",pos:"GK",year:1990,rating:86},
+    {name:"Joe Jordan",pos:"FWD",year:1978,rating:84},{name:"Jim Leighton",pos:"GK",year:1986,rating:84},
+    {name:"John McGinn",pos:"MID",year:2022,rating:83},{name:"David Weir",pos:"DEF",year:2002,rating:82},
+  ],
+  Czechia: [
+    {name:"Pavel Nedvěd",pos:"MID",year:1998,rating:94},{name:"Petr Čech",pos:"GK",year:2006,rating:92},
+    {name:"Tomáš Rosický",pos:"MID",year:2006,rating:88},{name:"Karel Poborský",pos:"MID",year:1996,rating:87},
+    {name:"Jan Koller",pos:"FWD",year:2006,rating:86},{name:"Milan Baroš",pos:"FWD",year:2006,rating:86},
+    {name:"Patrik Berger",pos:"MID",year:1998,rating:85},{name:"Vladimír Šmicer",pos:"MID",year:2006,rating:84},
+    {name:"Tomáš Ujfaluši",pos:"DEF",year:2006,rating:82},
+  ],
+  Chile: [
+    {name:"Alexis Sánchez",pos:"FWD",year:2010,rating:89},{name:"Arturo Vidal",pos:"MID",year:2010,rating:89},
+    {name:"Elías Figueroa",pos:"DEF",year:1974,rating:89},{name:"Marcelo Salas",pos:"FWD",year:1998,rating:88},
+    {name:"Claudio Bravo",pos:"GK",year:2014,rating:87},{name:"Gary Medel",pos:"DEF",year:2014,rating:86},
+    {name:"Carlos Caszely",pos:"FWD",year:1974,rating:85},{name:"Jorge Valdivia",pos:"MID",year:2010,rating:85},
+    {name:"Esteban Paredes",pos:"FWD",year:2014,rating:82},
+  ],
+  Paraguay: [
+    {name:"José Luis Chilavert",pos:"GK",year:1998,rating:89},{name:"Carlos Gamarra",pos:"DEF",year:1998,rating:85},
+    {name:"Roque Santa Cruz",pos:"FWD",year:2002,rating:83},{name:"Justo Villar",pos:"GK",year:2010,rating:83},
+    {name:"Óscar Cardozo",pos:"FWD",year:2010,rating:82},{name:"Roberto Acuña",pos:"MID",year:1998,rating:82},
+    {name:"Salvador Cabañas",pos:"FWD",year:2006,rating:82},{name:"Antolín Alcaraz",pos:"DEF",year:2010,rating:81},
+  ],
+  "South Africa": [
+    {name:"Lucas Radebe",pos:"DEF",year:1998,rating:85},{name:"Steven Pienaar",pos:"MID",year:2010,rating:82},
+    {name:"Itumeleng Khune",pos:"GK",year:2010,rating:82},{name:"Aaron Mokoena",pos:"DEF",year:2010,rating:82},
+    {name:"Shaun Bartlett",pos:"FWD",year:1998,rating:82},{name:"Phil Masinga",pos:"FWD",year:1998,rating:81},
+    {name:"Teko Modise",pos:"MID",year:2010,rating:81},{name:"Matthew Booth",pos:"DEF",year:2002,rating:80},
+  ],
+  "Saudi Arabia": [
+    {name:"Sami Al-Jaber",pos:"FWD",year:1994,rating:85},{name:"Saeed Al-Owairan",pos:"MID",year:1994,rating:84},
+    {name:"Mohamed Al-Deayea",pos:"GK",year:1994,rating:84},{name:"Yasser Al-Qahtani",pos:"FWD",year:2006,rating:83},
+    {name:"Salem Al-Dawsari",pos:"MID",year:2022,rating:82},{name:"Mohammed Al-Owais",pos:"GK",year:2022,rating:82},
+    {name:"Khalid Al-Muwallad",pos:"FWD",year:2018,rating:81},{name:"Ali Al-Bulayhi",pos:"DEF",year:2022,rating:80},
+  ],
+  Egypt: [
+    {name:"Mohamed Salah",pos:"FWD",year:2018,rating:93},{name:"Hossam Hassan",pos:"FWD",year:1990,rating:88},
+    {name:"Mohamed Aboutrika",pos:"MID",year:2010,rating:87},{name:"Ahmed Hassan",pos:"MID",year:1990,rating:84},
+    {name:"Essam El-Hadary",pos:"GK",year:2018,rating:83},{name:"Amr Zaki",pos:"FWD",year:2006,rating:82},
+    {name:"Hossam Ghaly",pos:"MID",year:2006,rating:81},{name:"Wael Gomaa",pos:"DEF",year:2006,rating:81},
+  ],
+  Norway: [
+    {name:"Martin Ødegaard",pos:"MID",year:2022,rating:88},{name:"Ole Gunnar Solskjær",pos:"FWD",year:1998,rating:87},
+    {name:"Tore André Flo",pos:"FWD",year:1998,rating:85},{name:"Ronny Johnsen",pos:"DEF",year:1998,rating:84},
+    {name:"John Arne Riise",pos:"DEF",year:2002,rating:83},{name:"Erik Thorstvedt",pos:"GK",year:1994,rating:83},
+    {name:"Øyvind Leonhardsen",pos:"MID",year:1994,rating:81},{name:"Stig Inge Bjørnebye",pos:"DEF",year:1998,rating:81},
+  ],
+  Algeria: [
+    {name:"Riyad Mahrez",pos:"MID",year:2014,rating:88},{name:"Lakhdar Belloumi",pos:"MID",year:1982,rating:87},
+    {name:"Rabah Madjer",pos:"MID",year:1982,rating:86},{name:"Islam Slimani",pos:"FWD",year:2014,rating:84},
+    {name:"Sofiane Feghouli",pos:"MID",year:2014,rating:83},{name:"Raïs M'Bolhi",pos:"GK",year:2014,rating:83},
+    {name:"Madjid Bougherra",pos:"DEF",year:2010,rating:83},{name:"Carl Medjani",pos:"MID",year:2014,rating:81},
+  ],
+  Ecuador: [
+    {name:"Enner Valencia",pos:"FWD",year:2022,rating:84},{name:"Moisés Caicedo",pos:"MID",year:2022,rating:84},
+    {name:"Alex Aguinaga",pos:"MID",year:2002,rating:84},{name:"Agustín Delgado",pos:"FWD",year:2002,rating:83},
+    {name:"Ulises de la Cruz",pos:"DEF",year:2002,rating:83},{name:"Édison Méndez",pos:"MID",year:2006,rating:82},
+    {name:"Alexander Domínguez",pos:"GK",year:2014,rating:82},{name:"Carlos Tenorio",pos:"FWD",year:2006,rating:81},
+  ],
+  Tunisia: [
+    {name:"Wahbi Khazri",pos:"MID",year:2018,rating:82},{name:"Issam Jebali",pos:"FWD",year:2022,rating:82},
+    {name:"Hatem Trabelsi",pos:"DEF",year:2002,rating:82},{name:"Youssef Msakni",pos:"MID",year:2018,rating:82},
+    {name:"Tarek Dhiab",pos:"MID",year:1978,rating:83},{name:"Riadh Bouazizi",pos:"MID",year:2002,rating:81},
+    {name:"Faouzi Ghoulam",pos:"DEF",year:2018,rating:82},{name:"Aymen Mathlouthi",pos:"GK",year:2018,rating:81},
+  ],
+  "Bosnia-Herzegovina": [
+    {name:"Edin Džeko",pos:"FWD",year:2014,rating:88},{name:"Miralem Pjanić",pos:"MID",year:2014,rating:89},
+    {name:"Asmir Begović",pos:"GK",year:2014,rating:85},{name:"Vedad Ibišević",pos:"FWD",year:2014,rating:83},
+    {name:"Sead Kolašinac",pos:"DEF",year:2014,rating:83},{name:"Muhamed Bešić",pos:"MID",year:2014,rating:82},
+    {name:"Senad Lulić",pos:"MID",year:2014,rating:82},{name:"Emir Spahić",pos:"DEF",year:2014,rating:81},
+  ],
+  "Türkiye": [
+    {name:"Hakan Çalhanoğlu",pos:"MID",year:2022,rating:88},{name:"Hakan Şükür",pos:"FWD",year:2002,rating:88},
+    {name:"Rüştü Reçber",pos:"GK",year:2002,rating:88},{name:"İlhan Mansız",pos:"FWD",year:2002,rating:85},
+    {name:"Emre Belözoğlu",pos:"MID",year:2002,rating:85},{name:"Tugay Kerimoğlu",pos:"MID",year:2002,rating:83},
+    {name:"Nihat Kahveci",pos:"FWD",year:2006,rating:84},{name:"Alpay Özalan",pos:"DEF",year:2002,rating:83},
+  ],
+  Panama: [
+    {name:"Blas Pérez",pos:"FWD",year:2018,rating:82},{name:"Román Torres",pos:"DEF",year:2018,rating:82},
+    {name:"Jaime Penedo",pos:"GK",year:2018,rating:82},{name:"Gabriel Torres",pos:"FWD",year:2018,rating:81},
+    {name:"Armando Cooper",pos:"MID",year:2018,rating:80},{name:"Rolando Blackburn",pos:"FWD",year:2026,rating:80},
+    {name:"César Yanis",pos:"MID",year:2018,rating:79},{name:"Erick Davis",pos:"DEF",year:2018,rating:80},
+  ],
+  Qatar: [
+    {name:"Almoez Ali",pos:"FWD",year:2022,rating:83},{name:"Akram Afif",pos:"MID",year:2022,rating:83},
+    {name:"Hassan Al-Haydos",pos:"MID",year:2022,rating:82},{name:"Mohammed Muntari",pos:"FWD",year:2022,rating:81},
+    {name:"Saad Al-Sheeb",pos:"GK",year:2022,rating:81},{name:"Karim Boudiaf",pos:"MID",year:2022,rating:80},
+    {name:"Pedro Miguel",pos:"DEF",year:2022,rating:80},{name:"Bassam Al-Rawi",pos:"DEF",year:2022,rating:79},
+  ],
+  "Congo DR": [
+    {name:"Cédric Bakambu",pos:"FWD",year:2026,rating:82},{name:"Chancel Mbemba",pos:"DEF",year:2026,rating:82},
+    {name:"Shabani Nonda",pos:"FWD",year:2006,rating:84},{name:"Kembo Uba Kembo",pos:"FWD",year:1974,rating:82},
+    {name:"Kilasu Massamba",pos:"MID",year:1974,rating:81},{name:"Kidumu Mantantu",pos:"MID",year:1974,rating:80},
+    {name:"Nico Nkoy",pos:"DEF",year:1974,rating:79},{name:"Mwanza Mukendi",pos:"GK",year:1974,rating:79},
+  ],
+  Haiti: [
+    {name:"Emmanuel Sanon",pos:"FWD",year:1974,rating:84},{name:"Manno Sanon",pos:"FWD",year:1974,rating:82},
+    {name:"Frantzdy Pierrot",pos:"FWD",year:2026,rating:80},{name:"Judelin Aveska",pos:"MID",year:2026,rating:80},
+    {name:"Antonio Roberson",pos:"GK",year:1974,rating:81},{name:"Jean-Claude Larrieu",pos:"MID",year:1974,rating:79},
+    {name:"Sévère Pierre",pos:"DEF",year:1974,rating:79},{name:"Richard Pierre",pos:"MID",year:1974,rating:79},
+  ],
+  Iraq: [
+    {name:"Ahmed Radhi",pos:"FWD",year:1986,rating:83},{name:"Ali Adnan",pos:"DEF",year:2026,rating:82},
+    {name:"Amjad Attwan",pos:"MID",year:2026,rating:80},{name:"Aímen Hussein",pos:"FWD",year:2026,rating:80},
+    {name:"Sharar Haydar",pos:"MID",year:1986,rating:80},{name:"Qahtan Chatir",pos:"GK",year:1986,rating:79},
+    {name:"Jalal Hassan",pos:"GK",year:2026,rating:79},{name:"Basil Gorgis",pos:"DEF",year:1986,rating:79},
+  ],
+  "New Zealand": [
+    {name:"Chris Wood",pos:"FWD",year:2018,rating:84},{name:"Wynton Rufer",pos:"FWD",year:1982,rating:84},
+    {name:"Ryan Nelsen",pos:"DEF",year:2010,rating:83},{name:"Shane Smeltz",pos:"FWD",year:2010,rating:82},
+    {name:"Mark Paston",pos:"GK",year:2010,rating:81},{name:"Ivan Vicelich",pos:"DEF",year:2010,rating:80},
+    {name:"Tommy Smith",pos:"DEF",year:2010,rating:80},{name:"Leo Bertos",pos:"MID",year:2010,rating:80},
+  ],
+  Jordan: [
+    {name:"Mousa Tamari",pos:"MID",year:2022,rating:81},{name:"Baha Faisal",pos:"FWD",year:2026,rating:80},
+    {name:"Yazan Al-Naimat",pos:"FWD",year:2026,rating:80},{name:"Ahmad Qasim",pos:"MID",year:2026,rating:79},
+    {name:"Ahmad Saleh",pos:"GK",year:2026,rating:79},{name:"Nour Mansour",pos:"MID",year:2026,rating:79},
+    {name:"Anas Bani-Yaseen",pos:"DEF",year:2026,rating:79},{name:"Ali Al-Hassan",pos:"DEF",year:2026,rating:79},
+  ],
+  "Cape Verde": [
+    {name:"Ryan Mendes",pos:"MID",year:2022,rating:82},{name:"Garry Rodrigues",pos:"MID",year:2022,rating:82},
+    {name:"Djaniny",pos:"FWD",year:2022,rating:82},{name:"Stopira",pos:"DEF",year:2022,rating:80},
+    {name:"Marco Soares",pos:"MID",year:2022,rating:80},{name:"Vozinha",pos:"GK",year:2022,rating:80},
+    {name:"Steven Fortes",pos:"DEF",year:2022,rating:80},{name:"Jeffry Fortes",pos:"DEF",year:2022,rating:79},
+  ],
+  Uzbekistan: [
+    {name:"Eldor Shomurodov",pos:"FWD",year:2026,rating:82},{name:"Jaloliddin Masharipov",pos:"MID",year:2026,rating:80},
+    {name:"Dostonbek Khamdamov",pos:"FWD",year:2026,rating:81},{name:"Otabek Shukurov",pos:"GK",year:2026,rating:79},
+    {name:"Timur Kapadze",pos:"MID",year:2014,rating:80},{name:"Akbar Djaksybekov",pos:"DEF",year:2026,rating:79},
+    {name:"Jasur Askarov",pos:"DEF",year:2026,rating:79},{name:"Sanjar Tursunov",pos:"MID",year:2014,rating:79},
+  ],
+  "Curaçao": [
+    {name:"Leandro Bacuna",pos:"MID",year:2026,rating:81},{name:"Rangelo Janga",pos:"FWD",year:2026,rating:80},
+    {name:"Cuco Martina",pos:"DEF",year:2026,rating:80},{name:"Elson Hooi",pos:"MID",year:2026,rating:80},
+    {name:"Quentin Bommerts",pos:"GK",year:2026,rating:79},{name:"Sheldon Bateau",pos:"DEF",year:2026,rating:80},
+    {name:"Chedric Bazoer",pos:"MID",year:2026,rating:80},{name:"Juriën Timber",pos:"DEF",year:2026,rating:84},
+  ],
+};
+
 
 const ESPN_TEAM_IDS = {
   Algeria:"624", Argentina:"202", Australia:"628", Austria:"474",
@@ -1515,10 +1982,170 @@ function FixturesTab({ predictions, onPredictOpen, onViewDetails, fetchError }) 
 }
 
 // ─── TAB: TEAMS (Groups + Teams combined) ────────────────────────────────────
-function TeamsTab({ selectedTeam, onTeamOpen, dbStandings }) {
-  const [subTab, setSubTab] = useState("group");
+const KNOCKOUT_ORDER = ["round-of-32", "round-of-16", "quarterfinals", "semifinals", "3rd-place-match", "final"];
+const KNOCKOUT_LABELS = {
+  "round-of-32":     "ROUND OF 32",
+  "round-of-16":     "ROUND OF 16",
+  "quarterfinals":   "QUARTERFINALS",
+  "semifinals":      "SEMI-FINALS",
+  "3rd-place-match": "3RD PLACE",
+  "final":           "FINAL",
+};
+
+const KO_TREE_STAGES = ["round-of-32", "round-of-16", "quarterfinals", "semifinals", "final"];
+const KO_TREE_LABELS = { "round-of-32": "R32", "round-of-16": "R16", "quarterfinals": "QF", "semifinals": "SF", "final": "FINAL" };
+
+function KnockoutTreeView({ fixtures, onTeamOpen }) {
+  const CARD_H = 54;
+  const BLOCK_H = 64;
+  const CARD_W = 156;
+  const CONN_W = 32;
+  const COL_W = CARD_W + CONN_W;
+  const LABEL_H = 26;
+
+  const rounds = KO_TREE_STAGES
+    .map(s => ({ stage: s, label: KO_TREE_LABELS[s], matches: fixtures.filter(f => f.stage === s).sort((a, b) => new Date(a.isoDate) - new Date(b.isoDate)) }))
+    .filter(r => r.matches.length > 0);
+
+  const thirdPlace = fixtures.filter(f => f.stage === "3rd-place-match");
+
+  if (rounds.length === 0) return (
+    <div style={{ textAlign: "center", padding: "48px 16px" }}>
+      <div style={{ fontSize: 36, marginBottom: 12 }}>⏳</div>
+      <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 18, color: T.white, marginBottom: 6 }}>Knockout stage pending</div>
+      <div style={{ fontSize: 13, color: T.gray, lineHeight: 1.6 }}>Matches will appear once the group stage completes</div>
+    </div>
+  );
+
+  const maxMatches = Math.max(...rounds.map(r => r.matches.length));
+  const TOTAL_H = maxMatches * BLOCK_H + LABEL_H;
+  const TOTAL_W = rounds.length * COL_W + CARD_W;
+
+  const cy = (rIdx, mIdx) => {
+    const count = rounds[rIdx].matches.length;
+    const slotH = (maxMatches * BLOCK_H) / count;
+    return LABEL_H + mIdx * slotH + slotH / 2;
+  };
+
+  const connectors = [];
+  rounds.forEach((round, rIdx) => {
+    if (rIdx >= rounds.length - 1) return;
+    round.matches.forEach((_, mIdx) => {
+      const nextIdx = Math.floor(mIdx / 2);
+      if (nextIdx >= rounds[rIdx + 1].matches.length) return;
+      const srcX = rIdx * COL_W + CARD_W;
+      const srcY = cy(rIdx, mIdx);
+      const dstX = (rIdx + 1) * COL_W;
+      const dstY = cy(rIdx + 1, nextIdx);
+      const midX = srcX + CONN_W / 2;
+      connectors.push({ d: `M ${srcX} ${srcY} H ${midX} V ${dstY} H ${dstX}` });
+    });
+  });
+
+  const MatchCard = ({ f, wide }) => {
+    const home = getTeam(f.home);
+    const away = getTeam(f.away);
+    const hasScore = f.status !== "Upcoming";
+    const isLive = f.status === "Live";
+    const homeWin = hasScore && f.homeScore > f.awayScore;
+    const awayWin = hasScore && f.awayScore > f.homeScore;
+    const TeamRow = ({ flag, name, score, isWin }) => (
+      <div onClick={() => name && onTeamOpen(name)} style={{
+        display: "flex", alignItems: "center", gap: 5, padding: "5px 7px",
+        background: isWin ? T.gold + "18" : "transparent",
+        borderLeft: `3px solid ${isWin ? T.gold : "transparent"}`,
+        cursor: name ? "pointer" : "default",
+      }}>
+        <span style={{ fontSize: 12, flexShrink: 0 }}>{flag || "🏴"}</span>
+        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11, color: isWin ? T.gold : T.white, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name || "TBD"}</span>
+        {hasScore && <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 13, color: isLive ? "#E63946" : T.white, flexShrink: 0 }}>{score}</span>}
+        {isLive && <span style={{ fontSize: 7, color: "#E63946", flexShrink: 0 }}>●</span>}
+      </div>
+    );
+    return (
+      <div style={{ background: T.navyMid, border: `1px solid ${hasScore ? T.gold + "44" : T.navyLight}`, borderRadius: 8, overflow: "hidden", width: wide ? CARD_W + CONN_W - 4 : CARD_W }}>
+        <TeamRow flag={home?.flag} name={f.home} score={f.homeScore} isWin={homeWin} />
+        <div style={{ height: 1, background: T.navyLight }} />
+        <TeamRow flag={away?.flag} name={f.away} score={f.awayScore} isWin={awayWin} />
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", paddingBottom: 8 }}>
+        <div style={{ position: "relative", width: TOTAL_W, height: TOTAL_H }}>
+          <svg style={{ position: "absolute", top: 0, left: 0, width: TOTAL_W, height: TOTAL_H, pointerEvents: "none", overflow: "visible" }}>
+            {connectors.map((c, i) => (
+              <path key={i} d={c.d} fill="none" stroke="rgba(90,120,160,0.45)" strokeWidth="1.5" strokeLinecap="round" />
+            ))}
+          </svg>
+
+          {rounds.map((round, rIdx) => {
+            const count = round.matches.length;
+            const slotH = (maxMatches * BLOCK_H) / count;
+            const x = rIdx * COL_W;
+            const isLast = rIdx === rounds.length - 1;
+            return (
+              <div key={round.stage}>
+                <div style={{ position: "absolute", left: x, top: 0, width: isLast ? CARD_W + CONN_W : CARD_W, textAlign: "center", fontFamily: "'Barlow Condensed', sans-serif", fontSize: 10, letterSpacing: 1.5, color: T.gold, fontWeight: 800, lineHeight: `${LABEL_H}px` }}>
+                  {round.label}
+                </div>
+                {round.matches.map((f, mIdx) => {
+                  const topY = cy(rIdx, mIdx) - CARD_H / 2;
+                  return (
+                    <div key={f.id} style={{ position: "absolute", left: x, top: topY }}>
+                      <MatchCard f={f} wide={isLast} />
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {thirdPlace.length > 0 && (
+        <div style={{ marginTop: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", marginBottom: 10 }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 12, letterSpacing: 2, color: T.gray }}>3RD PLACE</div>
+            <div style={{ flex: 1, height: 1, background: T.navyLight, marginLeft: 10 }} />
+          </div>
+          {thirdPlace.map(f => {
+            const home = getTeam(f.home);
+            const away = getTeam(f.away);
+            const hasScore = f.status !== "Upcoming";
+            return (
+              <div key={f.id} style={{ background: T.navyMid, border: `1px solid ${T.navyLight}`, borderRadius: 10, padding: 12, display: "flex", alignItems: "center", gap: 8 }}>
+                <div onClick={() => onTeamOpen(f.home)} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-start", cursor: "pointer" }}>
+                  <span style={{ fontSize: 26 }}>{home?.flag || "🏴"}</span>
+                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: T.white, marginTop: 4 }}>{f.home || "TBD"}</span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: 60 }}>
+                  {hasScore
+                    ? <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: T.white }}>{f.homeScore}–{f.awayScore}</span>
+                    : <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 14, color: T.gray }}>VS</span>}
+                  <span style={{ fontSize: 10, color: T.gray, marginTop: 2 }}>{f.date}</span>
+                </div>
+                <div onClick={() => onTeamOpen(f.away)} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-end", cursor: "pointer" }}>
+                  <span style={{ fontSize: 26 }}>{away?.flag || "🏴"}</span>
+                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: T.white, marginTop: 4, textAlign: "right" }}>{f.away || "TBD"}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TeamsTab({ selectedTeam, onTeamOpen, dbStandings, dataVersion: _dv }) {
+  const [subTab, setSubTab] = useState("knockout");
   const [expanded, setExpanded] = useState(null);
   const [search, setSearch] = useState("");
+
+  const knockoutFixtures = FIXTURES.filter(f => f.stage && f.stage !== "group-stage");
 
   if (selectedTeam) {
     return <TeamDetail name={selectedTeam} onBack={() => onTeamOpen(null)} />;
@@ -1553,7 +2180,7 @@ function TeamsTab({ selectedTeam, onTeamOpen, dbStandings }) {
 
       {/* Sub-tab toggle */}
       <div style={{ display: "flex", marginBottom: 16, background: T.navyLight, borderRadius: 10, padding: 3 }}>
-        {[["group", "📊  GROUPS"], ["team", "👕  TEAMS"]].map(([id, label]) => (
+        {[["knockout", "⚔️  KNOCKOUT"], ["group", "📊  GROUPS"], ["team", "👕  TEAMS"]].map(([id, label]) => (
           <button key={id} onClick={() => setSubTab(id)} style={{
             flex: 1, padding: "8px", border: "none", borderRadius: 8, cursor: "pointer",
             background: subTab === id ? T.gold : "transparent",
@@ -1563,6 +2190,11 @@ function TeamsTab({ selectedTeam, onTeamOpen, dbStandings }) {
           }}>{label}</button>
         ))}
       </div>
+
+      {/* Knockout sub-tab */}
+      {subTab === "knockout" && (
+        <KnockoutTreeView fixtures={knockoutFixtures} onTeamOpen={onTeamOpen} />
+      )}
 
       {/* Groups sub-tab */}
       {subTab === "group" && (
@@ -2199,14 +2831,215 @@ function BracketMatchCard({ match, standings, picks, groupPosPicks, onPickWinner
   );
 }
 
+// ── CIRCLE BRACKET ──
+const UNIT_DEG = 11.25;
+const ANGLE_COEFFS = [
+  [2,  0,    1,    0.5 ],  // R32
+  [4,  0.5,  2.5,  1.5 ],  // R16
+  [8,  1.5,  5.5,  3.5 ],  // QF
+  [16, 3.5,  11.5, 7.5 ],  // SF
+];
+
+function slotAngleDeg(roundIdx, matchIdx, slot) {
+  const [step, h, a, m] = ANGLE_COEFFS[roundIdx];
+  const off = slot === "home" ? h : slot === "away" ? a : m;
+  return -90 + (step * matchIdx + off) * UNIT_DEG;
+}
+
+function toXY(cx, cy, r, angleDeg) {
+  const rad = angleDeg * Math.PI / 180;
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+
+function CircleBracket({ standings, picks, groupPosPicks, onPickWinner, onPickSlot }) {
+  const containerRef = useRef(null);
+  const [sz, setSz] = useState(480);
+
+  useEffect(() => {
+    const update = () => {
+      if (containerRef.current) setSz(Math.min(containerRef.current.clientWidth, 580));
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const cx = sz / 2, cy = sz / 2;
+  const rr = [cx * 0.93, cx * 0.73, cx * 0.53, cx * 0.34, cx * 0.20];
+  const SLOT_SZ = Math.max(26, Math.floor(sz * 0.062));
+  const half = SLOT_SZ / 2;
+  const fl = Math.max(13, Math.floor(sz * 0.038));
+
+  const r32Round = BRACKET_ROUNDS[0];
+  const r16Round = BRACKET_ROUNDS[1];
+  const qfRound  = BRACKET_ROUNDS[2];
+  const sfRound  = BRACKET_ROUNDS[3];
+  const finalMatch = BRACKET_ROUNDS[4].matches[0];
+  const finalWinner = picks["FINAL_W"] || null;
+
+  // Connector lines
+  const lines = [];
+  BRACKET_ROUNDS.slice(0, 4).forEach((round, rIdx) => {
+    round.matches.forEach((match, mIdx) => {
+      const r = rr[rIdx];
+      const homeAng = slotAngleDeg(rIdx, mIdx, "home");
+      const awayAng = slotAngleDeg(rIdx, mIdx, "away");
+      const midAng  = slotAngleDeg(rIdx, mIdx, "mid");
+      const homeP = toXY(cx, cy, r, homeAng);
+      const awayP = toXY(cx, cy, r, awayAng);
+      const midP  = toXY(cx, cy, r, midAng);
+      const active = !!picks[match.id + "_W"];
+
+      lines.push({ x1: homeP.x, y1: homeP.y, x2: midP.x, y2: midP.y, active });
+      lines.push({ x1: awayP.x, y1: awayP.y, x2: midP.x, y2: midP.y, active });
+
+      if (rIdx < 3 && match.nextMatch) {
+        const nextRound = BRACKET_ROUNDS[rIdx + 1];
+        const nextIdx = nextRound.matches.findIndex(m => m.id === match.nextMatch);
+        if (nextIdx >= 0) {
+          const nextSlotKey = match.nextSlot === "A" ? "home" : "away";
+          const nextAng = slotAngleDeg(rIdx + 1, nextIdx, nextSlotKey);
+          const innerP = toXY(cx, cy, rr[rIdx + 1], nextAng);
+          lines.push({ x1: midP.x, y1: midP.y, x2: innerP.x, y2: innerP.y, active });
+        }
+      }
+      // SF → FINAL stem (radial, same angle as SF mid)
+      if (rIdx === 3) {
+        const innerP = toXY(cx, cy, rr[4], midAng);
+        lines.push({ x1: midP.x, y1: midP.y, x2: innerP.x, y2: innerP.y, active });
+      }
+    });
+  });
+
+  // FINAL → center lines
+  sfRound.matches.forEach((_, sfIdx) => {
+    const sfMidAng = slotAngleDeg(3, sfIdx, "mid");
+    const finalSlotP = toXY(cx, cy, rr[4], sfMidAng);
+    lines.push({ x1: finalSlotP.x, y1: finalSlotP.y, x2: cx, y2: cy, active: !!finalWinner });
+  });
+
+  // Slot buttons
+  const slots = [];
+  BRACKET_ROUNDS.slice(0, 4).forEach((round, rIdx) => {
+    round.matches.forEach((match, mIdx) => {
+      ["home", "away"].forEach(slotKey => {
+        const slotDef = match[slotKey];
+        const otherDef = slotKey === "home" ? match.away : match.home;
+        const team  = resolveSlot(slotDef, standings, picks, groupPosPicks, match.id);
+        const other = resolveSlot(otherDef, standings, picks, groupPosPicks, match.id);
+        const winner = picks[match.id + "_W"] || null;
+        const t = team ? getTeam(team) : null;
+        const ang = slotAngleDeg(rIdx, mIdx, slotKey);
+        const { x, y } = toXY(cx, cy, rr[rIdx], ang);
+        const isW = winner === team && !!team;
+        const isGroupSlot = !!(slotDef && !slotDef.winnerOf);
+        const canPick = !!(team && other);
+        const clickable = (canPick && !!team) || isGroupSlot;
+        const handleClick = () => {
+          if (canPick && team) onPickWinner(match, team);
+          else if (isGroupSlot) onPickSlot(match, slotDef);
+        };
+        slots.push({ key: `${match.id}_${slotKey}`, x: x - half, y: y - half, team, t, isW, isGroupSlot, clickable, isEmpty: !team && !isGroupSlot, onClick: clickable ? handleClick : undefined });
+      });
+    });
+  });
+
+  // FINAL home + away slots at SF mid angles on rr[4]
+  sfRound.matches.forEach((_, sfIdx) => {
+    const sfMidAng = slotAngleDeg(3, sfIdx, "mid");
+    const { x, y } = toXY(cx, cy, rr[4], sfMidAng);
+    const slotDef = sfIdx === 0 ? finalMatch.home : finalMatch.away;
+    const otherDef = sfIdx === 0 ? finalMatch.away : finalMatch.home;
+    const team  = resolveSlot(slotDef, standings, picks, groupPosPicks, finalMatch.id);
+    const other = resolveSlot(otherDef, standings, picks, groupPosPicks, finalMatch.id);
+    const t = team ? getTeam(team) : null;
+    const isW = finalWinner === team && !!team;
+    const canPick = !!(team && other);
+    const handleClick = () => { if (canPick && team) onPickWinner(finalMatch, team); };
+    slots.push({ key: `FINAL_${sfIdx}`, x: x - half, y: y - half, team, t, isW, isGroupSlot: false, clickable: canPick && !!team, isEmpty: !team, onClick: canPick && team ? handleClick : undefined });
+  });
+
+  const champion = finalWinner ? getTeam(finalWinner) : null;
+
+  return (
+    <div ref={containerRef} style={{ width: "100%" }}>
+      <div style={{ position: "relative", width: sz, height: sz, margin: "0 auto" }}>
+        {/* Dashed rings */}
+        {rr.slice(0, 4).map((r, i) => (
+          <div key={i} style={{ position: "absolute", left: cx - r, top: cy - r, width: r * 2, height: r * 2, borderRadius: "50%", border: `1px dashed ${T.grayDark}55`, pointerEvents: "none" }} />
+        ))}
+
+        {/* SVG connectors */}
+        <svg style={{ position: "absolute", top: 0, left: 0, width: sz, height: sz, pointerEvents: "none", overflow: "visible" }}>
+          {lines.map((l, i) => (
+            <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
+              stroke={l.active ? T.gold + "cc" : T.grayDark + "99"}
+              strokeWidth={l.active ? 1.8 : 1.1}
+              strokeLinecap="round"
+            />
+          ))}
+        </svg>
+
+        {/* Slot buttons */}
+        {slots.map(s => (
+          <div key={s.key} onClick={s.onClick} style={{
+            position: "absolute", left: s.x, top: s.y,
+            width: SLOT_SZ, height: SLOT_SZ, borderRadius: "50%",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: fl, lineHeight: 1,
+            cursor: s.clickable ? "pointer" : "default",
+            background: s.isW ? T.gold + "33" : s.isGroupSlot ? T.gold + "1a" : s.isEmpty ? T.navyMid : T.navyLight,
+            border: `${s.isW ? 2 : 1.5}px solid ${s.isW ? T.gold : s.isGroupSlot ? T.gold + "77" : T.grayDark + "99"}`,
+            boxSizing: "border-box", zIndex: 2, userSelect: "none",
+            transition: "transform 0.1s, border-color 0.1s",
+          }}
+            onMouseEnter={s.clickable ? e => { e.currentTarget.style.transform = "scale(1.18)"; } : undefined}
+            onMouseLeave={s.clickable ? e => { e.currentTarget.style.transform = "scale(1)"; } : undefined}
+          >
+            {s.t ? s.t.flag : s.isGroupSlot ? <span style={{ fontSize: fl * 0.65, color: T.gold, fontWeight: 900, fontFamily: "'Barlow Condensed', sans-serif" }}>+</span> : <span style={{ fontSize: fl * 0.55, color: T.grayDark }}>?</span>}
+          </div>
+        ))}
+
+        {/* Center champion circle */}
+        <div style={{
+          position: "absolute", left: cx - rr[4], top: cy - rr[4],
+          width: rr[4] * 2, height: rr[4] * 2, borderRadius: "50%",
+          background: champion ? T.gold + "22" : T.navyMid,
+          border: `2px solid ${champion ? T.gold + "bb" : T.grayDark + "55"}`,
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          zIndex: 3, pointerEvents: "none",
+        }}>
+          {champion ? (
+            <>
+              <div style={{ fontSize: rr[4] * 0.52, lineHeight: 1 }}>{champion.flag}</div>
+              <div style={{ fontSize: 9, marginTop: 2 }}>🏆</div>
+            </>
+          ) : (
+            <div style={{ fontSize: 9, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.5 }}>?</div>
+          )}
+        </div>
+
+        {/* Round labels at top of each ring */}
+        {[["R32", rr[0]], ["R16", rr[1]], ["QF", rr[2]], ["SF", rr[3]]].map(([label, r]) => {
+          const p = toXY(cx, cy, r, -90);
+          return (
+            <div key={label} style={{ position: "absolute", left: p.x - 16, top: p.y - 18, width: 32, textAlign: "center", fontSize: 8, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, color: T.gray, opacity: 0.65, pointerEvents: "none" }}>{label}</div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ── BRACKET TAB ──
 function BracketTab({ user, theme }) {
   const [picks, setPicks] = useState(() => ls.get("bracket_v6", {}));
   const [groupPosPicks, setGroupPosPicks] = useState(() => ls.get("gpp_v1", {}));
   const [standings, setStandings] = useState([]);
   const [slotModal, setSlotModal] = useState(null);
-  const [viewMode, setViewMode] = useState("tree");
+  const [viewMode, setViewMode] = useState("circle");
   const [isCapturing, setIsCapturing] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
   const bracketRef = useRef(null);
 
   useEffect(() => {
@@ -2316,13 +3149,13 @@ function BracketTab({ user, theme }) {
           <button onClick={handleShare} disabled={isCapturing} style={{ background: theme === "dark" ? "#c8f135" : "#1a6b4a", color: theme === "dark" ? "#0d1b2a" : "#ffffff", border: "none", padding: "6px 14px", borderRadius: 8, cursor: isCapturing ? "default" : "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, opacity: isCapturing ? 0.7 : 1, display: "flex", alignItems: "center", gap: 5 }}>
             <span style={{ fontSize: 14 }}>↑</span>{isCapturing ? "Capturing…" : "SHARE"}
           </button>
-          <button onClick={resetAll} style={{ background: "var(--bk-surface)", border: "1px solid var(--bk-border-empty)", color: "var(--bk-text-secondary)", padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12 }}>RESET</button>
+          <button onClick={() => setConfirmReset(true)} style={{ background: "var(--bk-surface)", border: "1px solid var(--bk-border-empty)", color: "var(--bk-text-secondary)", padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12 }}>RESET</button>
         </div>
       </div>
 
       <div style={{ display: "flex", marginBottom: 14, background: "var(--bk-surface)", border: "1px solid var(--bk-border-empty)", borderRadius: 8, padding: 3, gap: 3 }}>
-        {[["tree", "⟶  TREE VIEW"], ["list", "☰  LIST VIEW"]].map(([mode, label]) => (
-          <button key={mode} onClick={() => setViewMode(mode)} style={{ flex: 1, padding: "7px", border: "none", borderRadius: 6, cursor: "pointer", background: viewMode === mode ? "var(--bk-border-active)" : "transparent", color: viewMode === mode ? "#ffffff" : "var(--bk-text-secondary)", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 13, transition: "all 0.15s" }}>{label}</button>
+        {[["circle", "◎  CIRCLE"], ["tree", "⟶  TREE"], ["list", "☰  LIST"]].map(([mode, label]) => (
+          <button key={mode} onClick={() => setViewMode(mode)} style={{ flex: 1, padding: "7px", border: "none", borderRadius: 6, cursor: "pointer", background: viewMode === mode ? "var(--bk-border-active)" : "transparent", color: viewMode === mode ? "#ffffff" : "var(--bk-text-secondary)", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 12, transition: "all 0.15s" }}>{label}</button>
         ))}
       </div>
 
@@ -2330,7 +3163,9 @@ function BracketTab({ user, theme }) {
         💡 Tap a <span style={{ color: "var(--bk-accent)", fontWeight: 700 }}>+ slot</span> to predict who qualifies from each group. Once both teams are set, tap the card to pick the winner.
       </div>
 
-      {viewMode === "tree"
+      {viewMode === "circle"
+        ? <CircleBracket standings={standings} picks={picks} groupPosPicks={groupPosPicks} onPickWinner={handlePickWinner} onPickSlot={handlePickSlot} />
+        : viewMode === "tree"
         ? <BracketTreeView standings={standings} picks={picks} groupPosPicks={groupPosPicks} onPickWinner={handlePickWinner} onPickSlot={handlePickSlot} />
         : BRACKET_ROUNDS.map(round => (
             <div key={round.id} style={{ marginBottom: 24 }}>
@@ -2355,6 +3190,18 @@ function BracketTab({ user, theme }) {
 
       {slotModal && (
         <GroupSlotPickerModal slotDef={slotModal.slotDef} matchId={slotModal.match.id} currentPick={slotModal.current} pickKey={slotModal.key} allPicks={groupPosPicks} onPick={handleSlotSelect} onClose={() => setSlotModal(null)} />
+      )}
+
+      {confirmReset && (
+        <ConfirmModal
+          icon="🗑️"
+          title="Reset Bracket?"
+          message="All your bracket picks will be cleared. This cannot be undone."
+          confirmLabel="RESET"
+          confirmDanger={true}
+          onConfirm={() => { resetAll(); setConfirmReset(false); }}
+          onCancel={() => setConfirmReset(false)}
+        />
       )}
     </div>
   );
@@ -2801,7 +3648,7 @@ function LeaderboardTab() {
 // ─── STATS DATA ──────────────────────────────────────────────────────────────
 
 // ─── TAB: MORE ───────────────────────────────────────────────────────────────
-function MoreTab({ user, onSignIn, onChangeTeam }) {
+function MoreTab({ user, onSignIn, onChangeTeam, onConfirmModal }) {
   const [section, setSection] = useState("stats");
   const [statTab, setStatTab] = useState("goals");
   const [showChangePwd, setShowChangePwd] = useState(false);
@@ -2926,7 +3773,14 @@ function MoreTab({ user, onSignIn, onChangeTeam }) {
             )}
 
             {/* Sign out */}
-            <div onClick={() => supabase.auth.signOut()} style={{
+            <div onClick={() => onConfirmModal({
+              icon: "🚪",
+              title: "Sign Out?",
+              message: "You'll need to sign in again to access your predictions and leaderboard.",
+              confirmLabel: "SIGN OUT",
+              confirmDanger: true,
+              onConfirm: async () => { await supabase.auth.signOut(); onConfirmModal(null); },
+            })} style={{
               background: T.red + "18", borderRadius: 12, padding: "14px 16px",
               border: `1px solid ${T.red}44`, marginTop: 4,
               display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
@@ -3046,6 +3900,431 @@ function MoreTab({ user, onSignIn, onChangeTeam }) {
   );
 }
 
+// ─── TAB: WC XI ──────────────────────────────────────────────────────────────
+function WcXiTab() {
+  const FORMATIONS = ["4-2-3-1","4-3-3","4-4-2","3-5-2","5-3-2","4-1-4-1"];
+  const [step, setStep] = useState("country");
+  const [country, setCountry] = useState(null);
+  const [formation, setFormation] = useState("4-2-3-1");
+  const [allSquads, setAllSquads] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("wc26_xi_v2") || "{}"); }
+    catch { return {}; }
+  });
+  const [activeSlot, setActiveSlot] = useState(null);
+  const [search, setSearch] = useState("");
+  const [playerSearch, setPlayerSearch] = useState("");
+  const [simMatches, setSimMatches] = useState([]);
+  const [simRevealed, setSimRevealed] = useState(0);
+  const [simDone, setSimDone] = useState(false);
+  const [simResult, setSimResult] = useState(null);
+  const [record, setRecord] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("wc26_xi_record") || '{"wins":0,"sims":0}'); }
+    catch { return {wins:0,sims:0}; }
+  });
+  const [history, setHistory] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("wc26_xi_history") || "[]"); }
+    catch { return []; }
+  });
+  const [showHistory, setShowHistory] = useState(false);
+
+  const countryData = country ? TEAM_DATA[country] : null;
+  const histPlayers = country ? (HISTORICAL_SQUADS[country] || []) : [];
+  const slots = FORMATION_SLOTS[formation];
+  const picks = allSquads[country]?.[formation] || {};
+  const totalPicked = Object.keys(picks).length;
+  const avgRating = totalPicked === 0 ? 0 :
+    Math.round(Object.values(picks).reduce((s,p) => s + p.rating, 0) / totalPicked);
+
+  const allCountries = Object.keys(TEAM_DATA).filter(k => TEAM_DATA[k].squad?.length > 0);
+  const hasComplete = (c) => FORMATIONS.some(f => Object.keys(allSquads[c]?.[f]||{}).length === 11);
+  const hasAny = (c) => FORMATIONS.some(f => Object.keys(allSquads[c]?.[f]||{}).length > 0);
+  const completed = allCountries.filter(hasComplete).length;
+
+  const savePicks = (newPicks) => {
+    const next = { ...allSquads, [country]: { ...(allSquads[country]||{}), [formation]: newPicks } };
+    setAllSquads(next);
+    localStorage.setItem("wc26_xi_v2", JSON.stringify(next));
+  };
+
+  const sortedCountries = allCountries
+    .filter(c => (WC_APPS[c]||0) > 0 && (!search || c.toLowerCase().includes(search.toLowerCase())))
+    .sort((a, b) => (WC_APPS[b]||0) - (WC_APPS[a]||0));
+
+  const activePlayers = activeSlot
+    ? histPlayers.filter(p => {
+        if (p.pos !== activeSlot.pos) return false;
+        const used = Object.entries(picks).some(([k, v]) => k !== activeSlot.key && v.name === p.name);
+        if (used) return false;
+        if (playerSearch) return p.name.toLowerCase().includes(playerSearch.toLowerCase());
+        return true;
+      })
+    : [];
+
+  const runSim = () => {
+    const oppPool = [
+      {name:"France",flag:"🇫🇷"},{name:"Brazil",flag:"🇧🇷"},{name:"Argentina",flag:"🇦🇷"},
+      {name:"Germany",flag:"🇩🇪"},{name:"Spain",flag:"🇪🇸"},{name:"England",flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿"},
+      {name:"Portugal",flag:"🇵🇹"},{name:"Netherlands",flag:"🇳🇱"},{name:"Italy",flag:"🇮🇹"},
+      {name:"Belgium",flag:"🇧🇪"},{name:"Mexico",flag:"🇲🇽"},{name:"Colombia",flag:"🇨🇴"},
+    ].filter(o => o.name !== country).slice(0, 7);
+    const rounds = ["Group Stage","Group Stage","Group Stage","Round of 16","Quarter-Final","Semi-Final","Final"];
+    const baseStr = [70,72,74,78,82,85,88];
+    const matches = [];
+    let won=0, drawn=0, lost=0, gf=0, ga=0;
+    for (let i=0; i<7; i++) {
+      const oppRating = baseStr[i] + Math.floor(Math.random()*8);
+      const diff = avgRating - oppRating;
+      const winProb = Math.max(0.1, Math.min(0.85, 0.5 + diff*0.018));
+      const r = Math.random();
+      let ourGoals, theirGoals, outcome;
+      if (r < winProb) {
+        ourGoals = 1 + Math.floor(Math.random()*3); theirGoals = Math.floor(Math.random()*ourGoals);
+        outcome="W"; won++;
+      } else if (r < winProb+0.18 && i<3) {
+        ourGoals = Math.floor(Math.random()*2); theirGoals = ourGoals;
+        outcome="D"; drawn++;
+      } else {
+        theirGoals = 1 + Math.floor(Math.random()*2); ourGoals = Math.floor(Math.random()*theirGoals);
+        outcome="L"; lost++;
+      }
+      gf += ourGoals; ga += theirGoals;
+      matches.push({ round:rounds[i], opp:oppPool[i], score:`${ourGoals}–${theirGoals}`, outcome });
+    }
+    const isChampion = matches[6].outcome==="W";
+    const medal = isChampion?"🏆": won>=5?"🥈": won>=3?"🥉":"⚽";
+    const headline = isChampion ? `${country} are World Champions!`
+      : won>=5 ? `${country} reach the Final!`
+      : won>=3 ? `${country} reach the Semi-Finals`
+      : `${country} exit in the Group Stage`;
+    const newRec = {wins: record.wins+(isChampion?1:0), sims: record.sims+1};
+    setRecord(newRec);
+    localStorage.setItem("wc26_xi_record", JSON.stringify(newRec));
+    const entry = {country, flag:countryData.flag, formation, medal, headline, won, drawn, lost, gf, ga, avgRating, date: new Date().toLocaleDateString()};
+    const newHistory = [entry, ...history].slice(0, 50);
+    setHistory(newHistory);
+    localStorage.setItem("wc26_xi_history", JSON.stringify(newHistory));
+    setSimMatches(matches); setSimResult({won,drawn,lost,gf,ga,isChampion,medal,headline});
+    setSimRevealed(0); setSimDone(false); setStep("sim");
+    let rev=0;
+    const iv = setInterval(()=>{ rev++; setSimRevealed(rev); if(rev>=7){setSimDone(true);clearInterval(iv);} }, 800);
+  };
+
+  // ── COUNTRY SCREEN ──────────────────────────────────────────────────────────
+  if (step==="country") return (
+    <div style={{padding:"16px 16px 100px"}}>
+      <div style={{background:T.navyMid,borderRadius:14,padding:16,border:`1.5px solid ${T.gold}`,marginBottom:16}}>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:11,fontWeight:700,letterSpacing:1.5,color:T.gray,marginBottom:12}}>YOUR WC XI RECORD</div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+          <div style={{background:T.navy,borderRadius:10,padding:"14px 12px",textAlign:"center"}}>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:36,color:T.gold}}>{record.wins}</div>
+            <div style={{fontSize:12,color:T.gray,marginTop:2}}>🏆 WC Won</div>
+          </div>
+          <div style={{background:T.navy,borderRadius:10,padding:"14px 12px",textAlign:"center"}}>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:36,color:T.white}}>{record.sims}</div>
+            <div style={{fontSize:12,color:T.gray,marginTop:2}}>Simulations</div>
+          </div>
+        </div>
+        <div style={{fontSize:12,color:T.gray}}>
+          {record.sims===0?"Pick a country and build your all-time XI":`${completed} XIs built · ${record.wins} championship${record.wins!==1?"s":""} won`}
+        </div>
+      </div>
+      <div style={{position:"relative",marginBottom:14}}>
+        <span style={{position:"absolute",left:12,top:"50%",transform:"translateY(-50%)",fontSize:16}}>🔍</span>
+        <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search country..."
+          style={{width:"100%",padding:"12px 12px 12px 38px",background:T.navyMid,border:`1px solid ${T.navyLight}`,borderRadius:10,color:T.white,fontSize:14,fontFamily:"'Barlow',sans-serif",outline:"none",boxSizing:"border-box"}} />
+      </div>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:showHistory?8:12}}>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:18,fontWeight:700,color:T.white}}>Pick a country · Draft your all-time XI</div>
+        {history.length>0&&<button onClick={()=>setShowHistory(v=>!v)} style={{background:showHistory?T.navyLight:"transparent",border:`1px solid ${T.navyLight}`,color:showHistory?T.white:T.gray,borderRadius:8,padding:"5px 12px",fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,fontSize:12,cursor:"pointer",flexShrink:0,marginLeft:8}}>HISTORY ({history.length})</button>}
+      </div>
+      {showHistory&&<div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:10,marginBottom:12,scrollbarWidth:"none"}}>
+        {history.map((h,i)=>(
+          <div key={i} style={{flexShrink:0,width:130,background:T.navyMid,borderRadius:10,padding:"10px 10px 8px",border:`1px solid ${h.medal==="🏆"?T.gold:T.navyLight}`}}>
+            <div style={{fontSize:20,marginBottom:2}}>{h.flag} {h.medal}</div>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:12,color:h.medal==="🏆"?T.gold:T.white,lineHeight:1.2,marginBottom:4}}>{h.country}</div>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:11,color:T.gray,marginBottom:4}}>{h.formation} · avg {h.avgRating}</div>
+            <div style={{display:"flex",gap:4}}>
+              <span style={{background:"#4CAF5022",color:"#4CAF50",borderRadius:4,padding:"2px 5px",fontSize:10,fontWeight:700}}>{h.won}W</span>
+              <span style={{background:T.red+"22",color:T.red,borderRadius:4,padding:"2px 5px",fontSize:10,fontWeight:700}}>{h.lost}L</span>
+            </div>
+            <div style={{fontSize:9,color:T.grayDark,marginTop:4}}>{h.date}</div>
+          </div>
+        ))}
+      </div>}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8}}>
+        {sortedCountries.map(c => {
+          const d=TEAM_DATA[c]; const wc=WC_APPS[c]??0;
+          return (
+            <div key={c} onClick={()=>{const fresh={...allSquads,[c]:{"4-2-3-1":{}}};setAllSquads(fresh);localStorage.setItem("wc26_xi_v2",JSON.stringify(fresh));setCountry(c);setFormation("4-2-3-1");setActiveSlot(null);setPlayerSearch("");setStep("build");}} style={{
+              background:T.navyMid,borderRadius:10,padding:"12px 6px",cursor:"pointer",textAlign:"center",
+              border:`1px solid ${T.navyLight}`,
+            }}>
+              <div style={{fontSize:28,marginBottom:4}}>{d.flag}</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:15,color:T.white,lineHeight:1.2,wordBreak:"break-word"}}>{c}</div>
+              <div style={{fontSize:10,color:T.gray,marginTop:2}}>{wc} WC</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  // ── BUILD SCREEN ─────────────────────────────────────────────────────────────
+  if (step==="build") {
+    const displayRows = [...slots].reverse();
+    return (
+      <div style={{padding:"0 0 100px"}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,padding:"16px 16px 12px"}}>
+          <button onClick={()=>{setStep("country");setActiveSlot(null);}} style={{background:T.navyLight,border:"none",color:T.white,width:36,height:36,borderRadius:"50%",cursor:"pointer",fontSize:18,fontWeight:700,flexShrink:0}}>←</button>
+          <span style={{fontSize:28}}>{countryData.flag}</span>
+          <div style={{flex:1}}>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:20,color:T.white}}>{country}</div>
+            <div style={{fontSize:12,color:T.gray}}>{totalPicked}/11 selected</div>
+          </div>
+          {totalPicked===11&&(
+            <button onClick={()=>setStep("review")} style={{background:T.gold,border:"none",color:T.navy,padding:"8px 16px",borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:14,cursor:"pointer"}}>REVIEW →</button>
+          )}
+        </div>
+        <div style={{display:"flex",gap:8,padding:"0 16px 12px",overflowX:"auto"}}>
+          {FORMATIONS.map(f=>(
+            <button key={f} onClick={()=>{setFormation(f);setActiveSlot(null);}} style={{
+              flexShrink:0,padding:"6px 14px",border:`1.5px solid ${formation===f?T.gold:T.navyLight}`,
+              borderRadius:20,background:formation===f?T.gold+"22":"transparent",
+              color:formation===f?T.gold:T.gray,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,fontSize:13,cursor:"pointer",
+            }}>{f}</button>
+          ))}
+        </div>
+        <div style={{display:"flex",gap:12,padding:"0 12px",alignItems:"flex-start"}}>
+          {/* Pitch */}
+          <div style={{flex:1,minWidth:0,background:"linear-gradient(180deg,#1b6130 0%,#1e6b34 40%,#1b6130 100%)",borderRadius:14,padding:"12px 8px",position:"relative",border:"2px solid #28883f",overflow:"hidden"}}>
+            <div style={{position:"absolute",inset:0,pointerEvents:"none"}}>
+              <div style={{position:"absolute",top:"50%",left:"8%",right:"8%",height:1,background:"rgba(255,255,255,0.12)"}}/>
+              <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:52,height:52,border:"1px solid rgba(255,255,255,0.12)",borderRadius:"50%"}}/>
+              <div style={{position:"absolute",bottom:0,left:"26%",right:"26%",height:"13%",border:"1px solid rgba(255,255,255,0.09)",borderBottom:"none"}}/>
+              <div style={{position:"absolute",top:0,left:"26%",right:"26%",height:"13%",border:"1px solid rgba(255,255,255,0.09)",borderTop:"none"}}/>
+            </div>
+            {displayRows.map((row, di) => {
+              const realRowIdx = slots.length-1-di;
+              return (
+                <div key={di} style={{display:"flex",justifyContent:"space-evenly",marginBottom:di<displayRows.length-1?8:0}}>
+                  {row.map((slotDef, ci) => {
+                    const key=`${realRowIdx}-${ci}`;
+                    const player=picks[key];
+                    const isActive=activeSlot?.key===key;
+                    return (
+                      <div key={ci} onClick={()=>{setActiveSlot(isActive?null:{key,pos:slotDef.pos,label:slotDef.label});setPlayerSearch("");}}
+                        style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2,cursor:"pointer",minWidth:48}}>
+                        <div style={{
+                          width:42,height:42,borderRadius:"50%",
+                          background:isActive?T.gold+"44":player?T.gold+"22":"rgba(0,0,0,0.25)",
+                          border:`2px solid ${isActive?T.gold:player?T.gold+"88":"rgba(255,255,255,0.28)"}`,
+                          display:"flex",alignItems:"center",justifyContent:"center",
+                          fontSize:player?20:13,position:"relative",
+                          boxShadow:isActive?`0 0 10px ${T.gold}66`:"none",
+                        }}>
+                          {player?countryData.flag:<span style={{color:"rgba(255,255,255,0.35)",fontWeight:900}}>+</span>}
+                          {player&&<div onClick={e=>{e.stopPropagation();const n={...picks};delete n[key];savePicks(n);if(activeSlot?.key===key)setActiveSlot(null);}} style={{position:"absolute",top:-4,right:-4,width:15,height:15,background:T.red,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:7,color:"#fff",fontWeight:900,cursor:"pointer"}}>✕</div>}
+                        </div>
+                        <div style={{fontSize:9,fontWeight:700,color:isActive?T.gold:"rgba(255,255,255,0.45)",fontFamily:"'Barlow Condensed',sans-serif"}}>{slotDef.label}</div>
+                        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:9,fontWeight:800,color:player?"#fff":"rgba(255,255,255,0.2)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:52,textAlign:"center"}}>
+                          {player?player.name.split(" ").slice(-1)[0].toUpperCase():"—"}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Player panel — right side */}
+          <div style={{width:260,flexShrink:0,background:T.navyMid,borderRadius:12,border:`1px solid ${activeSlot?T.gold+"44":T.navyLight}`,overflow:"hidden",display:"flex",flexDirection:"column"}}>
+            {activeSlot ? (
+              <>
+                <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",background:T.gold+"18",borderBottom:`1px solid ${T.gold}33`,flexShrink:0}}>
+                  <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:13,color:T.gold}}>PICKING {activeSlot.label}</span>
+                  <span style={{fontSize:11,color:T.gray}}>({activePlayers.length})</span>
+                  <button onClick={()=>{setActiveSlot(null);setPlayerSearch("");}} style={{marginLeft:"auto",background:"transparent",border:"none",color:T.gray,cursor:"pointer",fontSize:16,lineHeight:1}}>✕</button>
+                </div>
+                <input value={playerSearch} onChange={e=>setPlayerSearch(e.target.value)} placeholder="Search player..." autoFocus
+                  style={{padding:"8px 12px",background:T.navy,border:"none",borderBottom:`1px solid ${T.navyLight}`,color:T.white,fontSize:12,fontFamily:"'Barlow',sans-serif",outline:"none",flexShrink:0}} />
+                <div style={{overflowY:"auto",flex:1,maxHeight:340}}>
+                  {activePlayers.length===0&&<div style={{padding:"16px 12px",color:T.gray,fontSize:12,textAlign:"center"}}>No players found</div>}
+                  {activePlayers.map((p,i)=>(
+                    <div key={i} onClick={()=>{savePicks({...picks,[activeSlot.key]:p});setActiveSlot(null);setPlayerSearch("");}} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 12px",cursor:"pointer",borderBottom:i<activePlayers.length-1?`1px solid ${T.navyLight}22`:"none"}}>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,fontSize:17,color:T.white,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.name}</div>
+                        <div style={{fontSize:10,color:T.gray,marginTop:1}}>{p.pos} · {p.year}</div>
+                      </div>
+                      <div style={{background:p.rating>=90?T.gold:p.rating>=85?"#4CAF50":"#2196F3",color:p.rating>=90?T.navy:"#fff",padding:"2px 7px",borderRadius:5,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:12,flexShrink:0}}>{p.rating}</div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div style={{padding:"28px 14px",textAlign:"center"}}>
+                <div style={{fontSize:28,marginBottom:8}}>⭐</div>
+                <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:13,color:T.gray,lineHeight:1.4}}>
+                  {totalPicked===11?"All 11 selected!":totalPicked===0?"Tap a position on the pitch to select a player":`${11-totalPicked} position${11-totalPicked!==1?"s":""} remaining`}
+                </div>
+                {totalPicked===11&&<button onClick={()=>setStep("review")} style={{marginTop:12,padding:"8px 16px",background:T.gold,border:"none",borderRadius:8,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:13,color:T.navy,cursor:"pointer"}}>REVIEW →</button>}
+                {totalPicked>0&&<button onClick={()=>savePicks({})} style={{marginTop:8,padding:"6px 12px",background:"transparent",border:`1px solid ${T.grayDark}`,color:T.gray,borderRadius:6,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,fontSize:11,cursor:"pointer",display:"block",width:"100%"}}>RESET</button>}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── REVIEW SCREEN ─────────────────────────────────────────────────────────────
+  if (step==="review") {
+    const lineup = slots.flatMap((row,ri)=>row.map((s,ci)=>({key:`${ri}-${ci}`,label:s.label,player:picks[`${ri}-${ci}`]}))).reverse();
+    const displayRowsR = [...slots].reverse();
+    return (
+      <div style={{padding:"16px 16px 100px"}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:14}}>
+          <button onClick={()=>setStep("build")} style={{background:T.navyLight,border:"none",color:T.white,width:36,height:36,borderRadius:"50%",cursor:"pointer",fontSize:18,fontWeight:700,flexShrink:0}}>←</button>
+          <span style={{fontSize:28}}>{countryData.flag}</span>
+          <div style={{flex:1}}>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:20,color:T.white}}>{country} XI</div>
+            <div style={{fontSize:12,color:T.gray}}>{formation} · Review before simulating</div>
+          </div>
+          <div style={{background:T.gold+"22",border:`1px solid ${T.gold}44`,borderRadius:10,padding:"6px 14px",textAlign:"center"}}>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:28,color:T.gold,lineHeight:1}}>{avgRating}</div>
+            <div style={{fontSize:9,color:T.gray,marginTop:1,letterSpacing:1}}>AVG</div>
+          </div>
+        </div>
+
+        {/* Pitch + lineup side by side */}
+        <div style={{display:"flex",gap:12,alignItems:"stretch",marginBottom:14}}>
+          {/* Read-only pitch */}
+          <div style={{flex:1,minWidth:0,background:"linear-gradient(180deg,#1b6130 0%,#1e6b34 40%,#1b6130 100%)",borderRadius:14,padding:"12px 8px",position:"relative",border:"2px solid #28883f",overflow:"hidden",display:"flex",flexDirection:"column",justifyContent:"space-evenly"}}>
+            <div style={{position:"absolute",inset:0,pointerEvents:"none"}}>
+              <div style={{position:"absolute",top:"50%",left:"8%",right:"8%",height:1,background:"rgba(255,255,255,0.12)"}}/>
+              <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:52,height:52,border:"1px solid rgba(255,255,255,0.12)",borderRadius:"50%"}}/>
+              <div style={{position:"absolute",bottom:0,left:"26%",right:"26%",height:"13%",border:"1px solid rgba(255,255,255,0.09)",borderBottom:"none"}}/>
+              <div style={{position:"absolute",top:0,left:"26%",right:"26%",height:"13%",border:"1px solid rgba(255,255,255,0.09)",borderTop:"none"}}/>
+            </div>
+            {displayRowsR.map((row, di) => {
+              const realRowIdx = slots.length-1-di;
+              return (
+                <div key={di} style={{display:"flex",justifyContent:"space-evenly",marginBottom:di<displayRowsR.length-1?8:0}}>
+                  {row.map((slotDef, ci) => {
+                    const key=`${realRowIdx}-${ci}`;
+                    const player=picks[key];
+                    return (
+                      <div key={ci} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2,minWidth:48}}>
+                        <div style={{width:42,height:42,borderRadius:"50%",background:player?T.gold+"22":"rgba(0,0,0,0.25)",border:`2px solid ${player?T.gold+"88":"rgba(255,255,255,0.28)"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:player?20:13}}>
+                          {player?countryData.flag:<span style={{color:"rgba(255,255,255,0.2)",fontWeight:900}}>+</span>}
+                        </div>
+                        <div style={{fontSize:9,fontWeight:700,color:"rgba(255,255,255,0.45)",fontFamily:"'Barlow Condensed',sans-serif"}}>{slotDef.label}</div>
+                        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontSize:9,fontWeight:800,color:player?"#fff":"rgba(255,255,255,0.2)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:52,textAlign:"center"}}>
+                          {player?player.name.split(" ").slice(-1)[0].toUpperCase():"—"}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Lineup list */}
+          <div style={{width:260,flexShrink:0,background:T.navyMid,borderRadius:12,border:`1px solid ${T.navyLight}`,overflow:"hidden",display:"flex",flexDirection:"column",justifyContent:"space-between"}}>
+            {lineup.map((slot,i)=>(
+              <div key={slot.key} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 12px",borderBottom:i<lineup.length-1?`1px solid ${T.navyLight}22`:"none"}}>
+                <div style={{width:28,height:28,borderRadius:"50%",background:T.gold+"18",border:`1px solid ${T.gold}44`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:8,color:T.gold,flexShrink:0}}>{slot.label}</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,fontSize:17,color:T.white,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{slot.player?.name||"—"}</div>
+                  <div style={{fontSize:10,color:T.gray,marginTop:1}}>{slot.player?.year}</div>
+                </div>
+                {slot.player&&<div style={{background:slot.player.rating>=90?T.gold:slot.player.rating>=85?"#4CAF50":"#2196F3",color:slot.player.rating>=90?T.navy:"#fff",padding:"2px 7px",borderRadius:5,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:12,flexShrink:0}}>{slot.player.rating}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <button onClick={runSim} style={{width:"100%",padding:"16px 0",background:T.gold,border:"none",borderRadius:12,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:20,color:T.navy,cursor:"pointer",letterSpacing:1}}>SIMULATE TOURNAMENT</button>
+      </div>
+    );
+  }
+
+  // ── SIMULATION SCREEN ─────────────────────────────────────────────────────────
+  if (step==="sim") return (
+    <div style={{padding:"16px 16px 100px"}}>
+      <div style={{textAlign:"center",marginBottom:24}}>
+        <div style={{fontSize:52,marginBottom:8}}>{countryData.flag}</div>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:24,color:T.white}}>Simulating Tournament</div>
+        {!simDone&&<div style={{fontSize:13,color:T.gray,marginTop:4}}>Match {Math.min(simRevealed+1,7)} of 7...</div>}
+        {simDone&&<div style={{fontSize:13,color:T.gold,marginTop:4}}>Simulation complete!</div>}
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        {simMatches.map((m,i)=>{
+          const revealed=i<simRevealed;
+          const outcomeColor=m.outcome==="W"?T.gold:m.outcome==="D"?"#64B5F6":T.red;
+          return (
+            <div key={i} style={{background:T.navyMid,borderRadius:12,padding:"14px 16px",border:`1px solid ${revealed&&m.outcome==="W"?T.gold+"55":T.navyLight}`,opacity:revealed?1:0.25,transition:"all 0.4s ease"}}>
+              <div style={{display:"flex",alignItems:"center",gap:10}}>
+                <div style={{fontSize:11,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,letterSpacing:1,color:T.gray,width:90,flexShrink:0}}>{m.round.toUpperCase()}</div>
+                <div style={{flex:1,display:"flex",alignItems:"center",gap:8,justifyContent:"center"}}>
+                  <span style={{fontSize:20}}>{countryData.flag}</span>
+                  <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:18,color:T.white}}>{revealed?m.score:"? – ?"}</span>
+                  <span style={{fontSize:20}}>{m.opp.flag}</span>
+                </div>
+                {revealed&&<div style={{background:outcomeColor+"22",border:`1px solid ${outcomeColor}44`,color:outcomeColor,width:28,height:28,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:13,flexShrink:0}}>{m.outcome}</div>}
+              </div>
+              {revealed&&<div style={{textAlign:"center",fontSize:12,color:T.gray,marginTop:6}}>vs {m.opp.name}</div>}
+            </div>
+          );
+        })}
+      </div>
+      {simDone&&<button onClick={()=>setStep("results")} style={{marginTop:20,width:"100%",padding:"16px 0",background:T.gold,border:"none",borderRadius:12,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:18,color:T.navy,cursor:"pointer"}}>SEE RESULTS →</button>}
+    </div>
+  );
+
+  // ── RESULTS SCREEN ─────────────────────────────────────────────────────────────
+  return (
+    <div style={{padding:"16px 16px 100px"}}>
+      <div style={{textAlign:"center",marginBottom:20}}>
+        <div style={{fontSize:64,marginBottom:8}}>{simResult.medal}</div>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:24,color:T.white,marginBottom:4}}>{simResult.headline}</div>
+        <div style={{fontSize:14,color:T.gray}}>{formation} · avg rating {avgRating}</div>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:8,marginBottom:16}}>
+        {[["W",simResult.won,T.gold],["D",simResult.drawn,"#64B5F6"],["L",simResult.lost,T.red],["GF",simResult.gf,T.white],["GA",simResult.ga,T.gray],["WIN%",Math.round(simResult.won/7*100)+"%",simResult.won>=5?T.gold:simResult.won>=3?"#4CAF50":T.gray]].map(([label,val,color])=>(
+          <div key={label} style={{background:T.navyMid,borderRadius:10,padding:"10px 0",textAlign:"center",border:`1px solid ${T.navyLight}`}}>
+            <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:22,color}}>{val}</div>
+            <div style={{fontSize:10,color:T.gray,marginTop:2}}>{label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{background:T.navyMid,borderRadius:12,border:`1px solid ${T.navyLight}`,overflow:"hidden",marginBottom:16}}>
+        {simMatches.map((m,i)=>{
+          const color=m.outcome==="W"?T.gold:m.outcome==="D"?"#64B5F6":T.red;
+          return (
+            <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",borderBottom:i<6?`1px solid ${T.navyLight}22`:"none"}}>
+              <div style={{fontSize:11,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,letterSpacing:0.5,color:T.gray,width:80,flexShrink:0}}>{m.round}</div>
+              <div style={{flex:1,display:"flex",alignItems:"center",gap:6}}>
+                <span style={{fontSize:16}}>{countryData.flag}</span>
+                <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:14,color:T.white}}>{m.score}</span>
+                <span style={{fontSize:16}}>{m.opp.flag}</span>
+                <span style={{fontSize:11,color:T.gray}}>{m.opp.name}</span>
+              </div>
+              <div style={{background:color+"22",color,padding:"2px 7px",borderRadius:4,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:12,flexShrink:0}}>{m.outcome}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{display:"flex",gap:10,marginBottom:10}}>
+        <button onClick={()=>setStep("review")} style={{flex:1,padding:"12px 0",background:"transparent",border:`1px solid ${T.navyLight}`,color:T.gray,borderRadius:10,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,fontSize:14,cursor:"pointer"}}>SIMULATE AGAIN</button>
+        <button onClick={()=>{setStep("country");setCountry(null);setActiveSlot(null);setPlayerSearch("");}} style={{flex:1,padding:"12px 0",background:T.gold,border:"none",color:T.navy,borderRadius:10,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:14,cursor:"pointer"}}>NEW COUNTRY</button>
+      </div>
+      <button onClick={()=>setStep("country")} style={{width:"100%",padding:"12px 0",background:"transparent",border:`1px solid ${T.navyLight}44`,color:T.gray,borderRadius:10,fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,fontSize:13,cursor:"pointer"}}>← BACK TO XI</button>
+    </div>
+  );
+}
+
 // ─── BOTTOM NAV ──────────────────────────────────────────────────────────────
 const TABS = [
   { id: "fixtures", label: "Fixtures", icon: "🏟️" },
@@ -3053,6 +4332,7 @@ const TABS = [
   { id: "teams",    label: "Teams",    icon: "👕" },
   { id: "bracket",  label: "Bracket",  icon: "🔮" },
   { id: "board",    label: "Board",    icon: "🏅" },
+  // { id: "xi",       label: "XI",       icon: "⭐" },
   { id: "more",     label: "More",     icon: "⋯" },
 ];
 
@@ -3149,6 +4429,36 @@ function SideDrawer({ open, onClose, theme }) {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Legal links */}
+        <div style={{
+          padding: "16px 20px", borderTop: `1px solid ${T.navyLight}`,
+          display: "flex", justifyContent: "center", gap: 24,
+        }}>
+          {[
+            { label: "Privacy Policy", url: "https://kick-cast.vercel.app/privacy-policy" },
+            { label: "Terms & Conditions", url: "https://kick-cast.vercel.app/terms-and-conditions" },
+          ].map(({ label, url }) => (
+            <a
+              key={label}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: 11,
+                color: T.gray,
+                textDecoration: "none",
+                fontFamily: "'Barlow Condensed', sans-serif",
+                letterSpacing: 0.5,
+                fontWeight: 600,
+                borderBottom: `1px solid ${T.grayDark}`,
+                paddingBottom: 1,
+              }}
+            >
+              {label}
+            </a>
+          ))}
         </div>
 
         {/* Footer */}
@@ -3338,6 +4648,44 @@ function SupportPickerModal({ onSave, onClose, currentTeam, currentCountry }) {
 }
 
 // ─── AUTH MODAL ───────────────────────────────────────────────────────────────
+function ConfirmModal({ icon, title, message, confirmLabel, confirmDanger, onConfirm, onCancel }) {
+  return (
+    <div onClick={onCancel} style={{
+      position: "fixed", inset: 0, background: "#000d", zIndex: 9999,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      padding: "20px",
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        background: T.navyMid, borderRadius: 20, padding: "28px 24px",
+        border: `1px solid ${T.navyLight}`, maxWidth: 360, width: "100%",
+        boxShadow: "0 24px 64px #0008",
+        textAlign: "center",
+      }}>
+        {icon && <div style={{ fontSize: 40, marginBottom: 16 }}>{icon}</div>}
+        <div style={{
+          fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900,
+          fontSize: 22, color: T.white, letterSpacing: 0.5, marginBottom: 10,
+        }}>{title}</div>
+        <div style={{ fontSize: 13, color: T.gray, lineHeight: 1.6, marginBottom: 24 }}>{message}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <button onClick={onCancel} style={{
+            padding: "12px 0", borderRadius: 10, border: `1px solid ${T.navyLight}`,
+            background: T.navyLight, color: T.gray, cursor: "pointer",
+            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: 0.5,
+          }}>CANCEL</button>
+          <button onClick={onConfirm} style={{
+            padding: "12px 0", borderRadius: 10, border: "none",
+            background: confirmDanger ? T.red : T.gold,
+            color: confirmDanger ? "#fff" : T.navy,
+            cursor: "pointer",
+            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 14, letterSpacing: 0.5,
+          }}>{confirmLabel || "CONFIRM"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function AuthModal({ onClose }) {
   const [mode, setMode] = useState("signin");
   const [email, setEmail] = useState("");
@@ -3468,6 +4816,7 @@ export default function App() {
   const [showAuth, setShowAuth] = useState(false);
   const [showTeamPicker, setShowTeamPicker] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(null);
   const pendingPredictRef = useRef(null);
   const [dbStandings, setDbStandings] = useState([]);
   const [dataVersion, setDataVersion] = useState(0);
@@ -3679,7 +5028,14 @@ export default function App() {
                       <div style={{ fontSize: 12, color: T.gray }}>🌍 From: {profile.country_from}</div>
                     )}
                   </div>
-                  <button onClick={async () => { await supabase.auth.signOut(); setProfile(null); setUserMenuOpen(false); }} style={{
+                  <button onClick={() => { setUserMenuOpen(false); setConfirmModal({
+                    icon: "🚪",
+                    title: "Sign Out?",
+                    message: "You'll need to sign in again to access your predictions and leaderboard.",
+                    confirmLabel: "SIGN OUT",
+                    confirmDanger: true,
+                    onConfirm: async () => { await supabase.auth.signOut(); setProfile(null); setConfirmModal(null); },
+                  }); }} style={{
                     width: "100%", padding: "8px 10px", background: "transparent", border: "none",
                     color: T.red, cursor: "pointer", textAlign: "left", borderRadius: 6,
                     fontFamily: "'Barlow', sans-serif", fontSize: 13,
@@ -3726,11 +5082,12 @@ export default function App() {
       <div className="wc-content" style={{ overflowY: "auto", flex: 1, minHeight: 0 }}>
         <div className="wc-inner">
           {tab === "fixtures" && <FixturesTab predictions={predictions} onPredictOpen={openPredict} onViewDetails={f => setDetailsModal(f)} fetchError={fetchError} />}
-          {tab === "teams" && <TeamsTab selectedTeam={selectedTeam} dbStandings={dbStandings} onTeamOpen={(name) => { setSelectedTeam(name); if (name) setTab("teams"); }} />}
-          {tab === "bracket" && <BracketTab key={`bracket-${dataVersion}`} user={user} theme={theme} />}
+          {tab === "teams" && <TeamsTab selectedTeam={selectedTeam} dbStandings={dbStandings} dataVersion={dataVersion} onTeamOpen={(name) => { setSelectedTeam(name); if (name) setTab("teams"); }} />}
+          {tab === "bracket" && <ErrorBoundary key={`bracket-${dataVersion}`}><BracketTab user={user} theme={theme} /></ErrorBoundary>}
           {tab === "vote" && <VoteTab key={`vote-${dataVersion}`} predictions={predictions} setPredictions={setPredictions} user={user} />}
           {tab === "board" && <LeaderboardTab />}
-          {tab === "more" && <MoreTab key={`more-${dataVersion}`} user={user} onSignIn={() => setShowAuth(true)} onChangeTeam={() => setShowTeamPicker(true)} />}
+          {tab === "xi" && <WcXiTab user={user} />}
+          {tab === "more" && <MoreTab key={`more-${dataVersion}`} user={user} onSignIn={() => setShowAuth(true)} onChangeTeam={() => setShowTeamPicker(true)} onConfirmModal={setConfirmModal} />}
         </div>
       </div>
 
@@ -3761,7 +5118,7 @@ export default function App() {
         {TABS.map(t => (
           <button key={t.id} onClick={() => { setTab(t.id); if (t.id !== "teams") setSelectedTeam(null); }}
             style={{
-              flex: 1, minWidth: 54, padding: "8px 10px 6px",
+              flex: 1, minWidth: 0, padding: "8px 6px 6px",
               background: tab === t.id ? T.gold + "22" : "transparent",
               border: "none", borderRadius: 10,
               cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
@@ -3859,6 +5216,18 @@ export default function App() {
 
       {/* Support picker — rendered last so it's always on top */}
       {showTeamPicker && <SupportPickerModal onSave={saveProfile} onClose={() => setShowTeamPicker(false)} currentTeam={profile?.supporting_team} currentCountry={profile?.country_from} />}
+
+      {confirmModal && (
+        <ConfirmModal
+          icon={confirmModal.icon}
+          title={confirmModal.title}
+          message={confirmModal.message}
+          confirmLabel={confirmModal.confirmLabel}
+          confirmDanger={confirmModal.confirmDanger}
+          onConfirm={confirmModal.onConfirm}
+          onCancel={() => setConfirmModal(null)}
+        />
+      )}
     </div>
   );
 }
