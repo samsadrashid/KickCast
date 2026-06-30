@@ -1724,16 +1724,21 @@ function MatchCard({ fixture, onPredict, userPrediction }) {
 function MatchDetailsModal({ fixture, userPrediction, onClose }) {
   const home = getTeam(fixture.home);
   const away = getTeam(fixture.away);
-  const homeWin = fixture.homeScore > fixture.awayScore;
-  const awayWin = fixture.awayScore > fixture.homeScore;
-  const draw = fixture.homeScore === fixture.awayScore;
+  const penWinner = fixture.penWinner || null;
+  const homeWin = fixture.homeScore > fixture.awayScore || (fixture.homeScore === fixture.awayScore && penWinner === "home");
+  const awayWin = fixture.awayScore > fixture.homeScore || (fixture.homeScore === fixture.awayScore && penWinner === "away");
+  const draw = !homeWin && !awayWin;
+  const isPen = !!penWinner;
   const result = homeWin ? `${fixture.home} Win` : awayWin ? `${fixture.away} Win` : "Draw";
+  const timeLabel = isPen ? "AET · PENS" : "FULL TIME";
 
   let predLabel = null;
   if (userPrediction != null) {
     const pH = userPrediction.homeScore, pA = userPrediction.awayScore;
-    const exact = pH === fixture.homeScore && pA === fixture.awayScore;
-    const correctResult = (pH > pA && homeWin) || (pA > pH && awayWin) || (pH === pA && draw);
+    const predWinner = pH > pA ? "home" : pA > pH ? "away" : userPrediction.penWinner || "draw";
+    const actualWinner = fixture.homeScore > fixture.awayScore ? "home" : fixture.awayScore > fixture.homeScore ? "away" : penWinner || "draw";
+    const exact = pH === fixture.homeScore && pA === fixture.awayScore && (!isPen || userPrediction.penWinner === penWinner);
+    const correctResult = predWinner === actualWinner;
     predLabel = exact ? "✅ Exact!" : correctResult ? "🎯 Correct result" : "❌ Wrong";
   }
 
@@ -1769,7 +1774,8 @@ function MatchDetailsModal({ fixture, userPrediction, onClose }) {
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 44, color: T.gold, letterSpacing: 4 }}>
               {fixture.homeScore} — {fixture.awayScore}
             </div>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, color: T.gray, marginTop: 4 }}>FULL TIME</div>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, color: isPen ? T.gold : T.gray, marginTop: 4 }}>{timeLabel}</div>
+            {isPen && <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, color: T.gray, marginTop: 1 }}>({fixture.homePens ?? "?"} – {fixture.awayPens ?? "?"} pens)</div>}
           </div>
           <div style={{ flex: 1, textAlign: "center" }}>
             <div style={{ fontSize: 48 }}>{away.flag}</div>
