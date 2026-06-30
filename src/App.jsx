@@ -2216,7 +2216,8 @@ function LiveCircleBracket({ fixtures, onTeamOpen }) {
 
   // Group and sort fixtures by round
   const rounds = [[], [], [], [], []];
-  fixtures.forEach(f => {
+  (fixtures || []).forEach(f => {
+    if (!f || !f.stage) return;
     const rIdx = LIVE_STAGE_ROUND[f.stage];
     if (rIdx !== undefined) rounds[rIdx].push(f);
   });
@@ -3108,7 +3109,9 @@ const ANGLE_COEFFS = [
 ];
 
 function slotAngleDeg(roundIdx, matchIdx, slot) {
-  const [step, h, a, m] = ANGLE_COEFFS[roundIdx];
+  const coeffs = ANGLE_COEFFS[roundIdx];
+  if (!coeffs) return -90;
+  const [step, h, a, m] = coeffs;
   const off = slot === "home" ? h : slot === "away" ? a : m;
   return -90 + (step * matchIdx + off) * UNIT_DEG;
 }
@@ -5386,7 +5389,7 @@ export default function App() {
       <div className="wc-content" style={{ overflowY: "auto", flex: 1, minHeight: 0 }}>
         <div className="wc-inner">
           {tab === "fixtures" && <FixturesTab predictions={predictions} onPredictOpen={openPredict} onViewDetails={f => setDetailsModal(f)} fetchError={fetchError} />}
-          {tab === "teams" && <TeamsTab selectedTeam={selectedTeam} dbStandings={dbStandings} dataVersion={dataVersion} onTeamOpen={(name) => { setSelectedTeam(name); if (name) setTab("teams"); }} />}
+          {tab === "teams" && <ErrorBoundary key={`teams-${dataVersion}`}><TeamsTab selectedTeam={selectedTeam} dbStandings={dbStandings} dataVersion={dataVersion} onTeamOpen={(name) => { setSelectedTeam(name); if (name) setTab("teams"); }} /></ErrorBoundary>}
           {tab === "bracket" && <ErrorBoundary key={`bracket-${dataVersion}`}><BracketTab user={user} theme={theme} /></ErrorBoundary>}
           {tab === "vote" && <VoteTab key={`vote-${dataVersion}`} predictions={predictions} setPredictions={setPredictions} user={user} />}
           {tab === "board" && <LeaderboardTab />}
