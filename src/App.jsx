@@ -1616,6 +1616,9 @@ function mapMatch(row) {
     status: statusMap[row.status_state] || 'Upcoming',
     clock: row.clock,
     stage: row.stage,
+    penWinner: row.pen_winner || null,
+    homePens: row.home_pens ?? null,
+    awayPens: row.away_pens ?? null,
     goals: row.goals || [],
     yellowCards: row.yellow_cards || [],
     redCards: row.red_cards || [],
@@ -3214,6 +3217,7 @@ function VoteTab({ predictions, setPredictions, user }) {
   const [dbTallies, setDbTallies] = useState({ home: 0, draw: 0, away: 0 });
   const [predictOpen, setPredictOpen] = useState(null);
   const [scoreInput, setScoreInput] = useState({ home: 0, away: 0 });
+  const [penWinnerV, setPenWinnerV] = useState(null);
   const [showAllUpcoming, setShowAllUpcoming] = useState(false);
 
   useEffect(() => {
@@ -3248,20 +3252,24 @@ function VoteTab({ predictions, setPredictions, user }) {
   const openPredict = (fixture) => {
     const existing = predictions[fixture.id];
     setScoreInput({ home: existing?.homeScore ?? 0, away: existing?.awayScore ?? 0 });
+    setPenWinnerV(existing?.penWinner ?? null);
     setPredictOpen(fixture);
   };
 
   const submitPrediction = () => {
     if (!predictOpen) return;
+    const isKO = predictOpen.stage && predictOpen.stage !== "group-stage";
+    const isDraw = scoreInput.home === scoreInput.away;
+    const penWinner = isKO && isDraw ? penWinnerV : null;
     const next = {
       ...predictions,
-      [predictOpen.id]: { homeScore: scoreInput.home, awayScore: scoreInput.away },
+      [predictOpen.id]: { homeScore: scoreInput.home, awayScore: scoreInput.away, penWinner },
     };
     setPredictions(next);
     ls.set("predictions", next);
     if (user) {
       supabase.from("wc_predictions").upsert(
-        { user_id: user.id, match_id: predictOpen.id, home_score: scoreInput.home, away_score: scoreInput.away, updated_at: new Date().toISOString() },
+        { user_id: user.id, match_id: predictOpen.id, home_score: scoreInput.home, away_score: scoreInput.away, pen_winner: penWinner, updated_at: new Date().toISOString() },
         { onConflict: "user_id,match_id" }
       ).then(({ error }) => { if (error) alert("Prediction save failed: " + error.message); });
     } else {
@@ -3415,14 +3423,16 @@ function VoteTab({ predictions, setPredictions, user }) {
                 const pred = predictions[fixture.id];
                 const h = getTeam(fixture.home);
                 const a = getTeam(fixture.away);
-                const exact = pred.homeScore === fixture.homeScore && pred.awayScore === fixture.awayScore;
                 const predHome = pred.homeScore, predAway = pred.awayScore;
-                const actHome = fixture.homeScore ?? fixture.home_score ?? 0;
-                const actAway = fixture.awayScore ?? fixture.away_score ?? 0;
-                const correctResult = (predHome > predAway && actHome > actAway) ||
-                  (predHome < predAway && actHome < actAway) ||
-                  (predHome === predAway && actHome === actAway);
-                const isExact = predHome === actHome && predAway === actAway;
+                const actHome = fixture.homeScore ?? 0;
+                const actAway = fixture.awayScore ?? 0;
+                const actPen = fixture.penWinner || null;
+                const isKnockout = fixture.stage && fixture.stage !== "group-stage";
+                const actualWinner = actHome > actAway ? "home" : actAway > actHome ? "away" : actPen || null;
+                const predWinner = predHome > predAway ? "home" : predAway > predHome ? "away"
+                  : isKnockout && pred.penWinner ? pred.penWinner : "draw";
+                const correctResult = actualWinner !== null && predWinner === actualWinner;
+                const isExact = predHome === actHome && predAway === actAway && (!actPen || pred.penWinner === actPen);
                 const badge = isExact ? { label: "🎯 EXACT", color: T.gold, pts: "+3 pts" }
                   : correctResult ? { label: "✅ CORRECT", color: "#4ade80", pts: "+1 pt" }
                   : { label: "❌ WRONG", color: T.red, pts: "0 pts" };
@@ -3452,7 +3462,7 @@ function VoteTab({ predictions, setPredictions, user }) {
                         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: T.gold, letterSpacing: 2 }}>
                           {actHome}–{actAway}
                         </div>
-                        <div style={{ fontSize: 10, color: T.gray, marginTop: 2, fontFamily: "'Barlow Condensed', sans-serif" }}>FULL TIME</div>
+                        <div style={{ fontSize: 10, color: T.gray, marginTop: 2, fontFamily: "'Barlow Condensed', sans-serif" }}>{actPen ? "AET · PENS" : "FULL TIME"}</div>
                       </div>
                       <div style={{ flex: 1, textAlign: "center" }}>
                         <div style={{ fontSize: 32 }}>{a.flag}</div>
@@ -3528,9 +3538,35 @@ function VoteTab({ predictions, setPredictions, user }) {
               </div>
             </div>
 
-            <div style={{ marginTop: 8, textAlign: "center", fontSize: 12, color: T.gray }}>
-              {scoreInput.home > scoreInput.away ? `${predictOpen.home} wins` : scoreInput.away > scoreInput.home ? `${predictOpen.away} wins` : "Draw"}
-            </div>
+            {(() => {
+              const isKO = predictOpen.stage && predictOpen.stage !== "group-stage";
+              const isDraw = scoreInput.home === scoreInput.away;
+              return (
+                <>
+                  <div style={{ marginTop: 8, textAlign: "center", fontSize: 12, color: T.gray }}>
+                    {scoreInput.home > scoreInput.away ? `${predictOpen.home} wins` : scoreInput.away > scoreInput.home ? `${predictOpen.away} wins` : isKO ? "Draw → pick penalty winner ↓" : "Draw"}
+                  </div>
+                  {isKO && isDraw && (
+                    <div style={{ marginTop: 14, borderTop: `1px solid ${T.navyLight}`, paddingTop: 14 }}>
+                      <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 12, letterSpacing: 1, color: T.gold, textAlign: "center", marginBottom: 10 }}>WHO WINS ON PENALTIES?</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                        {[{ key: "home", name: predictOpen.home }, { key: "away", name: predictOpen.away }].map(({ key, name }) => (
+                          <button key={key} onClick={() => setPenWinnerV(key)} style={{
+                            padding: "10px 8px", borderRadius: 12,
+                            border: `${penWinnerV === key ? 2 : 1}px solid ${penWinnerV === key ? T.gold : T.grayDark}`,
+                            background: penWinnerV === key ? T.gold + "22" : "transparent",
+                            cursor: "pointer", textAlign: "center",
+                          }}>
+                            <div style={{ fontSize: 28 }}>{getTeam(name).flag}</div>
+                            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, color: penWinnerV === key ? T.gold : T.gray, marginTop: 4 }}>{name}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 20 }}>
               <button onClick={() => setPredictOpen(null)} style={{ padding: 14, background: T.navyLight, border: "none", color: T.gray, borderRadius: 12, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>CANCEL</button>
@@ -4810,6 +4846,7 @@ export default function App() {
   const [predictModal, setPredictModal] = useState(null);
   const [detailsModal, setDetailsModal] = useState(null);
   const [scoreInput, setScoreInput] = useState({ home: 0, away: 0 });
+  const [penWinnerInput, setPenWinnerInput] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -4895,14 +4932,14 @@ export default function App() {
 
   const loadUserData = async (userId) => {
     const [{ data: preds }, { data: bracket }, { data: voteRow }, { data: prof }] = await Promise.all([
-      supabase.from("wc_predictions").select("match_id,home_score,away_score").eq("user_id", userId),
+      supabase.from("wc_predictions").select("match_id,home_score,away_score,pen_winner").eq("user_id", userId),
       supabase.from("wc_brackets").select("picks").eq("user_id", userId).maybeSingle(),
       supabase.from("wc_votes").select("vote").eq("user_id", userId).maybeSingle(),
       supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
     ]);
     if (preds?.length) {
       const map = {};
-      preds.forEach(p => { map[p.match_id] = { homeScore: p.home_score, awayScore: p.away_score }; });
+      preds.forEach(p => { map[p.match_id] = { homeScore: p.home_score, awayScore: p.away_score, penWinner: p.pen_winner || null }; });
       setPredictions(map);
       ls.set("predictions", map);
     }
@@ -4915,12 +4952,12 @@ export default function App() {
     }
     // Flush pending prediction made before login
     if (pendingPredictRef.current) {
-      const { matchId, homeScore, awayScore } = pendingPredictRef.current;
+      const { matchId, homeScore, awayScore, penWinner = null } = pendingPredictRef.current;
       supabase.from("wc_predictions").upsert(
-        { user_id: userId, match_id: matchId, home_score: homeScore, away_score: awayScore, updated_at: new Date().toISOString() },
+        { user_id: userId, match_id: matchId, home_score: homeScore, away_score: awayScore, pen_winner: penWinner, updated_at: new Date().toISOString() },
         { onConflict: "user_id,match_id" }
       );
-      const next = { ...ls.get("predictions", {}), [matchId]: { homeScore, awayScore } };
+      const next = { ...ls.get("predictions", {}), [matchId]: { homeScore, awayScore, penWinner } };
       setPredictions(next);
       ls.set("predictions", next);
       pendingPredictRef.current = null;
@@ -4942,26 +4979,29 @@ export default function App() {
   const openPredict = (fixture) => {
     const existing = predictions[fixture.id];
     setScoreInput({ home: existing?.homeScore ?? 0, away: existing?.awayScore ?? 0 });
+    setPenWinnerInput(existing?.penWinner ?? null);
     setPredictModal(fixture);
   };
 
   const submitPrediction = () => {
     if (!predictModal) return;
+    const isKnockout = predictModal.stage && predictModal.stage !== "group-stage";
+    const isDraw = scoreInput.home === scoreInput.away;
+    const penWinner = isKnockout && isDraw ? penWinnerInput : null;
     if (!user) {
-      // Hold prediction, prompt login — will be flushed in loadUserData after sign-in
-      pendingPredictRef.current = { matchId: predictModal.id, homeScore: scoreInput.home, awayScore: scoreInput.away };
+      pendingPredictRef.current = { matchId: predictModal.id, homeScore: scoreInput.home, awayScore: scoreInput.away, penWinner };
       setPredictModal(null);
       setShowAuth(true);
       return;
     }
     const next = {
       ...predictions,
-      [predictModal.id]: { homeScore: scoreInput.home, awayScore: scoreInput.away },
+      [predictModal.id]: { homeScore: scoreInput.home, awayScore: scoreInput.away, penWinner },
     };
     setPredictions(next);
     ls.set("predictions", next);
     supabase.from("wc_predictions").upsert(
-      { user_id: user.id, match_id: predictModal.id, home_score: scoreInput.home, away_score: scoreInput.away, updated_at: new Date().toISOString() },
+      { user_id: user.id, match_id: predictModal.id, home_score: scoreInput.home, away_score: scoreInput.away, pen_winner: penWinner, updated_at: new Date().toISOString() },
       { onConflict: "user_id,match_id" }
     ).then(({ error }) => { if (error) alert("Prediction save failed: " + error.message); });
     setPredictModal(null);
@@ -5190,9 +5230,34 @@ export default function App() {
               </div>
             </div>
 
-            <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif" }}>
-              {scoreInput.home > scoreInput.away ? `${predictModal.home} wins` : scoreInput.away > scoreInput.home ? `${predictModal.away} wins` : "Draw"}
-            </div>
+            {(() => {
+              const isKO = predictModal.stage && predictModal.stage !== "group-stage";
+              const isDraw = scoreInput.home === scoreInput.away;
+              return (
+                <>
+                  <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, color: T.gray, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                    {scoreInput.home > scoreInput.away ? `${predictModal.home} wins` : scoreInput.away > scoreInput.home ? `${predictModal.away} wins` : isKO ? "Draw → pick penalty winner ↓" : "Draw"}
+                  </div>
+                  {isKO && isDraw && (
+                    <div style={{ marginTop: 14, borderTop: `1px solid ${T.navyLight}`, paddingTop: 14 }}>
+                      <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 12, letterSpacing: 1, color: T.gold, textAlign: "center", marginBottom: 10 }}>WHO WINS ON PENALTIES?</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                        {[{ key: "home", name: predictModal.home }, { key: "away", name: predictModal.away }].map(({ key, name }) => (
+                          <button key={key} onClick={() => setPenWinnerInput(key)} style={{
+                            padding: "10px 8px", borderRadius: 12, border: `${penWinnerInput === key ? 2 : 1}px solid ${penWinnerInput === key ? T.gold : T.grayDark}`,
+                            background: penWinnerInput === key ? T.gold + "22" : "transparent",
+                            cursor: "pointer", textAlign: "center",
+                          }}>
+                            <div style={{ fontSize: 28 }}>{getTeam(name).flag}</div>
+                            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, color: penWinnerInput === key ? T.gold : T.gray, marginTop: 4 }}>{name}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 20 }}>
               <button onClick={() => setPredictModal(null)} style={{ padding: 14, background: T.navyLight, border: "none", color: T.gray, borderRadius: 12, cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15 }}>CANCEL</button>
