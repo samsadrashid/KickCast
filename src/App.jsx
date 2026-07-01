@@ -2054,9 +2054,39 @@ function KnockoutTreeView({ fixtures, onTeamOpen }) {
   const COL_W = CARD_W + CONN_W;
   const LABEL_H = 26;
 
-  const rounds = KO_TREE_STAGES
-    .map(s => ({ stage: s, label: KO_TREE_LABELS[s], matches: fixtures.filter(f => f.stage === s).sort((a, b) => new Date(a.isoDate) - new Date(b.isoDate)) }))
-    .filter(r => r.matches.length > 0);
+  // Sort using official bracket order so connectors align correctly
+  const buildBracketRounds = () => {
+    const r32 = fixtures.filter(f => f.stage === "round-of-32").sort((a, b) => {
+      const ai = R32_BRACKET_ORDER.indexOf(String(a.id));
+      const bi = R32_BRACKET_ORDER.indexOf(String(b.id));
+      return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+    });
+    const buildPosMap = (arr) => {
+      const map = {};
+      arr.forEach((m, idx) => {
+        const add = (t) => { if (!t) return; const pp = getPlaceholderPos(t); map[t] = pp !== undefined ? pp : idx; };
+        add(m.home); add(m.away);
+      });
+      return map;
+    };
+    const reorder = (arr, prevMap) => [...arr].sort((a, b) => {
+      const pa = Math.floor(Math.min(prevMap[a.home] ?? 999, prevMap[a.away] ?? 999) / 2);
+      const pb = Math.floor(Math.min(prevMap[b.home] ?? 999, prevMap[b.away] ?? 999) / 2);
+      return pa - pb;
+    });
+    const r16 = reorder(fixtures.filter(f => f.stage === "round-of-16"), buildPosMap(r32));
+    const qf  = reorder(fixtures.filter(f => f.stage === "quarterfinals"), buildPosMap(r16));
+    const sf  = reorder(fixtures.filter(f => f.stage === "semifinals"), buildPosMap(qf));
+    const fin = fixtures.filter(f => f.stage === "final");
+    return [
+      { stage: "round-of-32",   label: "R32",   matches: r32 },
+      { stage: "round-of-16",   label: "R16",   matches: r16 },
+      { stage: "quarterfinals", label: "QF",    matches: qf  },
+      { stage: "semifinals",    label: "SF",    matches: sf  },
+      { stage: "final",         label: "FINAL", matches: fin },
+    ].filter(r => r.matches.length > 0);
+  };
+  const rounds = buildBracketRounds();
 
   const thirdPlace = fixtures.filter(f => f.stage === "3rd-place-match");
 
@@ -2098,9 +2128,14 @@ function KnockoutTreeView({ fixtures, onTeamOpen }) {
     const away = getTeam(f.away);
     const hasScore = f.status !== "Upcoming";
     const isLive = f.status === "Live";
-    const homeWin = hasScore && f.homeScore > f.awayScore;
-    const awayWin = hasScore && f.awayScore > f.homeScore;
-    const TeamRow = ({ flag, name, score, isWin }) => (
+    const homeWin = hasScore && (f.homeScore > f.awayScore || f.penWinner === "home");
+    const awayWin = hasScore && (f.awayScore > f.homeScore || f.penWinner === "away");
+    const scoreStr = (s, pens, isHome) => {
+      if (s === null || s === undefined) return null;
+      const penLabel = f.penWinner ? ` (${isHome ? (f.homePens ?? "?") : (f.awayPens ?? "?")}p)` : "";
+      return `${s}${penLabel}`;
+    };
+    const TeamRow = ({ flag, name, score, isWin, isHome }) => (
       <div onClick={() => name && onTeamOpen(name)} style={{
         display: "flex", alignItems: "center", gap: 5, padding: "5px 7px",
         background: isWin ? T.gold + "18" : "transparent",
@@ -2115,9 +2150,9 @@ function KnockoutTreeView({ fixtures, onTeamOpen }) {
     );
     return (
       <div style={{ background: T.navyMid, border: `1px solid ${hasScore ? T.gold + "44" : T.navyLight}`, borderRadius: 8, overflow: "hidden", width: wide ? CARD_W + CONN_W - 4 : CARD_W }}>
-        <TeamRow flag={home?.flag} name={f.home} score={f.homeScore} isWin={homeWin} />
+        <TeamRow flag={home?.flag} name={f.home} score={scoreStr(f.homeScore, f.homePens, true)} isWin={homeWin} isHome={true} />
         <div style={{ height: 1, background: T.navyLight }} />
-        <TeamRow flag={away?.flag} name={f.away} score={f.awayScore} isWin={awayWin} />
+        <TeamRow flag={away?.flag} name={f.away} score={scoreStr(f.awayScore, f.awayPens, false)} isWin={awayWin} isHome={false} />
       </div>
     );
   };
@@ -2523,7 +2558,7 @@ function TeamsTab({ selectedTeam, onTeamOpen, dbStandings, dataVersion: _dv }) {
 
       {/* Knockout sub-tab */}
       {subTab === "knockout" && (
-        <LiveCircleBracket fixtures={knockoutFixtures} onTeamOpen={onTeamOpen} />
+        <KnockoutTreeView fixtures={knockoutFixtures} onTeamOpen={onTeamOpen} />
       )}
 
       {/* Groups sub-tab */}
