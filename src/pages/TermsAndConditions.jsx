@@ -146,7 +146,7 @@ export default function TermsAndConditions() {
         <div style={s.header}>
           <a href="https://kick-cast.vercel.app" style={s.back}>← KICKCAST</a>
           <span style={s.title}>TERMS & CONDITIONS</span>
-          <span style={s.updated}>Updated Jun 16, 2026</span>
+          <span style={s.updated}>Updated Jun 30, 2026</span>
         </div>
 
         <div style={s.body}>
@@ -178,7 +178,8 @@ export default function TermsAndConditions() {
 
           <div style={s.section}>
             <div style={s.h2}>4. User Accounts</div>
-            <p style={s.p}><span style={s.badge}>SECURITY</span>You are responsible for keeping your password confidential and for all activity under your account. Notify us immediately of any unauthorized use.</p>
+            <p style={s.p}><span style={s.badge}>SIGN-IN OPTIONS</span>You may create an account using an email address and password, or sign in with your Google account via Google Sign-In (OAuth 2.0). By using Google Sign-In, you authorize KickCast to receive your Google email, display name, and profile picture, and you agree that your use of Google's services remains subject to <a href="https://policies.google.com/terms" style={s.link} target="_blank" rel="noreferrer">Google's Terms of Service</a>.</p>
+            <p style={s.p}><span style={s.badge}>SECURITY</span>You are responsible for keeping your credentials confidential and for all activity under your account. If you signed in with Google, ensure your Google account is secured. Notify us immediately of any unauthorized use at <a href="mailto:samsadsam35@gmail.com" style={s.link}>samsadsam35@gmail.com</a>.</p>
             <p style={s.p}><span style={s.badge}>ACCURACY</span>You agree to provide accurate information. We may suspend accounts with false or misleading details.</p>
             <p style={s.p}><span style={s.badge}>ONE ACCOUNT</span>Each user may hold only one account. Multiple accounts to gain leaderboard advantages are prohibited.</p>
           </div>
@@ -224,7 +225,7 @@ export default function TermsAndConditions() {
 
           <div style={s.section}>
             <div style={s.h2}>10. Termination</div>
-            <p style={s.p}>We may suspend or terminate your account at any time for violation of these Terms, harmful conduct, or extended inactivity (12+ months). You may delete your account at any time by contacting <a href="mailto:samsadsam35@gmail.com" style={s.link}>samsadsam35@gmail.com</a>.</p>
+            <p style={s.p}>We may suspend or terminate your account at any time for violation of these Terms, harmful conduct, or extended inactivity (12+ months). You may delete your account at any time from the <strong>Settings screen inside the app</strong>. Account deletion immediately removes all your data from our servers.</p>
           </div>
 
           <div style={s.section}>
