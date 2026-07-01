@@ -2197,6 +2197,29 @@ const LIVE_STAGE_ROUND = {
   "quarterfinals": 2, "semifinals": 3, "final": 4,
 };
 
+// R32 match IDs in official bracket order (grouped by QF path, matching FIFA bracket)
+// Each group of 4 feeds one QF: slots 1&4→R16 1, 3&6→R16 2 → QF1→SF1, etc.
+const R32_BRACKET_ORDER = [
+  "760486","760488","760489","760492",  // QF1 path (SF1 left)
+  "760497","760496","760493","760494",  // QF2 path (SF1 right)
+  "760487","760490","760491","760495",  // QF3 path (SF2 left)
+  "760499","760501","760498","760500",  // QF4 path (SF2 right)
+];
+// ESPN slot number → bracket position index (for placeholder team names)
+const R32_SLOT_TO_POS = {1:0,4:1,3:2,6:3, 11:4,12:5,9:6,10:7, 2:8,5:9,7:10,8:11, 14:12,16:13,13:14,15:15};
+// ESPN R16 number → sorted bracket index (R16 sort order: 1,2,5,6,3,4,7,8 → indices 0-7)
+const R16_ESPN_TO_POS = {1:0,2:1,5:2,6:3,3:4,4:5,7:6,8:7};
+// QF ESPN number → bracket position index
+const QF_ESPN_TO_POS = {1:0,2:1,3:2,4:3};
+
+const getPlaceholderPos = (name) => {
+  let m;
+  if ((m = name?.match(/Round of 32 (\d+) Winner/))) return R32_SLOT_TO_POS[+m[1]];
+  if ((m = name?.match(/Round of 16 (\d+) Winner/))) return R16_ESPN_TO_POS[+m[1]];
+  if ((m = name?.match(/Quarterfinal (\d+) Winner/))) return QF_ESPN_TO_POS[+m[1]];
+  return undefined;
+};
+
 function LiveCircleBracket({ fixtures, onTeamOpen }) {
   const containerRef = useRef(null);
   const [sz, setSz] = useState(480);
@@ -2224,17 +2247,26 @@ function LiveCircleBracket({ fixtures, onTeamOpen }) {
     const rIdx = LIVE_STAGE_ROUND[f.stage];
     if (rIdx !== undefined) rounds[rIdx].push(f);
   });
-  // R32: sort by date to get base positions
-  rounds[0].sort((a, b) => new Date(a.isoDate) - new Date(b.isoDate));
+  // R32: sort by official bracket order so QF-path groups are adjacent
+  rounds[0].sort((a, b) => {
+    const ai = R32_BRACKET_ORDER.indexOf(String(a.id));
+    const bi = R32_BRACKET_ORDER.indexOf(String(b.id));
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  });
 
   // Reorder each subsequent round so winners flow inward on the same radial line.
-  // Build team→matchIdx map from the previous round, then sort current round
-  // so that floor(prevIdx/2) gives each match its bracket-aligned position.
+  // Build team→matchIdx map from the previous round; resolve ESPN placeholder names
+  // like "Round of 32 7 Winner" to their bracket position via lookup tables.
   const buildTeamPosMap = (roundMatches) => {
     const map = {};
     roundMatches.forEach((m, idx) => {
-      if (m.home) map[m.home] = idx;
-      if (m.away) map[m.away] = idx;
+      const addTeam = (t) => {
+        if (!t) return;
+        const pp = getPlaceholderPos(t);
+        map[t] = pp !== undefined ? pp : idx;
+      };
+      addTeam(m.home);
+      addTeam(m.away);
     });
     return map;
   };
