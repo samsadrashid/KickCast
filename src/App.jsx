@@ -2208,17 +2208,26 @@ const LIVE_STAGE_ROUND = {
 
 // Match IDs in official FIFA 2026 bracket order for each round.
 // Groups of 2 within each round feed the same match in the next round (floor(idx/2)).
+// R32 #N from ESPN's own placeholder numbering (1-16 by date-time order).
+// Each adjacent pair feeds the same R16 slot via floor(idx/2).
 const R32_BRACKET_ORDER = [
-  "760486","760488","760489","760492",  // → R16 0,1 → QF 0 → SF 0
-  "760497","760496","760493","760494",  // → R16 2,3 → QF 1 → SF 0
-  "760487","760490","760491","760495",  // → R16 4,5 → QF 2 → SF 1
-  "760499","760501","760498","760500",  // → R16 6,7 → QF 3 → SF 1
+  "760486","760488",  // #1(SA/Can) #4(Net/Mor) → R16[0]=760502 → QF[0]=760510 → SF[0]
+  "760489","760492",  // #3(Ger/Par) #6(Fra/Swe) → R16[1]=760503 → QF[0] → SF[0]
+  "760496","760497",  // #11(Por/Cro) #12(Esp/Aut) → R16[2]=760506 → QF[1]=760511 → SF[0]
+  "760494","760495",  // #9(USA/Bos) #10(Eng/Con) → R16[3]=760507 → QF[1] → SF[0]
+  "760487","760490",  // #2(Bra/Jpn) #5(Ivo/Nor) → R16[4]=760504 → QF[2]=760512 → SF[1]
+  "760491","760493",  // #7(Mex/Ecu) #8(Bel/Sen) → R16[5]=760505 → QF[2] → SF[1]
+  "760498","760500",  // #13(Swi/Alg) #15(Arg/Cpv) → R16[6]=760508 → QF[3]=760513 → SF[1]
+  "760499","760501",  // #14(Aus/Egy) #16(Col/Gha) → R16[7]=760509 → QF[3] → SF[1]
 ];
+// R16 array order maps to QF via floor(r16Idx/2).
+// QF 760510="R16#1vsR16#2", QF 760511="R16#5vsR16#6", QF 760512="R16#3vsR16#4", QF 760513="R16#7vsR16#8"
+// So positions: [0,1]→QF0, [2,3]→QF1, [4,5]→QF2, [6,7]→QF3
 const R16_BRACKET_ORDER = [
-  "760502","760503",  // QF 0 → SF 0
-  "760506","760507",  // QF 1 → SF 0
-  "760504","760505",  // QF 2 → SF 1
-  "760509","760508",  // QF 3 → SF 1
+  "760502","760503",  // R16#1,#2 → QF[0]=760510 → SF[0]
+  "760506","760507",  // R16#5,#6 → QF[1]=760511 → SF[0]
+  "760504","760505",  // R16#3,#4 → QF[2]=760512 → SF[1]
+  "760508","760509",  // R16#7,#8 → QF[3]=760513 → SF[1]
 ];
 const QF_BRACKET_ORDER = ["760510","760511","760512","760513"];
 const SF_BRACKET_ORDER = ["760514","760515"];
