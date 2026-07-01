@@ -2054,39 +2054,13 @@ function KnockoutTreeView({ fixtures, onTeamOpen }) {
   const COL_W = CARD_W + CONN_W;
   const LABEL_H = 26;
 
-  // Sort using official bracket order so connectors align correctly
-  const buildBracketRounds = () => {
-    const r32 = fixtures.filter(f => f.stage === "round-of-32").sort((a, b) => {
-      const ai = R32_BRACKET_ORDER.indexOf(String(a.id));
-      const bi = R32_BRACKET_ORDER.indexOf(String(b.id));
-      return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-    });
-    const buildPosMap = (arr) => {
-      const map = {};
-      arr.forEach((m, idx) => {
-        const add = (t) => { if (!t) return; const pp = getPlaceholderPos(t); map[t] = pp !== undefined ? pp : idx; };
-        add(m.home); add(m.away);
-      });
-      return map;
-    };
-    const reorder = (arr, prevMap) => [...arr].sort((a, b) => {
-      const pa = Math.floor(Math.min(prevMap[a.home] ?? 999, prevMap[a.away] ?? 999) / 2);
-      const pb = Math.floor(Math.min(prevMap[b.home] ?? 999, prevMap[b.away] ?? 999) / 2);
-      return pa - pb;
-    });
-    const r16 = reorder(fixtures.filter(f => f.stage === "round-of-16"), buildPosMap(r32));
-    const qf  = reorder(fixtures.filter(f => f.stage === "quarterfinals"), buildPosMap(r16));
-    const sf  = reorder(fixtures.filter(f => f.stage === "semifinals"), buildPosMap(qf));
-    const fin = fixtures.filter(f => f.stage === "final");
-    return [
-      { stage: "round-of-32",   label: "R32",   matches: r32 },
-      { stage: "round-of-16",   label: "R16",   matches: r16 },
-      { stage: "quarterfinals", label: "QF",    matches: qf  },
-      { stage: "semifinals",    label: "SF",    matches: sf  },
-      { stage: "final",         label: "FINAL", matches: fin },
-    ].filter(r => r.matches.length > 0);
-  };
-  const rounds = buildBracketRounds();
+  const rounds = [
+    { label: "R32",   matches: sortByBracket(fixtures.filter(f => f.stage === "round-of-32"),   R32_BRACKET_ORDER) },
+    { label: "R16",   matches: sortByBracket(fixtures.filter(f => f.stage === "round-of-16"),   R16_BRACKET_ORDER) },
+    { label: "QF",    matches: sortByBracket(fixtures.filter(f => f.stage === "quarterfinals"), QF_BRACKET_ORDER)  },
+    { label: "SF",    matches: sortByBracket(fixtures.filter(f => f.stage === "semifinals"),    SF_BRACKET_ORDER)  },
+    { label: "FINAL", matches: fixtures.filter(f => f.stage === "final") },
+  ].filter(r => r.matches.length > 0);
 
   const thirdPlace = fixtures.filter(f => f.stage === "3rd-place-match");
 
@@ -2232,28 +2206,29 @@ const LIVE_STAGE_ROUND = {
   "quarterfinals": 2, "semifinals": 3, "final": 4,
 };
 
-// R32 match IDs in official bracket order (grouped by QF path, matching FIFA bracket)
-// Each group of 4 feeds one QF: slots 1&4→R16 1, 3&6→R16 2 → QF1→SF1, etc.
+// Match IDs in official FIFA 2026 bracket order for each round.
+// Groups of 2 within each round feed the same match in the next round (floor(idx/2)).
 const R32_BRACKET_ORDER = [
-  "760486","760488","760489","760492",  // QF1 path (SF1 left)
-  "760497","760496","760493","760494",  // QF2 path (SF1 right)
-  "760487","760490","760491","760495",  // QF3 path (SF2 left)
-  "760499","760501","760498","760500",  // QF4 path (SF2 right)
+  "760486","760488","760489","760492",  // → R16 0,1 → QF 0 → SF 0
+  "760497","760496","760493","760494",  // → R16 2,3 → QF 1 → SF 0
+  "760487","760490","760491","760495",  // → R16 4,5 → QF 2 → SF 1
+  "760499","760501","760498","760500",  // → R16 6,7 → QF 3 → SF 1
 ];
-// ESPN slot number → bracket position index (for placeholder team names)
-const R32_SLOT_TO_POS = {1:0,4:1,3:2,6:3, 11:4,12:5,9:6,10:7, 2:8,5:9,7:10,8:11, 14:12,16:13,13:14,15:15};
-// ESPN R16 number → sorted bracket index (R16 sort order: 1,2,5,6,3,4,7,8 → indices 0-7)
-const R16_ESPN_TO_POS = {1:0,2:1,5:2,6:3,3:4,4:5,7:6,8:7};
-// QF ESPN number → bracket position index
-const QF_ESPN_TO_POS = {1:0,2:1,3:2,4:3};
+const R16_BRACKET_ORDER = [
+  "760502","760503",  // QF 0 → SF 0
+  "760506","760507",  // QF 1 → SF 0
+  "760504","760505",  // QF 2 → SF 1
+  "760509","760508",  // QF 3 → SF 1
+];
+const QF_BRACKET_ORDER = ["760510","760511","760512","760513"];
+const SF_BRACKET_ORDER = ["760514","760515"];
 
-const getPlaceholderPos = (name) => {
-  let m;
-  if ((m = name?.match(/Round of 32 (\d+) Winner/))) return R32_SLOT_TO_POS[+m[1]];
-  if ((m = name?.match(/Round of 16 (\d+) Winner/))) return R16_ESPN_TO_POS[+m[1]];
-  if ((m = name?.match(/Quarterfinal (\d+) Winner/))) return QF_ESPN_TO_POS[+m[1]];
-  return undefined;
-};
+const sortByBracket = (arr, order) =>
+  [...arr].sort((a, b) => {
+    const ai = order.indexOf(String(a.id));
+    const bi = order.indexOf(String(b.id));
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  });
 
 function LiveCircleBracket({ fixtures, onTeamOpen }) {
   const containerRef = useRef(null);
@@ -2282,44 +2257,11 @@ function LiveCircleBracket({ fixtures, onTeamOpen }) {
     const rIdx = LIVE_STAGE_ROUND[f.stage];
     if (rIdx !== undefined) rounds[rIdx].push(f);
   });
-  // R32: sort by official bracket order so QF-path groups are adjacent
-  rounds[0].sort((a, b) => {
-    const ai = R32_BRACKET_ORDER.indexOf(String(a.id));
-    const bi = R32_BRACKET_ORDER.indexOf(String(b.id));
-    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-  });
-
-  // Reorder each subsequent round so winners flow inward on the same radial line.
-  // Build team→matchIdx map from the previous round; resolve ESPN placeholder names
-  // like "Round of 32 7 Winner" to their bracket position via lookup tables.
-  const buildTeamPosMap = (roundMatches) => {
-    const map = {};
-    roundMatches.forEach((m, idx) => {
-      const addTeam = (t) => {
-        if (!t) return;
-        const pp = getPlaceholderPos(t);
-        map[t] = pp !== undefined ? pp : idx;
-      };
-      addTeam(m.home);
-      addTeam(m.away);
-    });
-    return map;
-  };
-  const reorderByPrev = (matches, prevMap) => {
-    return [...matches].sort((a, b) => {
-      const posA = Math.floor(Math.min(prevMap[a.home] ?? 999, prevMap[a.away] ?? 999) / 2);
-      const posB = Math.floor(Math.min(prevMap[b.home] ?? 999, prevMap[b.away] ?? 999) / 2);
-      return posA - posB;
-    });
-  };
-  let prevMap = buildTeamPosMap(rounds[0]);
-  rounds[1] = reorderByPrev(rounds[1], prevMap);
-  prevMap = buildTeamPosMap(rounds[1]);
-  rounds[2] = reorderByPrev(rounds[2], prevMap);
-  prevMap = buildTeamPosMap(rounds[2]);
-  rounds[3] = reorderByPrev(rounds[3], prevMap);
-  rounds[4].sort((a, b) => new Date(a.isoDate) - new Date(b.isoDate));
-
+  // Sort all rounds by official bracket order (same IDs as KnockoutTreeView)
+  rounds[0] = sortByBracket(rounds[0], R32_BRACKET_ORDER);
+  rounds[1] = sortByBracket(rounds[1], R16_BRACKET_ORDER);
+  rounds[2] = sortByBracket(rounds[2], QF_BRACKET_ORDER);
+  rounds[3] = sortByBracket(rounds[3], SF_BRACKET_ORDER);
   const getWinner = (f) => {
     if (!f || f.homeScore === null) return null;
     if (f.homeScore > f.awayScore) return f.home;
