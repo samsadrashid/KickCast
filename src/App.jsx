@@ -3902,13 +3902,16 @@ function VoteTab({ predictions, setPredictions, user }) {
 // ─── TAB: LEADERBOARD ────────────────────────────────────────────────────────
 function LeaderboardTab() {
   const medals = ["🥇", "🥈", "🥉"];
+  const [board, setBoard] = useState("knockout"); // "knockout" | "alltime"
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.rpc("get_leaderboard")
+    setLoading(true);
+    const rpcName = board === "knockout" ? "get_knockout_leaderboard" : "get_leaderboard";
+    supabase.rpc(rpcName)
       .then(({ data }) => { setUsers(data || []); setLoading(false); });
-  }, []);
+  }, [board]);
 
   const getName = (u) => u.display_name?.split("@")[0] || "Player";
   const getFlag = (u) => u.supporting_team ? getTeam(u.supporting_team).flag : "🌍";
@@ -3918,7 +3921,25 @@ function LeaderboardTab() {
     <div style={{ padding: "16px", paddingBottom: 80 }}>
       <div style={{ marginBottom: 16 }}>
         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: 2, color: T.gold }}>LEADERBOARD</div>
-        <div style={{ fontSize: 13, color: T.gray }}>Top predictors this tournament</div>
+        <div style={{ fontSize: 13, color: T.gray }}>
+          {board === "knockout" ? "Quarterfinal to final" : "Top predictors this tournament"}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        {[["knockout", "KNOCKOUT"], ["alltime", "ALL-TIME"]].map(([key, label]) => (
+          <button
+            key={key}
+            onClick={() => setBoard(key)}
+            style={{
+              flex: 1, padding: "10px 0", borderRadius: 8, border: `1px solid ${board === key ? T.gold : T.navyLight}`,
+              background: board === key ? `${T.gold}15` : T.navyMid,
+              color: board === key ? T.gold : T.gray,
+              fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 13, letterSpacing: 1,
+              cursor: "pointer",
+            }}
+          >{label}</button>
+        ))}
       </div>
 
       {/* Scoring guide */}
