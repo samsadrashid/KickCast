@@ -1722,6 +1722,123 @@ function MatchCard({ fixture, onPredict, userPrediction }) {
 }
 
 // ─── MATCH DETAILS MODAL ──────────────────────────────────────────────────────
+// ─── GOAL TIMELINE (Phase 2 — real per-match minute/scorer data) ─────────────
+function parseMinute(m) {
+  const match = /^(\d+)'(?:\+(\d+)')?$/.exec(m || "");
+  if (!match) return { base: 0, extra: 0, total: 0 };
+  const base = Number(match[1]);
+  const extra = Number(match[2] || 0);
+  return { base, extra, total: base + extra };
+}
+
+// Match Story Mode — templated narrative over real minute/scorer/side data (Phase 4). Not a new data source.
+const OG_TEMPLATES = [
+  (g) => `${g.minute} — disaster for ${g.team}. ${g.player} turns it into his own net.`,
+  (g) => `${g.minute} — own goal. ${g.player} can't watch back — ${g.team} concede.`,
+];
+const GOAL_TEMPLATES = [
+  (g) => `${g.minute} — ${g.player} finds the net for ${g.team}.`,
+  (g) => `${g.minute} — GOAL. ${g.player} strikes for ${g.team}.`,
+  (g) => `${g.minute} — ${g.player} makes it count. ${g.team} on the board.`,
+  (g) => `${g.minute} — ${g.player} buries it. ${g.team} celebrate.`,
+];
+function narrateGoal(g) {
+  const templates = g.own ? OG_TEMPLATES : GOAL_TEMPLATES;
+  const idx = (g.base + (g.extra || 0) + g.player.length) % templates.length;
+  return templates[idx](g);
+}
+
+// No curated youtube_video_id exists yet (roadmap forbids auto-search for real embeds) —
+// fallback is an honest, clearly-labeled YouTube search link, not a claimed official clip.
+function youtubeSearchUrl(g) {
+  const q = `${g.player} goal ${g.team} World Cup 2026`;
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`;
+}
+
+function GoalTimeline({ goals, isPen }) {
+  const [selected, setSelected] = useState(null);
+  if (!goals?.length) return null;
+
+  const parsed = goals.map((g, i) => ({ ...g, i, ...parseMinute(g.minute) }));
+  const maxTotal = Math.max(...parsed.map(g => g.total));
+  const wentToExtra = maxTotal > 96;
+  const trackMax = wentToExtra ? Math.max(120, maxTotal + 4) : 96;
+  const pct = (total) => Math.min(100, (total / trackMax) * 100);
+  const active = selected != null ? parsed.find(g => g.i === selected) : null;
+
+  return (
+    <div style={{ background: T.navy, borderRadius: 12, padding: "12px 16px", marginBottom: 10 }}>
+      <div style={{ fontSize: 11, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 14 }}>GOALS</div>
+
+      {/* Track */}
+      <div style={{ position: "relative", height: 40, margin: "0 4px 8px" }}>
+        <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: 2, background: T.navyLight, transform: "translateY(-50%)", borderRadius: 1 }} />
+        {/* Tick labels */}
+        {[45, 90, ...(wentToExtra ? [120] : [])].map(t => (
+          <div key={t} style={{
+            position: "absolute", top: "50%", left: `${pct(t)}%`, transform: "translate(-50%, -50%)",
+            width: 1, height: 10, background: T.grayDark,
+          }} />
+        ))}
+        {[45, 90, ...(wentToExtra ? [120] : [])].map(t => (
+          <div key={`l${t}`} style={{
+            position: "absolute", bottom: -2, left: `${pct(t)}%`, transform: "translateX(-50%)",
+            fontSize: 9, color: T.grayDark, fontFamily: "'Barlow Condensed', sans-serif",
+          }}>{t}'</div>
+        ))}
+        {/* Playhead */}
+        {active && (
+          <div style={{
+            position: "absolute", top: 2, bottom: 8, left: `${pct(active.total)}%`,
+            width: 2, background: T.gold, transform: "translateX(-50%)",
+            transition: "left 0.25s ease", borderRadius: 1,
+          }} />
+        )}
+        {/* Markers */}
+        {parsed.map(g => (
+          <div key={g.i} onClick={() => setSelected(selected === g.i ? null : g.i)}
+            style={{
+              position: "absolute", left: `${pct(g.total)}%`,
+              top: g.side === "home" ? "18%" : "82%",
+              transform: "translate(-50%, -50%)",
+              cursor: "pointer", fontSize: selected === g.i ? 18 : 14,
+              transition: "all 0.2s ease", zIndex: selected === g.i ? 2 : 1,
+              filter: selected != null && selected !== g.i ? "opacity(0.4)" : "none",
+            }}>
+            {g.own ? "⚠️" : "⚽"}
+          </div>
+        ))}
+      </div>
+
+      {/* Selected goal readout */}
+      {active ? (
+        <div style={{ textAlign: "center", padding: "6px 0" }}>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: T.white }}>
+            {narrateGoal(active)}
+          </div>
+          <a href={youtubeSearchUrl(active)} target="_blank" rel="noopener noreferrer"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 5, marginTop: 8,
+              fontSize: 11, color: T.gray, textDecoration: "none",
+              border: `1px solid ${T.navyLight}`, borderRadius: 20, padding: "4px 12px",
+            }}>
+            🔍 Search YouTube <span style={{ color: T.grayDark }}>(no curated clip yet)</span>
+          </a>
+        </div>
+      ) : (
+        parsed.map(g => (
+          <div key={g.i} onClick={() => setSelected(g.i)}
+            style={{ display: "flex", justifyContent: g.side === "home" ? "flex-start" : "flex-end", marginBottom: 4, cursor: "pointer" }}>
+            <span style={{ fontSize: 12, color: T.white, fontFamily: "'Barlow Condensed', sans-serif" }}>
+              {g.side === "home" ? `⚽ ${g.own ? "(OG) " : ""}${g.player} ${g.minute}` : `${g.minute} ${g.player}${g.own ? " (OG)" : ""} ⚽`}
+            </span>
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+
 function MatchDetailsModal({ fixture, userPrediction, onClose }) {
   const home = getTeam(fixture.home);
   const away = getTeam(fixture.away);
@@ -1732,6 +1849,31 @@ function MatchDetailsModal({ fixture, userPrediction, onClose }) {
   const isPen = !!penWinner;
   const result = homeWin ? `${fixture.home} Win` : awayWin ? `${fixture.away} Win` : "Draw";
   const timeLabel = isPen ? "AET · PENS" : "FULL TIME";
+  const cardRef = useRef(null);
+  const [sharing, setSharing] = useState(false);
+
+  const handleShareCard = async () => {
+    if (!cardRef.current) return;
+    setSharing(true);
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const canvas = await html2canvas(cardRef.current, {
+        backgroundColor: T.navyMid, scale: 2, useCORS: true,
+      });
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+      const file = new File([blob], "kickcast-match.png", { type: "image/png" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ title: "KickCast — World Cup 2026", text: `${fixture.home} ${fixture.homeScore}–${fixture.awayScore} ${fixture.away}`, files: [file] });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = "kickcast-match.png"; a.click();
+        URL.revokeObjectURL(url);
+      }
+    } finally {
+      setSharing(false);
+    }
+  };
 
   let predLabel = null;
   if (userPrediction != null) {
@@ -1768,45 +1910,53 @@ function MatchDetailsModal({ fixture, userPrediction, onClose }) {
           <button onClick={onClose} style={{ background: "none", border: "none", color: T.gray, fontSize: 22, cursor: "pointer", padding: 0 }}>✕</button>
         </div>
 
-        {/* Teams + Score */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-          <div style={{ flex: 1, textAlign: "center" }}>
-            <div style={{ fontSize: 48 }}>{home.flag}</div>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, marginTop: 6, color: homeWin ? T.gold : T.white }}>{fixture.home}</div>
+        {/* Shareable card region — captured by handleShareCard */}
+        <div ref={cardRef} style={{ background: T.navyMid, padding: "4px 4px 2px" }}>
+          <div style={{ textAlign: "center", fontSize: 10, letterSpacing: 2, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, marginBottom: 10 }}>
+            🏆 KICKCAST · FIFA WORLD CUP 2026
           </div>
-          <div style={{ textAlign: "center", padding: "0 16px" }}>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 44, color: T.gold, letterSpacing: 4 }}>
-              {fixture.homeScore} — {fixture.awayScore}
+
+          {/* Teams + Score */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+            <div style={{ flex: 1, textAlign: "center" }}>
+              <div style={{ fontSize: 48 }}>{home.flag}</div>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, marginTop: 6, color: homeWin ? T.gold : T.white }}>{fixture.home}</div>
             </div>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, color: isPen ? T.gold : T.gray, marginTop: 4 }}>{timeLabel}</div>
-            {isPen && <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, color: T.gray, marginTop: 1 }}>({fixture.homePens ?? "?"} – {fixture.awayPens ?? "?"} pens)</div>}
+            <div style={{ textAlign: "center", padding: "0 16px" }}>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 44, color: T.gold, letterSpacing: 4 }}>
+                {fixture.homeScore} — {fixture.awayScore}
+              </div>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, color: isPen ? T.gold : T.gray, marginTop: 4 }}>{timeLabel}</div>
+              {isPen && <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, color: T.gray, marginTop: 1 }}>({fixture.homePens ?? "?"} – {fixture.awayPens ?? "?"} pens)</div>}
+            </div>
+            <div style={{ flex: 1, textAlign: "center" }}>
+              <div style={{ fontSize: 48 }}>{away.flag}</div>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, marginTop: 6, color: awayWin ? T.gold : T.white }}>{fixture.away}</div>
+            </div>
           </div>
-          <div style={{ flex: 1, textAlign: "center" }}>
-            <div style={{ fontSize: 48 }}>{away.flag}</div>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, marginTop: 6, color: awayWin ? T.gold : T.white }}>{fixture.away}</div>
+
+          {/* Result pill */}
+          <div style={{ textAlign: "center", marginBottom: 16 }}>
+            <span style={{ background: T.gold + "22", color: T.gold, padding: "5px 16px", borderRadius: 20, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: 1 }}>
+              {result}
+            </span>
           </div>
         </div>
 
-        {/* Result pill */}
-        <div style={{ textAlign: "center", marginBottom: 16 }}>
-          <span style={{ background: T.gold + "22", color: T.gold, padding: "5px 16px", borderRadius: 20, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: 1 }}>
-            {result}
-          </span>
-        </div>
+        {/* Share button */}
+        {fixture.status === "FT" && (
+          <button onClick={handleShareCard} disabled={sharing} style={{
+            width: "100%", padding: "10px 0", marginBottom: 10,
+            background: "transparent", border: `1px solid ${T.navyLight}`, borderRadius: 10,
+            color: T.gray, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13,
+            cursor: sharing ? "default" : "pointer", opacity: sharing ? 0.6 : 1,
+          }}>
+            {sharing ? "GENERATING…" : "📤 SHARE RESULT"}
+          </button>
+        )}
 
         {/* Goals */}
-        {fixture.goals?.length > 0 && (
-          <div style={{ background: T.navy, borderRadius: 12, padding: "12px 16px", marginBottom: 10 }}>
-            <div style={{ fontSize: 11, color: T.gold, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginBottom: 8 }}>GOALS</div>
-            {fixture.goals.map((g, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: g.side === "home" ? "flex-start" : "flex-end", marginBottom: 4 }}>
-                <span style={{ fontSize: 12, color: T.white, fontFamily: "'Barlow Condensed', sans-serif" }}>
-                  {g.side === "home" ? `⚽ ${g.own ? "(OG) " : ""}${g.player} ${g.minute}` : `${g.minute} ${g.player}${g.own ? " (OG)" : ""} ⚽`}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
+        <GoalTimeline goals={fixture.goals} isPen={isPen} />
 
         {/* Cards */}
         {(fixture.yellowCards?.length > 0 || fixture.redCards?.length > 0) && (
@@ -3361,7 +3511,7 @@ function BracketTab({ user, theme }) {
   const bracketRef = useRef(null);
 
   useEffect(() => {
-    supabase.from("standings").select("*").then(({ data }) => { if (data) setStandings(data); });
+    supabase.from("standings").select("*").eq("tournament_id", "2026").then(({ data }) => { if (data) setStandings(data); });
   }, []);
 
   const saveBracket = (next) => {
@@ -4702,6 +4852,113 @@ function WcXiTab() {
   );
 }
 
+// ─── MUSEUM (Phase 1) ─────────────────────────────────────────────────────────
+// Phase 6 — 2030 Countdown. Real hosts/dates (Wikidata-sourced). Live-ticking, no fabricated data.
+function Countdown2030Card({ tournament }) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const target = new Date(tournament.starts_on).getTime();
+  const diff = Math.max(0, target - now);
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+
+  return (
+    <div style={{
+      background: `linear-gradient(135deg, ${T.navyLight}, ${T.navyMid})`,
+      borderRadius: 14, padding: "16px 16px 14px", marginBottom: 16,
+      border: `1px solid ${T.navyLight}`,
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, color: T.white, letterSpacing: 1 }}>
+          🇪🇸🇵🇹🇲🇦 FIFA WORLD CUP 2030
+        </div>
+        <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: 1, padding: "3px 7px", borderRadius: 6, background: T.gold, color: T.navy }}>NEXT UP</div>
+      </div>
+      <div style={{ fontSize: 12, color: T.gray, marginBottom: 14 }}>Hosted by {tournament.host_country} · kicks off {new Date(tournament.starts_on).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+        {[["DAYS", days], ["HRS", hours], ["MIN", minutes], ["SEC", seconds]].map(([label, val]) => (
+          <div key={label} style={{ background: T.navy, borderRadius: 10, padding: "10px 0", textAlign: "center" }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: T.gold }}>{String(val).padStart(2, "0")}</div>
+            <div style={{ fontSize: 9, color: T.gray, marginTop: 2, letterSpacing: 1 }}>{label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MuseumTab({ onOpenLive }) {
+  const [tournaments, setTournaments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(null);
+
+  useEffect(() => {
+    supabase.from("tournaments").select("*").order("year", { ascending: false })
+      .then(({ data }) => { setTournaments(data || []); setLoading(false); });
+  }, []);
+
+  const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+  const next2030 = tournaments.find(t => t.fidelity_tier === "upcoming");
+  const archiveTournaments = tournaments.filter(t => t.fidelity_tier !== "upcoming");
+
+  return (
+    <div style={{ padding: "16px", paddingBottom: 80 }}>
+      <div style={{ marginBottom: 16 }}>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: 2, color: T.gold }}>MUSEUM</div>
+        <div style={{ fontSize: 13, color: T.gray }}>{archiveTournaments.length || 23} editions · 1930 – 2026</div>
+      </div>
+
+      {loading && <div style={{ color: T.gray, fontSize: 13, textAlign: "center", padding: 40 }}>Loading archive…</div>}
+
+      {next2030 && <Countdown2030Card tournament={next2030} />}
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        {archiveTournaments.map(t => {
+          const cinematic = t.fidelity_tier === "cinematic";
+          const isExpanded = expanded === t.id;
+          return (
+            <div key={t.id}
+              onClick={() => cinematic ? onOpenLive() : setExpanded(isExpanded ? null : t.id)}
+              style={{
+                gridColumn: isExpanded ? "1 / -1" : "auto",
+                background: cinematic ? `linear-gradient(135deg, ${T.gold}22, ${T.navyMid})` : T.navyMid,
+                borderRadius: 12, padding: 14, cursor: "pointer",
+                border: `1px solid ${cinematic ? T.gold : T.navyLight}`,
+                transition: "all 0.2s",
+              }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 24, color: cinematic ? T.gold : T.white }}>{t.year}</div>
+                <div style={{
+                  fontSize: 9, fontWeight: 800, letterSpacing: 1, padding: "3px 7px", borderRadius: 6,
+                  background: cinematic ? T.gold : T.navyLight, color: cinematic ? T.navy : T.gray,
+                }}>{cinematic ? "LIVE" : "ARCHIVE"}</div>
+              </div>
+              <div style={{ fontSize: 12, color: T.gray, marginTop: 4 }}>{t.host_country}</div>
+              {t.winner_team_name && (
+                <div style={{ fontSize: 11, color: T.gold, marginTop: 4, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700 }}>
+                  🏆 {t.winner_team_name}
+                </div>
+              )}
+              {isExpanded && (
+                <div style={{ marginTop: 10, paddingTop: 10, borderTop: `1px solid ${T.navyLight}`, fontSize: 12, color: T.gray }}>
+                  <div>{fmtDate(t.starts_on)} – {fmtDate(t.ends_on)}</div>
+                  <div style={{ marginTop: 6, color: T.grayDark }}>Match-by-match archive not yet available for this edition.</div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ─── BOTTOM NAV ──────────────────────────────────────────────────────────────
 const TABS = [
   { id: "fixtures", label: "Fixtures", icon: "🏟️" },
@@ -4709,6 +4966,7 @@ const TABS = [
   { id: "teams",    label: "Teams",    icon: "👕" },
   { id: "bracket",  label: "Bracket",  icon: "🔮" },
   { id: "board",    label: "Board",    icon: "🏅" },
+  { id: "museum",   label: "Museum",   icon: "🏛️" },
   // { id: "xi",       label: "XI",       icon: "⭐" },
   { id: "more",     label: "More",     icon: "⋯" },
 ];
@@ -5220,6 +5478,7 @@ export default function App() {
     supabase
       .from('matches')
       .select('*')
+      .eq('tournament_id', '2026')
       .order('date', { ascending: true })
       .then(({ data, error }) => {
         if (error) { setFetchError(error.message); return; }
@@ -5236,12 +5495,12 @@ export default function App() {
       .catch(e => setFetchError(e.message));
 
     // Fetch standings
-    supabase.from('standings').select('*').order('group_name').order('rank')
+    supabase.from('standings').select('*').eq('tournament_id', '2026').order('group_name').order('rank')
       .then(({ data }) => { if (data?.length) setDbStandings(data); });
 
     const channel = supabase
       .channel('matches-live')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'matches' }, ({ new: row }) => {
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'matches', filter: 'tournament_id=eq.2026' }, ({ new: row }) => {
         const updated = mapMatch(row);
         FIXTURES = FIXTURES.map(f => f.id === updated.id ? updated : f);
         POLL_MATCH = FIXTURES.find(f => f.status === 'Live') ||
@@ -5249,8 +5508,8 @@ export default function App() {
           POLL_MATCH;
         setDataVersion(v => v + 1);
       })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'standings' }, () => {
-        supabase.from('standings').select('*').order('group_name').order('rank')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'standings', filter: 'tournament_id=eq.2026' }, () => {
+        supabase.from('standings').select('*').eq('tournament_id', '2026').order('group_name').order('rank')
           .then(({ data }) => { if (data?.length) setDbStandings(data); });
       })
       .subscribe();
@@ -5467,6 +5726,7 @@ export default function App() {
           {tab === "bracket" && <ErrorBoundary key={`bracket-${dataVersion}`}><BracketTab user={user} theme={theme} /></ErrorBoundary>}
           {tab === "vote" && <VoteTab key={`vote-${dataVersion}`} predictions={predictions} setPredictions={setPredictions} user={user} />}
           {tab === "board" && <LeaderboardTab />}
+          {tab === "museum" && <MuseumTab onOpenLive={() => setTab("fixtures")} />}
           {tab === "xi" && <WcXiTab user={user} />}
           {tab === "more" && <MoreTab key={`more-${dataVersion}`} user={user} onSignIn={() => setShowAuth(true)} onChangeTeam={() => setShowTeamPicker(true)} onConfirmModal={setConfirmModal} />}
         </div>
